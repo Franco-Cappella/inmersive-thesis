@@ -24,7 +24,8 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - [x] Escena 3D del capítulo 09 (zonas, conductos, sensor pasivo y gemelo digital, sincronizados con los pilares del texto).
 - [x] Escena 3D del capítulo 10 (la torre segmentada en marcha y la pirámide AIC que se rearma).
 - [x] Escena 3D del capítulo 05 (tres golpes sobre la misma planta, sincronizados con la lista del texto).
-- [ ] Escena 3D del capítulo 03 (según `docs/GUION.md`). Hoy usa `dim: 1`.
+- [x] Escena 3D del capítulo 03 (la trama en texto plano que el PLC ejecuta sin preguntar).
+- Los capítulos 04, 06 y 08 no llevan escena: se leen sobre el velo (`dim: 1`).
 - [x] Animaciones de figuras HTML: contador en las cifras de costo, brecha IT/OT que se cierra, barras SANS que crecen.
 - [x] Reloj del 01: los pasos se encienden con la escena 3D.
 - [x] Trama Modbus (03): los campos aparecen en orden.

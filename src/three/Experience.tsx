@@ -22,6 +22,7 @@ import { Escenario } from "./scenes/Escenario";
 import { ITFloor } from "./scenes/ITFloor";
 import { Matiz } from "./scenes/Matiz";
 import { OTFloor } from "./scenes/OTFloor";
+import { Protocolos } from "./scenes/Protocolos";
 import { Pyramid } from "./scenes/Pyramid";
 
 function FrameBridge() {
@@ -84,6 +85,7 @@ export default function Experience() {
           <OTFloor palette={palette} />
           <Escenario palette={palette} />
           <Convergencia palette={palette} />
+          <Protocolos palette={palette} />
           <Conflicto palette={palette} />
           <Casos palette={palette} />
           <Matiz palette={palette} />

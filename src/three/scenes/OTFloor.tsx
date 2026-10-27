@@ -3,12 +3,12 @@
 import { Edges, Grid, Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import { Color, MeshBasicMaterial, MeshStandardMaterial } from "three";
+import { Color, Group, MeshBasicMaterial, MeshStandardMaterial } from "three";
 import { rig, type Vec3 } from "@/scroll/rig";
 import { FlowPipe } from "../FlowPipe";
 import { FONT_URL, glow, smooth } from "../helpers";
 import type { Palette } from "../palette";
-import { hitBeat, oldsmarExposure, overpressure, plantFlow, plcCompromised } from "../signals";
+import { hitBeat, oldsmarExposure, overpressure, plantFlow, plcCompromised, valveTurn } from "../signals";
 
 // Planta OT (abajo): tanques, cañerías con flujo, una válvula y gabinetes PLC.
 export const OT_FLOOR_Y = -8;
@@ -80,11 +80,18 @@ export const VALVE_POS: Vec3 = [-3.2, OT_FLOOR_Y + 0.8, -3.6];
 function Valve({ palette }: { palette: Palette }) {
   const body = useRef<MeshStandardMaterial>(null);
   const wheel = useRef<MeshStandardMaterial>(null);
+  const handle = useRef<Group>(null);
   const c = useMemo(
     () => ({ metal: new Color(palette.metal), ink: new Color(palette.ink), warn: new Color(palette.warn), alarm: new Color(palette.alarm), state: new Color() }),
     [palette],
   );
   useFrame(() => {
+    // 03: la trama escribe un valor y el volante gira (y el vástago sube un poco).
+    if (handle.current) {
+      const turn = valveTurn();
+      handle.current.rotation.y = turn * Math.PI * 3;
+      handle.current.position.y = turn * 0.14;
+    }
     if (!body.current || !wheel.current) return;
     const h = rig.fx.halt;
     // 01: se traba (ámbar → rojo). 05, MFA: la presión sube (ámbar) y la maniobra llega tarde (rojo).
@@ -105,14 +112,29 @@ function Valve({ palette }: { palette: Palette }) {
         <boxGeometry args={[0.6, 0.55, 0.55]} />
         <meshStandardMaterial ref={body} color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
       </mesh>
-      <mesh position={[0, 0.55, 0]}>
-        <cylinderGeometry args={[0.05, 0.05, 0.5, 8]} />
-        <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
-      </mesh>
-      <mesh position={[0, 0.82, 0]} rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[0.32, 0.045, 8, 28]} />
-        <meshStandardMaterial ref={wheel} color={palette.ink} roughness={0.6} />
-      </mesh>
+      <group ref={handle}>
+        <mesh position={[0, 0.55, 0]}>
+          <cylinderGeometry args={[0.05, 0.05, 0.5, 8]} />
+          <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
+        </mesh>
+        <mesh position={[0, 0.82, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <torusGeometry args={[0.32, 0.045, 8, 28]} />
+          <meshStandardMaterial ref={wheel} color={palette.ink} roughness={0.6} />
+        </mesh>
+        {/* rayos y manija del volante: sin ellos no se ve que gira */}
+        <mesh position={[0.32, 0.92, 0]}>
+          <cylinderGeometry args={[0.035, 0.035, 0.2, 8]} />
+          <meshStandardMaterial color={palette.ink} roughness={0.6} />
+        </mesh>
+        <mesh position={[0, 0.82, 0]}>
+          <boxGeometry args={[0.62, 0.035, 0.035]} />
+          <meshStandardMaterial color={palette.ink} roughness={0.6} />
+        </mesh>
+        <mesh position={[0, 0.82, 0]}>
+          <boxGeometry args={[0.035, 0.035, 0.62]} />
+          <meshStandardMaterial color={palette.ink} roughness={0.6} />
+        </mesh>
+      </group>
     </group>
   );
 }

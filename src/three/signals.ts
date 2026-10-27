@@ -5,6 +5,10 @@ import { range, smooth } from "./helpers";
 // Señales derivadas de rig.fx que comparten varias escenas (planta, enlaces y casos).
 // Se leen en useFrame: nunca pasan por React.
 
+// 03: el PLC acepta la trama (sin verificar quién la envía) y la válvula gira.
+export const frameAccepted = () => smooth(rig.fx.frame, 0.5, 0.58);
+export const valveTurn = () => smooth(rig.fx.frame, 0.58, 0.92);
+
 // Progreso 0..1 del golpe i del capítulo 05 (0 parche automático, 1 escaneo activo, 2 MFA en plena alarma).
 export const hitBeat = (i: number) => range(rig.fx.hits, CONFLICTO_TRAMOS[i][0], CONFLICTO_TRAMOS[i][1]);
 

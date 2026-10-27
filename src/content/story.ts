@@ -46,11 +46,12 @@ export type SceneFx = {
   patch: number; // 01: el parche viaja de la torre IT al PLC de la planta
   halt: number; // 01: la planta se detiene (HMI en blanco, flujo cortado, válvula en alarma)
   bridge: number; // 02: se rompe el air gap: enlaces de IT (y la nube) a la planta y paquetes que cruzan
+  frame: number; // 03: una trama Modbus en texto plano llega al PLC, que la ejecuta y mueve la válvula
   hits: number; // 05: tres controles IT, tres formas de parar, uno por tramo (ver CONFLICTO_TRAMOS)
   attack: number; // 07: los cuatro casos, uno por tramo (ver CASOS_TRAMOS en src/scroll/timing.ts)
   zones: number; // 09: zonas y conductos, monitoreo pasivo y gemelo digital (ver MATIZ_TRAMOS)
 };
-export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, patch: 0, halt: 0, bridge: 0, hits: 0, attack: 0, zones: 0 };
+export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, patch: 0, halt: 0, bridge: 0, frame: 0, hits: 0, attack: 0, zones: 0 };
 
 // Estado acumulado al terminar el capítulo i (i = -1: el final del hero).
 export const fxOf = (i: number): SceneFx =>
@@ -145,10 +146,14 @@ export const chapters: Chapter[] = [
     },
     fuentes: [],
     pendientes: ["La tesina no cita fuente para estas tres características."],
-    // Sin escena propia todavía: el 3D se atenúa.
-    fx: { dim: 1 },
     escena:
-      "Primer plano de un gabinete PLC. Llega una trama en texto plano y el PLC la ejecuta: la válvula se mueve sin que nadie se identifique.",
+      "Primer plano de un gabinete PLC. Una trama Modbus baja por el cable con sus bytes a la vista, en texto plano; el PLC la acepta sin preguntar quién la manda y la válvula gira.",
+    weight: 2,
+    camara: {
+      landscape: { position: [-7.4, -5.4, 2.4], target: [1, -6.8, -6] },
+      portrait: { position: [-4.6, -5.4, 4.6], target: [-4.4, -6.6, -3.4] },
+    },
+    fx: { dim: 0, frame: 1 },
   },
   {
     id: "pregunta",
@@ -167,6 +172,7 @@ export const chapters: Chapter[] = [
     },
     fuentes: [],
     escena: "Sin escena nueva: la pirámide invertida del inicio queda de fondo, atenuada, mientras se lee la pregunta.",
+    fx: { dim: 1 }, // la pregunta y la hipótesis se leen sobre el campo liso
   },
   {
     id: "conflicto",
