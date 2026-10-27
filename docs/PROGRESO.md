@@ -5,7 +5,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 ## Estado actual
 
 - **Hero:** completo en lo funcional. La pirámide C·I·A se arma al cargar, gira 180° y baja de IT a OT con el scroll. La ficha IT/OT cambia con paletas y la lista de prioridades rueda fila por fila. Tiene respaldo SVG, modo reduced motion y modo lectura.
-- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **Los capítulos 01, 02 y 07 ya tienen su escena 3D**; los demás usan `dim: 1` (el velo tapa el 3D) hasta que se construya la suya.
+- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **Los capítulos 01, 02, 07 y 09 ya tienen su escena 3D**; el 03, el 05 y el 08 usan `dim: 1` (el velo tapa el 3D) y el 10 hereda por ahora el estado final del 09 (la planta segmentada y en marcha).
 - **Verificación:** `scripts/capturas.cjs` (hero y capítulos en desktop y celular, consola, scroll horizontal) y `scripts/modos.cjs` (estudios, lectura, presentación, reduced motion, sin WebGL, scroll inverso). Última corrida: todo bien, consola limpia.
 
 ## Bitácora
@@ -36,6 +36,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - Escena 07 (`src/three/scenes/Casos.tsx`): un caso por tramo de `fx.attack` (`CASOS_TRAMOS` en `src/scroll/timing.ts`), con la lista del texto encendiéndose al mismo ritmo. Colonial: racks en rojo, enlaces cortados y planta detenida por decisión, sin que el rojo baje. Oldsmar en ámbar (exposición, caso en discusión). Stuxnet e Industroyer: rojo hasta un PLC, que pasa a alarma.
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
 - El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
+- Escena 09 (`src/three/scenes/Matiz.tsx`): un pilar por tramo de `fx.zones` (`MATIZ_TRAMOS`), con la lista de pilares encendiéndose al mismo ritmo. La DMZ se cierra sobre el air gap, aparecen las zonas y una compuerta por enlace legítimo; los recorridos de los casos se retraen hasta la DMZ (señal `segmentation` en `signals.ts`) y la planta vuelve a azul. Después, un sensor pasivo en un puerto espejo y un gemelo digital que valida el parche. Verificada en los tres estudios, celular, reduced motion y scroll de vuelta al 07.
 
 ## Deploy
 
@@ -43,17 +44,18 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 ## Próximo paso
 
-**Escena 3D del capítulo 09 (matiz: zonas y conductos que bloquean el rojo).**
+**Escena 3D del capítulo 10 (postura: la planta segmentada sigue en marcha y vuelve la pirámide AIC).**
 
-1. `src/content/story.ts`: al capítulo `matiz`, `weight`, `camara` (la misma vista de los dos pisos sirve) y `fx: { dim: 0, zones: 1 }`; sumar `zones` a `SceneFx`/`FX_INICIAL`. `attack` queda en 1: los recorridos de los casos siguen ahí, pero los conductos los cortan.
-2. `src/three/scenes/Matiz.tsx`: volúmenes de zona (oficina, DMZ, planta) y conductos con compuertas sobre el borde del air gap. Con `zones`, el tramo OT de cada recorrido rojo se apaga en la compuerta, los PLC vuelven a azul (señales en `signals.ts`) y un sensor pasivo escucha una copia del tráfico.
-3. El 10 (postura) vuelve a `dim: 1` o tiene su escena (pirámide AIC con `triad: 1`).
+1. `src/content/story.ts`: al capítulo `postura`, `camara` (la cámara sube y se aleja para ver la torre entera: oficina, DMZ y planta) y `fx: { triad: 1 }` (la pirámide vuelve). Si hace falta un estado propio (por ejemplo, que la pirámide se apoye sobre la planta en vez de flotar donde quedó en el hero), sumarlo a `SceneFx`/`FX_INICIAL`.
+2. `src/three/scenes/Pyramid.tsx`: hoy escala con `rig.fx.triad` en la posición del final del hero (OT, con la A arriba). Revisar que se vea bien con la cámara nueva.
+3. Verificar que el final del recorrido (referencias) no deje el Canvas a medio camino.
 
 ## Cola (en orden)
 
-1. Escena 09 (zonas y conductos que bloquean el rojo).
-2. Pasada de arte del hero y de los estudios.
-3. Escenas 3D restantes: 03 (PLC que ejecuta una trama), 05 (tres golpes), 10 (postura: vuelve la pirámide AIC con `triad: 1`).
+1. Escena 10 (postura).
+2. Preparación de la defensa: prueba sin conexión automatizada y script para grabar el recorrido en video.
+3. Escenas 3D restantes: 05 (tres golpes) y 03 (PLC que ejecuta una trama).
+4. Pasada de arte del hero y de los estudios.
 
 ## Bloqueado por Franco
 

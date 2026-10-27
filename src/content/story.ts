@@ -47,8 +47,9 @@ export type SceneFx = {
   halt: number; // 01: la planta se detiene (HMI en blanco, flujo cortado, válvula en alarma)
   bridge: number; // 02: se rompe el air gap: enlaces de IT (y la nube) a la planta y paquetes que cruzan
   attack: number; // 07: los cuatro casos, uno por tramo (ver CASOS_TRAMOS en src/scroll/timing.ts)
+  zones: number; // 09: zonas y conductos, monitoreo pasivo y gemelo digital (ver MATIZ_TRAMOS)
 };
-export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, patch: 0, halt: 0, bridge: 0, attack: 0 };
+export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, patch: 0, halt: 0, bridge: 0, attack: 0, zones: 0 };
 
 // Estado acumulado al terminar el capítulo i (i = -1: el final del hero).
 export const fxOf = (i: number): SceneFx =>
@@ -318,7 +319,9 @@ export const chapters: Chapter[] = [
     },
     fuentes: ["isa-iec-62443", "cisa-ics-rp", "nist-800-82r3"],
     escena:
-      "Aparecen volúmenes de zona y conductos con compuertas. El recorrido rojo de los casos choca contra un conducto y se detiene; un sensor pasivo escucha una copia del tráfico.",
+      "La misma vista de los dos pisos, con los recorridos de los casos todavía ahí. Aparecen las zonas (oficina, DMZ y dos celdas de planta) y una compuerta en cada cruce del air gap: el rojo se retrae hasta la compuerta y los controladores vuelven a la normalidad, mientras el tráfico legítimo sigue pasando. Después, un sensor pasivo recibe copias del tráfico desde un puerto espejo, y un gemelo digital del controlador pasa de prueba (ámbar) a validado (azul).",
+    weight: 2.6,
+    fx: { dim: 0, zones: 1 },
   },
   {
     id: "postura",

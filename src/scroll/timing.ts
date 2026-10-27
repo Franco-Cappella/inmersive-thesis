@@ -13,3 +13,11 @@ export const CASOS_TRAMOS: [number, number][] = [
   [0.52, 0.75],
   [0.77, 0.98],
 ];
+
+// Capítulo 09: tramo de cada pilar dentro de la estadía, en el orden del texto
+// (zonas y conductos, monitoreo pasivo, probar antes de parchear).
+export const MATIZ_TRAMOS: [number, number][] = [
+  [0.02, 0.4],
+  [0.42, 0.7],
+  [0.72, 0.98],
+];

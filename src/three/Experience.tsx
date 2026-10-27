@@ -18,6 +18,7 @@ import { Casos } from "./scenes/Casos";
 import { Convergencia } from "./scenes/Convergencia";
 import { Escenario } from "./scenes/Escenario";
 import { ITFloor } from "./scenes/ITFloor";
+import { Matiz } from "./scenes/Matiz";
 import { OTFloor } from "./scenes/OTFloor";
 import { Pyramid } from "./scenes/Pyramid";
 
@@ -82,6 +83,7 @@ export default function Experience() {
           <Escenario palette={palette} />
           <Convergencia palette={palette} />
           <Casos palette={palette} />
+          <Matiz palette={palette} />
         </Suspense>
         <CameraRig />
         <FrameBridge />

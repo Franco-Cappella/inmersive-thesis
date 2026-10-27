@@ -1,4 +1,4 @@
-import { CASOS_TRAMOS } from "@/scroll/timing";
+import { CASOS_TRAMOS, MATIZ_TRAMOS } from "@/scroll/timing";
 import { rig } from "@/scroll/rig";
 import { range, smooth } from "./helpers";
 
@@ -16,11 +16,22 @@ export const itInfection = () => smooth(caseBeat(0), 0, 0.45);
 export const colonialCut = () =>
   smooth(caseBeat(0), 0.45, 0.65) * (1 - smooth(rig.fx.attack, CASOS_TRAMOS[1][0], CASOS_TRAMOS[1][0] + 0.04));
 
+// Progreso 0..1 del pilar i del capítulo 09 (0 zonas y conductos, 1 monitoreo pasivo, 2 gemelo digital).
+export const pillarBeat = (i: number) => range(rig.fx.zones, MATIZ_TRAMOS[i][0], MATIZ_TRAMOS[i][1]);
+
+// 09: la DMZ se cierra sobre el air gap (reemplaza al borde punteado del 02).
+export const dmzShown = () => smooth(pillarBeat(0), 0, 0.2);
+
+// 09: cuánto bloquea la segmentación. Los recorridos de los casos se cortan en la compuerta
+// y lo que estaba comprometido en la planta vuelve a la normalidad. IT sigue con su incidente.
+export const segmentation = () => smooth(pillarBeat(0), 0.3, 0.8);
+
 // Oldsmar: la válvula queda expuesta (advertencia, no alarma: el caso quedó en discusión).
-export const oldsmarExposure = () => smooth(caseBeat(1), 0.55, 0.75);
+export const oldsmarExposure = () => smooth(caseBeat(1), 0.55, 0.75) * (1 - segmentation());
 
 // Stuxnet (gabinete 0, a la derecha) e Industroyer (gabinete 1, a la izquierda): el controlador en alarma.
-export const plcCompromised = (cabinet: number) => smooth(caseBeat(cabinet === 0 ? 2 : 3), 0.55, 0.75);
+export const plcCompromised = (cabinet: number) =>
+  smooth(caseBeat(cabinet === 0 ? 2 : 3), 0.55, 0.75) * (1 - segmentation());
 
 // El proceso corre cuando llegamos a la planta; se corta si la planta se detiene (01) o por la decisión de Colonial (07).
 export const plantFlow = () =>

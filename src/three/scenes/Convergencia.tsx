@@ -8,7 +8,7 @@ import { rig, type Vec3 } from "@/scroll/rig";
 import { glow, range, smooth } from "../helpers";
 import { PacketFlow } from "../PacketFlow";
 import type { Palette } from "../palette";
-import { colonialCut } from "../signals";
+import { colonialCut, dmzShown } from "../signals";
 import { pipePath } from "../paths";
 import { IT_FLOOR_Y } from "./ITFloor";
 
@@ -18,8 +18,9 @@ import { IT_FLOOR_Y } from "./ITFloor";
 //   0.25–0.65  bajan los enlaces: de los racks y de la nube hacia un PLC, un tanque y una válvula
 //   0.45–0.65  el borde pasa a ámbar: el aislamiento físico ya no existe
 //   0.60–0.80  los paquetes empiezan a cruzar hacia la planta
+// En el capítulo 09 el borde se apaga (la DMZ toma su lugar) y cada enlace pasa por una compuerta (Matiz).
 
-const GAP_Y = -1.7; // a mitad de camino entre el piso IT (y ≈ 0.35) y el techo de la planta
+export const GAP_Y = -1.7; // a mitad de camino entre el piso IT (y ≈ 0.35) y el techo de la planta
 const GAP: Vec3[] = [
   [-11, GAP_Y, 1.5],
   [11, GAP_Y, 1.5],
@@ -29,7 +30,7 @@ const GAP: Vec3[] = [
 ];
 
 // Recorridos de arriba hacia abajo: los paquetes viajan de IT a OT.
-const LINKS: Vec3[][] = [
+export const LINKS: Vec3[][] = [
   // rack de la oficina → gabinete PLC (derecha)
   [[2.4, IT_FLOOR_Y + 1.4, -3.95], [2.4, -5.4, -3.95], [2.8, -5.4, -2.6], [2.8, -6.25, -2.6]],
   // la nube (fuera del edificio) → sensor de un tanque
@@ -78,11 +79,13 @@ export function Convergencia({ palette }: { palette: Palette }) {
     const g = border.current;
     if (!g) return;
     const b = rig.fx.bridge;
-    g.visible = b > 0.001;
+    // 09: la DMZ ocupa el lugar del air gap y el borde punteado se apaga mientras aparece.
+    const fade = 1 - dmzShown();
+    g.visible = b > 0.001 && fade > 0.001;
     const line = g.children[0] as unknown as { material?: MeshBasicMaterial & { opacity: number } };
     if (line?.material) {
       line.material.color.copy(c.ink).lerp(c.warn, smooth(b, 0.45, 0.65));
-      line.material.opacity = smooth(b, 0, 0.1);
+      line.material.opacity = smooth(b, 0, 0.1) * fade;
     }
   });
 

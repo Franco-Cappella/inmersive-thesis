@@ -8,8 +8,9 @@ import { glow, range, smooth } from "../helpers";
 import { PacketFlow } from "../PacketFlow";
 import type { Palette } from "../palette";
 import { pipePath } from "../paths";
-import { caseBeat, itInfection } from "../signals";
+import { caseBeat, itInfection, segmentation } from "../signals";
 import { IT_FLOOR_Y, RACK, RACK_ROWS, RACKS } from "./ITFloor";
+import { DMZ_TOP } from "./Matiz";
 
 // Capítulo 07 · "Cuatro casos que no se leen en bloque". Un caso por tramo de fx.attack
 // (CASOS_TRAMOS en src/scroll/timing.ts), en el orden de la lista del texto:
@@ -19,6 +20,7 @@ import { IT_FLOOR_Y, RACK, RACK_ROWS, RACKS } from "./ITFloor";
 //                      comprobado (el caso quedó en discusión). La válvula pasa a advertencia (OTFloor).
 //   Stuxnet            recorrido rojo hasta el controlador de la derecha, que pasa a alarma.
 //   Industroyer        recorrido rojo hasta el controlador de la izquierda, que pasa a alarma.
+// En el capítulo 09 (segmentation) cada recorrido se retrae hasta la DMZ y deja una marca donde lo frenó.
 
 const TRACES: { beat: number; color: "warn" | "alarm"; points: Vec3[] }[] = [
   // Oldsmar: escritorio remoto desde afuera (arriba, fuera de cuadro) hasta la válvula
@@ -37,14 +39,28 @@ function Trace({ beat, points, hex, warn }: { beat: number; points: Vec3[]; hex:
   const geometry = useMemo(() => new TubeGeometry(curve, 160, 0.07, 8, false), [curve]);
   useEffect(() => () => geometry.dispose(), [geometry]);
   const group = useRef<Group>(null);
+  const impact = useRef<Group>(null);
   const total = geometry.index?.count ?? 0;
   // El ámbar con mucho brillo se satura a amarillo: la advertencia brilla menos que la alarma.
   const color = useMemo(() => glow(hex, warn ? 1.45 : 2.2), [hex, warn]);
+  // Dónde llega el recorrido a la DMZ: ahí lo frena la segmentación (capítulo 09).
+  const gate = useMemo(() => {
+    const pts = curve.getSpacedPoints(200);
+    const i = Math.max(0, pts.findIndex((p) => p.y <= DMZ_TOP));
+    return { fraction: i / 200, position: pts[i] };
+  }, [curve]);
 
   useFrame(() => {
-    const reveal = range(caseBeat(beat), 0, 0.6);
+    const block = segmentation();
+    // 07: el recorrido se dibuja; 09: se retrae hasta la DMZ (el ataque queda bloqueado).
+    const reveal = Math.min(range(caseBeat(beat), 0, 0.6), 1 - (1 - gate.fraction) * block);
     if (group.current) group.current.visible = reveal > 0;
     geometry.setDrawRange(0, Math.floor((total * reveal) / 6) * 6);
+    if (impact.current) {
+      const shown = block * smooth(caseBeat(beat), 0.55, 0.6);
+      impact.current.visible = shown > 0.01;
+      impact.current.scale.setScalar(Math.max(0.001, shown));
+    }
   });
 
   return (
@@ -54,7 +70,25 @@ function Trace({ beat, points, hex, warn }: { beat: number; points: Vec3[]; hex:
           <meshBasicMaterial color={color} toneMapped={false} />
         </mesh>
       </group>
-      <PacketFlow curve={curve} count={8} speed={0.09} size={0.13} color={color} visibility={() => smooth(caseBeat(beat), 0.6, 0.8)} />
+      {/* Marca del bloqueo sobre la DMZ: hasta acá llega el ataque */}
+      <group ref={impact} position={gate.position} visible={false}>
+        <mesh>
+          <sphereGeometry args={[0.17, 20, 12]} />
+          <meshBasicMaterial color={color} toneMapped={false} />
+        </mesh>
+        <mesh position={[0, -0.02, 0]}>
+          <cylinderGeometry args={[0.34, 0.34, 0.04, 24]} />
+          <meshBasicMaterial color={color} toneMapped={false} />
+        </mesh>
+      </group>
+      <PacketFlow
+        curve={curve}
+        count={8}
+        speed={0.09}
+        size={0.13}
+        color={color}
+        visibility={() => smooth(caseBeat(beat), 0.6, 0.8) * (1 - smooth(segmentation(), 0, 0.25))}
+      />
     </>
   );
 }

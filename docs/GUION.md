@@ -15,7 +15,7 @@ Texto: título de 3 a 8 palabras y una bajada de una o dos oraciones, en prosa. 
 | 06 | Lo que cuesta una hora detenida | Cifras grandes: USD 125.000 y USD 2,3 M | Un contador corre en la sala de control (las cifras en HTML) | Hecho en HTML |
 | 07 | Cuatro casos que no se leen en bloque | Colonial Pipeline, Oldsmar, Stuxnet, Industroyer (cada uno se enciende cuando actúa) | Un caso por tramo: Colonial (racks en rojo, corte y planta detenida), Oldsmar (ámbar a la válvula), Stuxnet e Industroyer (rojo hasta un PLC) | **Hecho** |
 | 08 | La puerta de entrada es IT | Barras SANS 2024 (45,8 % compromiso en IT) | El 3D se atenúa y el gráfico toma la pantalla | Hecho en HTML |
-| 09 | No es la seguridad: es el trasplante | Tres pilares: zonas y conductos, monitoreo pasivo, probar antes de parchear | Compuertas de zona y conductos; el recorrido rojo choca y se detiene | Pendiente 3D |
+| 09 | No es la seguridad: es el trasplante | Tres pilares: zonas y conductos, monitoreo pasivo, probar antes de parchear (cada uno se enciende cuando actúa) | Un pilar por tramo: la DMZ y las zonas frenan los recorridos de los casos; un sensor pasivo escucha un puerto espejo; un gemelo digital valida el parche | **Hecho** |
 | 10 | Confirmada, con matiz | Cita de cierre | La cámara se aleja: la planta sigue operando, segmentada | Pendiente 3D |
 | refs | Bibliografía y declaración de IA | Lista con verificaciones marcadas | Sin 3D | Hecho |
 
@@ -37,7 +37,7 @@ Texto: título de 3 a 8 palabras y una bajada de una o dos oraciones, en prosa. 
 - **03 · protocolos.** La cámara entra en un gabinete PLC. Una trama llega en texto plano; el PLC la ejecuta y la válvula se mueve sin que se identifique nadie.
 - **05 · controles.** Tres impactos en secuencia sobre la planta. Latencia representada como un reloj que corre y una presión que sube.
 - **07 · casos (hecho).** Un caso por tramo de la estadía, sincronizado con la lista del texto. Colonial Pipeline: los racks de la oficina se ponen en rojo, la empresa corta los enlaces (pasan a gris) y la planta se detiene sin que el rojo baje. Oldsmar: recorrido en **ámbar** (exposición, no ataque comprobado) desde el acceso remoto hasta la válvula. Stuxnet e Industroyer: recorridos rojos hasta un controlador cada uno, que pasa a alarma.
-- **09 · matiz.** Aparecen volúmenes de zona y conductos con compuertas. El recorrido rojo se estrella contra un conducto. Un sensor pasivo escucha una copia del tráfico.
+- **09 · matiz (hecho).** Misma vista que el 07, con los recorridos de los casos todavía ahí. Un pilar por tramo de la estadía, sincronizado con la lista del texto. Zonas y conductos: la DMZ se cierra sobre el air gap (el borde punteado del 02 se apaga), aparecen las zonas (oficina y dos celdas de planta) y una compuerta en cada enlace legítimo; cada recorrido se retrae hasta la DMZ y queda una marca donde se frenó; los controladores y la válvula vuelven a la normalidad, los racks de la oficina siguen en rojo. Escuchar en vez de golpear: un puerto espejo en un enlace le copia el tráfico a un sensor pasivo, que no le envía nada a la red. Probar antes de parchear: el parche baja de la DMZ a un gemelo digital del controlador, que pasa de prueba (ámbar) a validado (azul).
 - **10 · postura.** La cámara sube y se aleja. La pirámide AIC queda estable sobre una planta que sigue funcionando.
 
 ## Reglas de movimiento
