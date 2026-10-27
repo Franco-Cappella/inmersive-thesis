@@ -19,7 +19,8 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - [x] Índice de progreso, atajos L / P / ← →, modo lectura.
 - [x] **Director de capítulos** (`useStoryTimeline`): cámara por capítulo, `fx` acumulados y velo (`dim`) por capítulo. Reversible y con reduced motion.
 - [x] Escena 3D del capítulo 01 (el parche que apaga la planta).
-- [ ] Escenas 3D de los demás capítulos (02, 03, 05, 07, 09, 10 según `docs/GUION.md`). Hoy usan `dim: 1`.
+- [x] Escena 3D del capítulo 02 (se rompe el air gap).
+- [ ] Escenas 3D de los demás capítulos (03, 05, 07, 09, 10 según `docs/GUION.md`). Hoy usan `dim: 1`.
 - [ ] Pasar a las figuras de los capítulos las animaciones de la guía (`docs/GUION.md`, columna "Movimiento").
 
 ## Fase 4 · Estudios de dirección — parcial

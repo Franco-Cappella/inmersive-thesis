@@ -14,6 +14,7 @@ import { rig } from "@/scroll/rig";
 import { useUI } from "@/state/store";
 import { CameraRig } from "./CameraRig";
 import { palettes } from "./palette";
+import { Convergencia } from "./scenes/Convergencia";
 import { Escenario } from "./scenes/Escenario";
 import { ITFloor } from "./scenes/ITFloor";
 import { OTFloor } from "./scenes/OTFloor";
@@ -78,6 +79,7 @@ export default function Experience() {
           <ITFloor palette={palette} />
           <OTFloor palette={palette} />
           <Escenario palette={palette} />
+          <Convergencia palette={palette} />
         </Suspense>
         <CameraRig />
         <FrameBridge />

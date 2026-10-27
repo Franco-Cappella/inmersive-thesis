@@ -127,6 +127,10 @@ export function Pyramid({ palette }: { palette: Palette }) {
     const { flip, descent } = rig.hero;
     const t = rig.snap ? 0 : state.clock.elapsedTime;
     lift.current.position.y = MathUtils.lerp(PYRAMID_Y.it, PYRAMID_Y.ot, descent) + Math.sin(t * 0.9) * 0.06;
+    // Los capítulos usan la planta: la pirámide se guarda (escala a 0) y vuelve si un capítulo la pide.
+    const triad = rig.fx.triad;
+    lift.current.visible = triad > 0.01;
+    lift.current.scale.setScalar(Math.max(0.001, triad));
     yaw.current.rotation.y = -0.38 + Math.sin(t * 0.25) * 0.16 + bell(flip) * 0.9;
     tumble.current.rotation.x = -Math.PI * flip;
   });

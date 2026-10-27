@@ -42,10 +42,12 @@ export type Figura =
 // cada capítulo declara solo lo que CAMBIA y hereda el resto del anterior.
 export type SceneFx = {
   dim: number; // velo sobre el 3D: 1 = el capítulo se lee sobre el campo liso
+  triad: number; // la pirámide del hero: 1 = presente, 0 = guardada (los capítulos usan la planta)
   patch: number; // 01: el parche viaja de la torre IT al PLC de la planta
   halt: number; // 01: la planta se detiene (HMI en blanco, flujo cortado, válvula en alarma)
+  bridge: number; // 02: se rompe el air gap: enlaces de IT (y la nube) a la planta y paquetes que cruzan
 };
-export const FX_INICIAL: SceneFx = { dim: 0, patch: 0, halt: 0 };
+export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, patch: 0, halt: 0, bridge: 0 };
 
 // Estado acumulado al terminar el capítulo i (i = -1: el final del hero).
 export const fxOf = (i: number): SceneFx =>
@@ -90,7 +92,7 @@ export const chapters: Chapter[] = [
       landscape: { position: [-7.5, -1.6, 8.5], target: [-0.6, -6.3, -3.2] },
       portrait: { position: [-3.4, -2.2, 12.5], target: [-3.6, -7.3, -3.4] },
     },
-    fx: { patch: 1, halt: 1 },
+    fx: { triad: 0, patch: 1, halt: 1 },
   },
   {
     id: "convergencia",
@@ -105,10 +107,15 @@ export const chapters: Chapter[] = [
     },
     fuentes: ["nist-blog-legacy"],
     pendientes: ["La convergencia se afirma sin fuente propia: el enlace de NIST es la fuente de la figura de esa sección."],
-    // Sin escena propia todavía: el 3D se atenúa y la planta vuelve a funcionar.
-    fx: { dim: 1, patch: 0, halt: 0 },
+    weight: 2,
+    camara: {
+      landscape: { position: [-1, -0.6, 17], target: [7.5, -2.6, -4] },
+      portrait: { position: [0.6, -1.4, 23.5], target: [0.6, -2.4, -4] },
+    },
+    // La planta vuelve a funcionar (se apaga al entrar) y se rompe el air gap (actúa en la estadía).
+    fx: { patch: 0, halt: 0, bridge: 1 },
     escena:
-      "La torre de red, del nivel 5 (empresa) al 0 (proceso). Entre IT y OT hay un hueco que se cierra; los paquetes empiezan a cruzar hacia la planta.",
+      "Vista de los dos pisos: arriba la oficina, abajo la planta, y entre los dos el air gap marcado como un borde. Los enlaces bajan desde los racks y desde la nube hasta un PLC, un tanque y una válvula; el borde pasa a ámbar y los paquetes empiezan a cruzar hacia la planta.",
   },
   {
     id: "protocolos",
@@ -135,6 +142,8 @@ export const chapters: Chapter[] = [
     },
     fuentes: [],
     pendientes: ["La tesina no cita fuente para estas tres características."],
+    // Sin escena propia todavía: el 3D se atenúa.
+    fx: { dim: 1 },
     escena:
       "Primer plano de un gabinete PLC. Llega una trama en texto plano y el PLC la ejecuta: la válvula se mueve sin que nadie se identifique.",
   },

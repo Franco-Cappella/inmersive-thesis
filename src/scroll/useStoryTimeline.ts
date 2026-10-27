@@ -26,7 +26,8 @@ const pick = (fx: SceneFx, keys: (keyof SceneFx)[]) => Object.fromEntries(keys.m
 // El director de los capítulos. Por capítulo i:
 //  ENTRADA (la sección sube: "top bottom" → "top top"): la cámara viaja del keyframe i-1 al i
 //          y el velo pasa del dim anterior al propio.
-//  ESTADÍA ("top top" → "bottom bottom"): se animan los fx que cambian en i (la escena "actúa").
+//  ESTADÍA ("top top" → "bottom bottom"): se animan los fx que se prenden en i (la escena "actúa").
+//           Los que se apagan se resetean durante la entrada.
 // Todo fromTo con valores explícitos + immediateRender:false → reversible y sin depender del orden.
 export function useStoryTimeline(scope: RefObject<HTMLElement | null>) {
   const reading = useUI((s) => s.reading);
@@ -98,10 +99,21 @@ export function useStoryTimeline(scope: RefObject<HTMLElement | null>) {
                 { opacity: after.dim, ease: "none", immediateRender: false, scrollTrigger: entry },
               );
 
-            const keys = (Object.keys(after) as (keyof SceneFx)[]).filter((k) => k !== "dim" && before[k] !== after[k]);
-            if (keys.length)
-              gsap.fromTo(rig.fx, pick(before, keys), {
-                ...pick(after, keys),
+            // Lo que se APAGA en este capítulo (por ejemplo, la planta detenida del 01) se resetea
+            // durante la entrada; lo que se PRENDE actúa durante la estadía, con el panel a la vista.
+            const changed = (Object.keys(after) as (keyof SceneFx)[]).filter((k) => k !== "dim" && before[k] !== after[k]);
+            const off = changed.filter((k) => after[k] < before[k]);
+            const on = changed.filter((k) => after[k] > before[k]);
+            if (off.length)
+              gsap.fromTo(rig.fx, pick(before, off), {
+                ...pick(after, off),
+                ease: "none",
+                immediateRender: false,
+                scrollTrigger: entry,
+              });
+            if (on.length)
+              gsap.fromTo(rig.fx, pick(before, on), {
+                ...pick(after, on),
                 ease: "none",
                 immediateRender: false,
                 scrollTrigger: { trigger: el, start: "top top", end: "bottom bottom", scrub: true },

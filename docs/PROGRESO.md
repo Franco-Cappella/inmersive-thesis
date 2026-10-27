@@ -5,7 +5,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 ## Estado actual
 
 - **Hero:** completo en lo funcional. La pirámide C·I·A se arma al cargar, gira 180° y baja de IT a OT con el scroll. La ficha IT/OT cambia con paletas y la lista de prioridades rueda fila por fila. Tiene respaldo SVG, modo reduced motion y modo lectura.
-- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **El capítulo 01 ya tiene su escena 3D**; los demás usan `dim: 1` (el velo tapa el 3D) hasta que se construya la suya.
+- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **Los capítulos 01 y 02 ya tienen su escena 3D**; los demás usan `dim: 1` (el velo tapa el 3D) hasta que se construya la suya.
 - **Verificación:** `scripts/capturas.cjs` (hero y capítulos en desktop y celular, consola, scroll horizontal) y `scripts/modos.cjs` (estudios, lectura, presentación, reduced motion, sin WebGL, scroll inverso). Última corrida: todo bien, consola limpia.
 
 ## Bitácora
@@ -23,21 +23,26 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - Director de capítulos: cámara por capítulo durante la entrada, `fx` durante la estadía, velo por `dim`. Reemplaza el velo fijo que tenía el hero.
 - Escena 01 (`src/three/scenes/Escenario.tsx` + reacciones en `OTFloor.tsx`): parche que baja, HMI en blanco, flujo cortado, válvula ámbar → rojo y baliza ESD. En escritorio el panel queda fijo mientras la escena actúa. En presentación, los capítulos con escena tienen una parada oculta al final (la flecha muestra la escena terminada antes de pasar al siguiente).
 
+### Sesión 2 (27/10/2026, 8:17–8:50 hora argentina)
+- Escena 02 (`src/three/scenes/Convergencia.tsx`): borde del air gap entre los pisos, tres enlaces que bajan (racks y nube → PLC, válvula, tanque) revelados con `drawRange`, borde en ámbar y paquetes que cruzan a la planta.
+- Director: lo que un capítulo apaga se resetea durante la entrada (la planta del 01 vuelve a funcionar al entrar al 02); lo que prende actúa en la estadía.
+- `fx.triad`: la pirámide del hero se guarda al empezar los capítulos.
+
 ## Deploy
 
 El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: cada push a `main` actualiza producción y cada rama genera una URL de preview. Las sesiones de Claude no tienen acceso a Vercel (la red lo bloquea y no hay credenciales): se trabaja contra el build local y se verifica con `scripts/capturas.cjs`.
 
 ## Próximo paso
 
-**Escena 3D del capítulo 02 (convergencia: se rompe el air gap).** Ver `docs/GUION.md`, sección "Cómo se agrega la escena de un capítulo".
+**Escena 3D del capítulo 07 (casos: los recorridos en rojo).** Es la "audacia" de la dirección de arte (la otra es el descenso). Ver `docs/GUION.md`, "Cómo se agrega la escena de un capítulo".
 
-1. `src/content/story.ts`: al capítulo `convergencia`, `weight`, `camara` y `fx: { dim: 0, bridge: 1 }`; sumar `bridge` a `SceneFx`/`FX_INICIAL`. El capítulo 03 tiene que volver a `dim: 1` (o tener su escena).
-2. `src/three/scenes/Convergencia.tsx`: entre el piso IT y la planta hay un hueco (el air gap). Con `bridge` aparece un enlace (nube/ERP → PLC) y los paquetes empiezan a cruzar hacia la planta.
-3. Verificar con `scripts/capturas.cjs` (captura la estadía de los capítulos con escena) y `scripts/modos.cjs`.
+1. `src/content/story.ts`: al capítulo `casos`, `weight`, `camara` y `fx: { dim: 0, attack: 1 }` (sumar `attack` a `SceneFx`/`FX_INICIAL`). Los capítulos 03 a 06 siguen con `dim: 1`; el 08 (datos) tiene que volver a `dim: 1`.
+2. `src/three/scenes/Casos.tsx`: un recorrido rojo (`palette.alarm`) por caso, de la oficina o la nube hacia la planta, reutilizando los enlaces del 02. Colonial Pipeline: el rojo se queda en IT y la planta se detiene igual (corte por decisión, sin que el ataque llegue a OT). Oldsmar: el recorrido llega a la válvula por acceso remoto. Stuxnet e Industroyer: llegan a un PLC.
+3. El texto del capítulo nombra cada caso: el color nunca es el único portador de significado.
 
 ## Cola (en orden)
 
-1. Escenas 02 (air gap), 07 (casos en rojo) y 09 (zonas y conductos).
+1. Escenas 07 (casos en rojo) y 09 (zonas y conductos que bloquean el rojo).
 2. Animaciones de las figuras HTML (contadores, reloj, brecha).
 3. Pasada de arte del hero y de los estudios.
 
