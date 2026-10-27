@@ -13,7 +13,7 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - [x] Respaldo SVG sin WebGL y para reduced motion; tabla de la tesina como contenido real.
 - [x] **Pasada de arte (detalle):** juntas entre servidores en los racks, bridas y soportes en las cañerías, aros y faldones en los tanques, rejillas y manija en los gabinetes (`src/three/scenes/PlantDetails.tsx`). Todo instanciado y en metal o tinta: cinco llamadas de dibujo más.
 - [ ] Atmósfera propia de cada estudio (luz, niebla, materiales), cuando Franco elija uno.
-- [ ] Revisar en una compu real de la defensa (GPU integrada): el tier bajo tiene que sostener 30 fps.
+- [ ] Revisar en una compu real de la defensa (GPU integrada): el tier bajo tiene que sostener 30 fps. Si no llega, abrir con `?calidad=baja` (fija el tier bajo desde el principio) o `?calidad=estatica` (sin 3D).
 
 ## Fase 3 · Capítulos — hecho en el esqueleto
 - [x] 9 capítulos con título, bajada, figura en HTML y fuentes enlazadas.

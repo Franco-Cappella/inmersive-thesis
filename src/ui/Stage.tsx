@@ -12,7 +12,7 @@ export function Stage() {
   const reading = useUI((s) => s.reading);
   const show3D = booted && tier !== "static" && !reading;
   return (
-    <div className="stage" aria-hidden="true">
+    <div className="stage" aria-hidden="true" data-tier={booted ? tier : undefined}>
       {show3D && <Experience />}
       <div className="stage__veil" />
     </div>

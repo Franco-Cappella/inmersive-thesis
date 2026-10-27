@@ -32,6 +32,7 @@ type UI = {
   booted: boolean; // ya se leyeron la URL y las capacidades del navegador (solo en el cliente)
   active: string; // id de la sección visible: "inicio", un capítulo o "referencias"
   tier: Tier;
+  tierFijo: boolean; // ?calidad= en la URL: el PerformanceMonitor ya no lo cambia
   reading: boolean;
   presenting: boolean;
   estudio: Estudio;
@@ -51,6 +52,7 @@ export const useUI = create<UI>((set, get) => ({
   booted: false,
   active: "inicio",
   tier: "high",
+  tierFijo: false,
   reading: false,
   presenting: false,
   estudio: "sala",
@@ -58,16 +60,22 @@ export const useUI = create<UI>((set, get) => ({
   boot: () => {
     const q = new URLSearchParams(location.search);
     const estudio = q.get("estudio");
+    // ?calidad=baja (sin posprocesado y a resolución 1×) o ?calidad=estatica (sin 3D): para una compu lenta.
+    const calidad = q.get("calidad");
+    const webgl = hasWebGL2();
+    const fijo: Tier | null = calidad === "estatica" || (calidad === "baja" && !webgl) ? "static" : calidad === "baja" ? "low" : null;
     set({
       booted: true,
-      tier: hasWebGL2() ? "high" : "static",
+      tier: fijo ?? (webgl ? "high" : "static"),
+      tierFijo: fijo !== null,
       reading: q.has("lectura"),
       presenting: q.has("presentacion"),
       estudio: isEstudio(estudio) ? estudio : "sala",
     });
   },
   setActive: (active) => set({ active }),
-  setTier: (tier) => set((s) => (s.tier === "static" ? s : { tier })), // sin WebGL no se sube de tier
+  // Sin WebGL no se sube de tier, y si la URL fijó la calidad, el PerformanceMonitor no la cambia.
+  setTier: (tier) => set((s) => (s.tier === "static" || s.tierFijo ? s : { tier })),
   setEstudio: (estudio) => {
     syncQuery("estudio", estudio === "sala" ? null : estudio);
     set({ estudio });
