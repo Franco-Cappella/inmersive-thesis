@@ -64,7 +64,8 @@ export function FlowPipe({
     if (!m) return;
     const a = amount();
     m.emissiveIntensity = a * 3.2;
-    if (a > 0.001) tex.offset.x -= delta * speed * a;
+    // La textura se mueve a través del material (ref): mutar en el loop lo que devolvió useMemo no corresponde.
+    if (a > 0.001 && m.emissiveMap) m.emissiveMap.offset.x -= delta * speed * a;
   });
 
   return (

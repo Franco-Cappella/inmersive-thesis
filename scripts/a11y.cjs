@@ -33,7 +33,6 @@ const vistas = [
     await page.waitForTimeout(1500);
     await page.addScriptTag({ path: AXE });
     const r = await page.evaluate(async () => {
-      // eslint-disable-next-line no-undef
       const res = await axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"] } });
       return res.violations.map((x) => ({ id: x.id, impacto: x.impact, ayuda: x.help, nodos: x.nodes.slice(0, 30).map((n) => `${n.target.join(" ")} ${n.any[0]?.data ? `(${n.any[0].data.contrastRatio}:1, ${n.any[0].data.fgColor} sobre ${n.any[0].data.bgColor})` : ""}`) }));
     });

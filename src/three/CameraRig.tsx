@@ -2,15 +2,15 @@
 
 import { useFrame } from "@react-three/fiber";
 import { easing } from "maath";
-import { useMemo } from "react";
+import { useRef } from "react";
 import { Vector3 } from "three";
 import { rig } from "@/scroll/rig";
 
 export function CameraRig() {
-  const goal = useMemo(() => new Vector3(), []); // vectores creados UNA vez, nunca en el loop
-  const target = useMemo(() => new Vector3(), []);
-  const look = useMemo(() => new Vector3(), []);
+  // Vectores creados UNA vez, nunca en el loop. En un ref: son mutables por diseño.
+  const v = useRef({ goal: new Vector3(), target: new Vector3(), look: new Vector3() });
   useFrame((state, delta) => {
+    const { goal, target, look } = v.current;
     const c = rig.cam;
     goal.set(c.px, c.py, c.pz);
     target.set(c.tx, c.ty, c.tz);

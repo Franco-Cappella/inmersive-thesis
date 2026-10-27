@@ -31,7 +31,7 @@ node scripts/video.cjs http://localhost:4321 /ruta/de/salida 4    # graba el rec
 
 ## Al cerrar una tanda de trabajo
 
-1. `npx tsc --noEmit && npm run build` sin errores.
+1. `npx tsc --noEmit && npm run lint && npm run build` sin errores.
 2. Capturas con `scripts/capturas.cjs` y revisarlas. Si se tocaron estilos o textos, también `scripts/a11y.cjs`.
 3. Actualizar `docs/PROGRESO.md` (qué se hizo, qué sigue) y `docs/ROADMAP.md`.
 4. Commit y push a `main`.
