@@ -13,6 +13,7 @@ import { chapters, fxOf } from "@/content/story";
 import { rig } from "@/scroll/rig";
 import { useUI } from "@/state/store";
 import { CameraRig } from "./CameraRig";
+import { FogRig } from "./FogRig";
 import { palettes } from "./palette";
 import { Casos } from "./scenes/Casos";
 import { Convergencia } from "./scenes/Convergencia";
@@ -86,6 +87,7 @@ export default function Experience() {
           <Matiz palette={palette} />
         </Suspense>
         <CameraRig />
+        <FogRig near={palette.fog[0]} far={palette.fog[1]} />
         <FrameBridge />
         {tier === "high" && (
           <EffectComposer multisampling={0}>

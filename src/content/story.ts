@@ -335,5 +335,11 @@ export const chapters: Chapter[] = [
     },
     fuentes: [],
     escena: "La cámara se aleja: la planta sigue funcionando, segmentada, y la pirámide AIC queda estable sobre ella.",
+    weight: 1.8,
+    camara: {
+      landscape: { position: [-8, 4, 31], target: [10, -3.2, -5] },
+      portrait: { position: [-1, 4, 40], target: [-1, -2.5, -5] },
+    },
+    fx: { triad: 1 },
   },
 ];

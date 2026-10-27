@@ -38,6 +38,10 @@ Para medirlo de nuevo: sumar el gzip de los `<script>` de `out/index.html` y bus
 | zustand | 5.0.16 | Estado discreto |
 | @fontsource-variable/archivo · source-serif-4 | 5.3.0 · 5.3.1 | Fuentes autoalojadas (offline) |
 
+## Niebla según el encuadre
+
+La niebla de cada estudio está pensada para la distancia de trabajo de la cámara (unas 26 unidades entre la cámara y su objetivo). En el cierre del 10 la cámara se aleja hasta 40 o 45 y con la niebla fija la planta quedaba lavada. `src/three/FogRig.tsx` escala `near` y `far` con esa distancia cuando la supera; hasta 26 deja la niebla del estudio como está.
+
 ## Errores que ya se encontraron y se corrigieron
 
 - **`matchMedia` sin la condición base:** con la forma de objeto, GSAP ejecuta el callback si *alguna* condición coincide. Sin `(prefers-reduced-motion: no-preference)` en la lista, el timeline del hero nunca corría.

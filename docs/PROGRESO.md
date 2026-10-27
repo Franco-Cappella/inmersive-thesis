@@ -5,7 +5,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 ## Estado actual
 
 - **Hero:** completo en lo funcional. La pirámide C·I·A se arma al cargar, gira 180° y baja de IT a OT con el scroll. La ficha IT/OT cambia con paletas y la lista de prioridades rueda fila por fila. Tiene respaldo SVG, modo reduced motion y modo lectura.
-- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **Los capítulos 01, 02, 07 y 09 ya tienen su escena 3D**; el 03, el 05 y el 08 usan `dim: 1` (el velo tapa el 3D) y el 10 hereda por ahora el estado final del 09 (la planta segmentada y en marcha).
+- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **Los capítulos 01, 02, 07, 09 y 10 ya tienen su escena 3D**; el 03, el 05 y el 08 usan `dim: 1` (el velo tapa el 3D).
 - **Verificación:** `scripts/capturas.cjs` (hero y capítulos en desktop y celular, consola, scroll horizontal) y `scripts/modos.cjs` (estudios, lectura, presentación, reduced motion, sin WebGL, scroll inverso). Última corrida: todo bien, consola limpia.
 
 ## Bitácora
@@ -37,6 +37,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
 - El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
 - Escena 09 (`src/three/scenes/Matiz.tsx`): un pilar por tramo de `fx.zones` (`MATIZ_TRAMOS`), con la lista de pilares encendiéndose al mismo ritmo. La DMZ se cierra sobre el air gap, aparecen las zonas y una compuerta por enlace legítimo; los recorridos de los casos se retraen hasta la DMZ (señal `segmentation` en `signals.ts`) y la planta vuelve a azul. Después, un sensor pasivo en un puerto espejo y un gemelo digital que valida el parche. Verificada en los tres estudios, celular, reduced motion y scroll de vuelta al 07.
+- Escena 10 (sin archivo propio: cámara y `fx.triad` en `story.ts`): la cámara sube y se aleja hasta ver la torre entera y la pirámide se rearma capa por capa en el orden A, I, C (`Pyramid.tsx`, cada capa escala con `fx.triad`). `src/three/FogRig.tsx` aleja la niebla cuando el encuadre se aleja (ver `docs/DECISIONES.md`).
 
 ## Deploy
 
@@ -44,18 +45,17 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 ## Próximo paso
 
-**Escena 3D del capítulo 10 (postura: la planta segmentada sigue en marcha y vuelve la pirámide AIC).**
+**Preparación de la defensa: prueba sin conexión y video de respaldo.**
 
-1. `src/content/story.ts`: al capítulo `postura`, `camara` (la cámara sube y se aleja para ver la torre entera: oficina, DMZ y planta) y `fx: { triad: 1 }` (la pirámide vuelve). Si hace falta un estado propio (por ejemplo, que la pirámide se apoye sobre la planta en vez de flotar donde quedó en el hero), sumarlo a `SceneFx`/`FX_INICIAL`.
-2. `src/three/scenes/Pyramid.tsx`: hoy escala con `rig.fx.triad` en la posición del final del hero (OT, con la A arriba). Revisar que se vea bien con la cámara nueva.
-3. Verificar que el final del recorrido (referencias) no deje el Canvas a medio camino.
+1. `scripts/offline.cjs`: Playwright sobre el build servido, registrando cada request. Falla si alguna sale de `localhost` (fuentes, modelos o scripts de CDN). Después recorre el sitio con la red cortada (`context.setOffline(true)` tras la primera carga) y confirma que no hay errores de consola.
+2. `scripts/video.cjs`: graba el recorrido completo en modo presentación (`recordVideo` de Playwright, 1920×1080), avanzando parada por parada con la flecha y esperando lo que dura cada escena. Salida en `.webm`; documentar cómo pasarlo a `.mp4` si hace falta.
+3. Sumar los dos comandos al README y a `CLAUDE.md`, y marcar en `docs/ROADMAP.md` (fase 5).
 
 ## Cola (en orden)
 
-1. Escena 10 (postura).
-2. Preparación de la defensa: prueba sin conexión automatizada y script para grabar el recorrido en video.
-3. Escenas 3D restantes: 05 (tres golpes) y 03 (PLC que ejecuta una trama).
-4. Pasada de arte del hero y de los estudios.
+1. Preparación de la defensa: prueba sin conexión automatizada y script para grabar el recorrido en video.
+2. Escenas 3D restantes: 05 (tres golpes) y 03 (PLC que ejecuta una trama).
+3. Pasada de arte del hero y de los estudios.
 
 ## Bloqueado por Franco
 
