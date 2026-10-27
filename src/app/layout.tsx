@@ -8,9 +8,18 @@ import "@/styles/hero.css";
 import "@/styles/chapters.css";
 import { site } from "@/content/hero";
 
+// La imagen para compartir es src/app/opengraph-image.png (convención de archivo de Next).
+// Sin metadataBase: en Vercel Next arma la URL absoluta con el dominio del deploy.
 export const metadata: Metadata = {
   title: `${site.titulo} · Tesina IT/OT`,
   description: site.descripcion,
+  openGraph: {
+    title: site.titulo,
+    description: site.descripcion,
+    type: "website",
+    locale: "es_AR",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 // Sin maximumScale: el zoom del navegador queda habilitado (accesibilidad).

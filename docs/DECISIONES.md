@@ -38,6 +38,12 @@ Para medirlo de nuevo: sumar el gzip de los `<script>` de `out/index.html` y bus
 | zustand | 5.0.16 | Estado discreto |
 | @fontsource-variable/archivo · source-serif-4 | 5.3.0 · 5.3.1 | Fuentes autoalojadas (offline) |
 
+## Imagen para compartir
+
+`src/app/opengraph-image.png` (1200×630, una captura del hero) y su texto alternativo en `opengraph-image.alt.txt`, con la convención de archivos de Next. No se fija `metadataBase`: en un build de producción en Vercel, Next arma la URL absoluta con `VERCEL_PROJECT_PRODUCTION_URL` (y en los previews con la URL de la rama), según `next/dist/lib/metadata/resolvers/resolve-url.js`. En el build local aparece el aviso "metadataBase property … is not set" y la URL apunta a `localhost:3000`: es esperable. Si el sitio se publica en otro dominio, ahí sí hay que fijar `metadataBase` en `src/app/layout.tsx`.
+
+Para regenerar la imagen después de un cambio visual del hero: capturar el hero a 1200×630 con la barra de estudios, el índice y la guía de scroll ocultos.
+
 ## Niebla según el encuadre
 
 La niebla de cada estudio está pensada para la distancia de trabajo de la cámara (unas 26 unidades entre la cámara y su objetivo). En el cierre del 10 la cámara se aleja hasta 40 o 45 y con la niebla fija la planta quedaba lavada. `src/three/FogRig.tsx` escala `near` y `far` con esa distancia cuando la supera; hasta 26 deja la niebla del estudio como está.

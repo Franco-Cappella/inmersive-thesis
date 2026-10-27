@@ -1,0 +1,1 @@
+La tríada invertida: una pirámide de tres capas (Confidencialidad arriba, Integridad, Disponibilidad en la base) delante de los racks de la oficina y la planta industrial.
