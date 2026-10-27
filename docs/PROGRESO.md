@@ -38,6 +38,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
 - Escena 09 (`src/three/scenes/Matiz.tsx`): un pilar por tramo de `fx.zones` (`MATIZ_TRAMOS`), con la lista de pilares encendiéndose al mismo ritmo. La DMZ se cierra sobre el air gap, aparecen las zonas y una compuerta por enlace legítimo; los recorridos de los casos se retraen hasta la DMZ (señal `segmentation` en `signals.ts`) y la planta vuelve a azul. Después, un sensor pasivo en un puerto espejo y un gemelo digital que valida el parche. Verificada en los tres estudios, celular, reduced motion y scroll de vuelta al 07.
 - Modo presentación: una parada oculta al final de cada caso del 07 y de cada pilar del 09 (`src/content/stops.ts`, desde `src/scroll/timing.ts`), y viajes que duran según la distancia (`src/ui/navigation.ts`). El recorrido completo son 23 paradas.
+- Preparación de la defensa: `scripts/offline.cjs` (ningún pedido sale de localhost y el recorrido sigue andando con la red cortada) y `scripts/video.cjs` (graba el recorrido en modo presentación). Los dos esperan con `load` y no con `networkidle`: el worker de troika (un blob) deja una conexión abierta y `networkidle` no llega nunca. Documentados en el README y en `CLAUDE.md`.
 - Escena 10 (sin archivo propio: cámara y `fx.triad` en `story.ts`): la cámara sube y se aleja hasta ver la torre entera y la pirámide se rearma capa por capa en el orden A, I, C (`Pyramid.tsx`, cada capa escala con `fx.triad`). `src/three/FogRig.tsx` aleja la niebla cuando el encuadre se aleja (ver `docs/DECISIONES.md`).
 
 ## Deploy
@@ -46,17 +47,18 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 ## Próximo paso
 
-**Preparación de la defensa: prueba sin conexión y video de respaldo.**
+**Escena 3D del capítulo 05 (tres controles IT, tres formas de parar).**
 
-1. `scripts/offline.cjs`: Playwright sobre el build servido, registrando cada request. Falla si alguna sale de `localhost` (fuentes, modelos o scripts de CDN). Después recorre el sitio con la red cortada (`context.setOffline(true)` tras la primera carga) y confirma que no hay errores de consola.
-2. `scripts/video.cjs`: graba el recorrido completo en modo presentación (`recordVideo` de Playwright, 1920×1080), avanzando parada por parada con la flecha y esperando lo que dura cada escena. Salida en `.webm`; documentar cómo pasarlo a `.mp4` si hace falta.
-3. Sumar los dos comandos al README y a `CLAUDE.md`, y marcar en `docs/ROADMAP.md` (fase 5).
+1. Leer el capítulo `conflicto` en `src/content/story.ts` y su sección en `docs/fuente/TESINA_FINAL.md`: parche, escaneo activo y MFA, cada uno con su forma de parar la planta.
+2. Una escena por tramos, como el 07 y el 09 (`CONFLICTO_TRAMOS` en `src/scroll/timing.ts`, lista del texto sincronizada en `Chapter.tsx` y paradas por tramo en `src/content/stops.ts`): el parche reinicia un controlador, el escaneo satura un equipo viejo y el MFA deja a un operador frente a una HMI bloqueada. La latencia como un reloj que corre.
+3. `weight`, `camara` y `fx` propios; volver a `dim: 0` y revisar que el 06 (que hoy deja ver la planta) no se pise con la escena.
 
 ## Cola (en orden)
 
-1. Preparación de la defensa: prueba sin conexión automatizada y script para grabar el recorrido en video.
-2. Escenas 3D restantes: 05 (tres golpes) y 03 (PLC que ejecuta una trama).
+1. Escena 05 (tres golpes).
+2. Escena 03 (PLC que ejecuta una trama sin identificar al emisor).
 3. Pasada de arte del hero y de los estudios.
+4. En la compu de la defensa: correr `scripts/offline.cjs` con el wifi apagado y grabar el video con `scripts/video.cjs`.
 
 ## Bloqueado por Franco
 

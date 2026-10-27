@@ -24,6 +24,8 @@ npm run build          # export estático en out/
 npx serve out -l 4321  # servir el build
 node scripts/capturas.cjs http://localhost:4321 /ruta/de/salida   # capturas + consola (requiere Playwright)
 node scripts/modos.cjs http://localhost:4321 /ruta/de/salida      # estudios, lectura, presentación, reduced motion, sin WebGL
+node scripts/offline.cjs http://localhost:4321 /ruta/de/salida    # sin pedidos externos y recorrido completo con la red cortada
+node scripts/video.cjs http://localhost:4321 /ruta/de/salida 4    # graba el recorrido de la presentación (.webm)
 ```
 
 ## Al cerrar una tanda de trabajo

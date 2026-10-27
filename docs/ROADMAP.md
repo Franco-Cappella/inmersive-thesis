@@ -36,8 +36,10 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - [x] Capturas del recorrido completo en celular y desktop, scroll hacia atrás incluido (`scripts/capturas.cjs`, `scripts/modos.cjs`).
 - [x] Modo presentación: ← → recorren IT, OT y los capítulos en orden. En el 07 y el 09 hay una parada por caso y por pilar (el texto y la escena avanzan juntos), y el viaje dura según lo que recorre (de 1,2 a 3,2 s).
 - [ ] Modo presentación ensayado con el proyector y con tiempos (5 a 9 minutos).
-- [ ] Probar sin conexión con el wifi apagado.
-- [ ] Video de respaldo del recorrido.
+- [x] Prueba sin conexión automatizada (`scripts/offline.cjs`): 0 pedidos externos y el recorrido completo (23 paradas) con la red cortada, consola limpia.
+- [ ] Probarlo también en la compu de la defensa, con el wifi apagado y el build servido desde `out/`.
+- [x] Script del video de respaldo (`scripts/video.cjs`): graba el recorrido en modo presentación a 1920×1080.
+- [ ] Grabar el video en la compu de la defensa (acá el 3D se dibuja por software y sale entrecortado).
 - [ ] Revisión de accesibilidad con teclado y lector de pantalla.
 
 ## Bloqueado por Franco

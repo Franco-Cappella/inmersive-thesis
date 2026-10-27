@@ -67,6 +67,15 @@ Si el sistema tiene activado "reducir movimiento", el sitio salta entre estados 
 | `npm run build` | Build estático en `out/` |
 | `npm run lint` | ESLint |
 
+### Antes de la defensa
+
+Con el build servido (`npx serve out -l 4321`) y Playwright instalado (`npm i -D playwright && npx playwright install chromium`):
+
+| Comando | Para qué |
+|---|---|
+| `node scripts/offline.cjs http://localhost:4321` | Confirma que el sitio no pide nada a internet y que, con la red cortada después de cargar, el recorrido completo en modo presentación sigue andando. Sale con error si encuentra un pedido externo o un error de consola |
+| `node scripts/video.cjs http://localhost:4321 video 4` | Graba el recorrido en modo presentación (1920×1080, 4 s por parada) en `video/recorrido.webm`, como respaldo por si falla la compu. Conviene grabarlo en la compu de la defensa: en una sin placa de video el 3D sale entrecortado. Con `GPU=1` usa la placa. Para pasarlo a mp4: `ffmpeg -i video/recorrido.webm -c:v libx264 -crf 20 video/recorrido.mp4` |
+
 ## Estructura
 
 ```
