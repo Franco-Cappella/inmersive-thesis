@@ -10,6 +10,11 @@ export const ui = {
   verificar: "Verificar",
   hipotetico: "Escenario hipotético",
   escena: "Qué muestra la ilustración:",
+  noEncontrada: {
+    titulo: "Esta página no existe",
+    texto: "El sitio es una sola página: el recorrido completo empieza en el inicio.",
+    volver: "Ir al inicio",
+  },
   antes: "Antes",
   despues: "Después",
   hipotesis: "Hipótesis",

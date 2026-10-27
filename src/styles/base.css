@@ -372,3 +372,31 @@ button {
     transition: none;
   }
 }
+
+/* ---------- 404 ---------- */
+
+.no-encontrada {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+  background: var(--c-field);
+}
+.no-encontrada__panel {
+  width: min(100%, 34rem);
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.3rem, 3vw, 2.4rem);
+  background: var(--c-panel-solid);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+}
+.no-encontrada h1 {
+  font-family: var(--f-display);
+  font-size: var(--step-3);
+  line-height: 1;
+}
+.no-encontrada a {
+  color: var(--c-flow-text);
+  font-weight: 700;
+}
