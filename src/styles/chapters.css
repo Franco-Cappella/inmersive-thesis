@@ -511,6 +511,67 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
     border-radius: 0;
     padding: 1rem 0 0;
   }
+  /* Los capítulos con escena no necesitan su scroll extra en papel (ni el espacio del celular) */
+  .chapter[data-escena] {
+    min-height: 0 !important;
+    padding-bottom: 1.2rem !important;
+  }
+  /* Las animaciones de entrada dejan estilos en línea (opacidad, visibilidad, desplazamiento):
+     en papel todo se ve, sin importar dónde quedó el scroll */
+  [data-reveal],
+  .chapter h2,
+  .chapter h2 *,
+  .fig-trama__bytes li,
+  .fig-reloj__pasos li,
+  .fig--golpes > li,
+  .fig--casos > li,
+  .fig--pilares > li {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+  /* Cortes de página: no partir tablas, cifras ni ítems de lista, y no dejar un título solo al pie */
+  table,
+  .cifra,
+  .fig-reloj__pasos li,
+  .fig--golpes > li,
+  .fig--casos > li,
+  .fig--pilares > li,
+  .fig-trama__frame,
+  .refs__lista li {
+    break-inside: avoid;
+  }
+  h1,
+  h2,
+  h3,
+  caption,
+  .chapter__head {
+    break-after: avoid;
+  }
+  h2,
+  .chapter__head {
+    break-inside: avoid;
+  }
+  /* Las barras del 08: su largo es el dato, así que se imprimen (fondo incluido) con el largo final */
+  .barra {
+    transform: scaleX(var(--v)) !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  /* El contador anima una copia visible que al volver arriba queda en 0: en papel va el valor final,
+     que es la copia para lectores de pantalla */
+  [data-contador] {
+    display: none !important;
+  }
+  .cifra__valor .sr-only {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+  }
   .flap__leaf {
     display: none;
   }

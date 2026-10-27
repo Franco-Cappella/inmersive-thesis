@@ -72,27 +72,30 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           tl.set({}, {}, 1); // el timeline dura exactamente la estadía
         }
         // Cifras: cuentan desde 0 hasta el valor de la tesina (formato es-AR: 125.000 · 2,3).
-        section.querySelectorAll<HTMLElement>("[data-contador]").forEach((el) => {
-          const original = el.textContent ?? "";
-          const m = original.match(/(\d{1,3}(?:\.\d{3})+|\d+)(?:,(\d+))?/);
-          if (!m || m.index === undefined) return;
-          const decimals = m[2]?.length ?? 0;
-          const value = parseFloat(`${m[1].replace(/\./g, "")}.${m[2] ?? "0"}`);
-          const [before, after] = [original.slice(0, m.index), original.slice(m.index + m[0].length)];
-          const fmt = (v: number) =>
-            v.toLocaleString("es-AR", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-          const n = { v: 0 };
-          el.textContent = before + fmt(0) + after;
-          gsap.to(n, {
-            v: value,
-            duration: 1.6,
-            ease: "power2.out",
-            onUpdate: () => {
-              el.textContent = before + fmt(n.v) + after;
-            },
-            scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none reverse" },
+        // En el modo lectura (para el jurado y para imprimir) las cifras quedan quietas, con su valor.
+        if (!reading) {
+          section.querySelectorAll<HTMLElement>("[data-contador]").forEach((el) => {
+            const original = el.textContent ?? "";
+            const m = original.match(/(\d{1,3}(?:\.\d{3})+|\d+)(?:,(\d+))?/);
+            if (!m || m.index === undefined) return;
+            const decimals = m[2]?.length ?? 0;
+            const value = parseFloat(`${m[1].replace(/\./g, "")}.${m[2] ?? "0"}`);
+            const [before, after] = [original.slice(0, m.index), original.slice(m.index + m[0].length)];
+            const fmt = (v: number) =>
+              v.toLocaleString("es-AR", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+            const n = { v: 0 };
+            el.textContent = before + fmt(0) + after;
+            gsap.to(n, {
+              v: value,
+              duration: 1.6,
+              ease: "power2.out",
+              onUpdate: () => {
+                el.textContent = before + fmt(n.v) + after;
+              },
+              scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none reverse" },
+            });
           });
-        });
+        }
         // Trama Modbus (03): los campos aparecen en orden, como llegan por la red.
         const campos = section.querySelectorAll(".fig-trama__bytes li");
         if (campos.length)

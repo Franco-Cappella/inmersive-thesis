@@ -27,6 +27,7 @@ node scripts/modos.cjs http://localhost:4321 /ruta/de/salida      # estudios, le
 node scripts/offline.cjs http://localhost:4321 /ruta/de/salida    # sin pedidos externos y recorrido completo con la red cortada
 node scripts/a11y.cjs http://localhost:4321                        # axe-core (WCAG 2.2 AA) en 5 vistas y orden de Tab
 node scripts/video.cjs http://localhost:4321 /ruta/de/salida 4    # graba el recorrido de la presentación (.webm)
+node scripts/pdf.cjs http://localhost:4321 /ruta/sitio.pdf         # PDF A4 del modo lectura (para el jurado)
 ```
 
 ## Al cerrar una tanda de trabajo

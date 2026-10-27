@@ -14,6 +14,7 @@ Lista adaptada de la sección 14 de la skill a este proyecto (Next.js en export 
 - [ ] Si la compu no sostiene el 3D (se ve entrecortado): abrir con `?calidad=baja`; si tampoco, `?calidad=estatica` o `?lectura`.
 - [ ] Grabar el video de respaldo en esa misma compu: `node scripts/video.cjs http://localhost:PUERTO video 4` y pasarlo a mp4 (README).
 - [ ] Tener abierta la tesina: cada dato del sitio sale de ahí, con su fuente en Referencias.
+- [ ] Si el jurado quiere el sitio en papel: `node scripts/pdf.cjs http://localhost:PUERTO tesina-sitio.pdf` (el modo lectura en A4).
 
 ## El recorrido en el modo presentación
 
