@@ -1,0 +1,365 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--c-field);
+  color: var(--c-ink);
+  font-family: var(--f-text);
+  font-size: var(--step-0);
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--f-display);
+  font-stretch: var(--display-stretch);
+  font-weight: var(--display-weight);
+  text-transform: var(--display-case);
+  letter-spacing: var(--display-tracking);
+  line-height: 0.95;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.5em;
+  padding: 0 0.3em;
+  border: 1px solid var(--c-line);
+  border-radius: 3px;
+  font-family: var(--f-display);
+  font-size: 0.75em;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+:focus-visible {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--c-ink);
+  color: var(--c-field);
+  font-family: var(--f-display);
+  font-weight: 600;
+  transform: translateY(-160%);
+}
+.skip:focus-visible {
+  transform: none;
+}
+
+/* ---------- Escenario 3D (fijo, detrás de todo) ---------- */
+
+.stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.stage__canvas {
+  position: absolute;
+  inset: 0;
+}
+.stage__veil {
+  position: absolute;
+  inset: 0;
+  background: var(--c-field);
+  opacity: 0;
+}
+main,
+.masthead,
+.progress {
+  position: relative;
+  z-index: 10;
+}
+
+/* ---------- Paneles y piezas comunes ---------- */
+
+.panel {
+  background: var(--c-panel);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  backdrop-filter: blur(6px);
+}
+
+.tag,
+.pending {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 0.1em 0.55em;
+  border-radius: 999px;
+  font-family: var(--f-display);
+  font-size: var(--step--1);
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.tag {
+  border: 1px solid var(--c-ink);
+}
+/* Pendiente de fuente: se ve a propósito hasta que se resuelva */
+.pending {
+  border: 1px dashed var(--c-warn);
+  color: var(--c-ink);
+}
+.pending::before {
+  content: "";
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  background: var(--c-warn);
+}
+
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.6rem;
+  margin-top: 0.9rem;
+  font-family: var(--f-display);
+  font-size: var(--step--1);
+  color: var(--c-ink-soft);
+}
+.sources__label {
+  font-weight: 600;
+}
+.sources__ref {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--c-ink);
+  min-height: 1.75rem;
+  display: inline-grid;
+  place-items: center;
+}
+
+/* ---------- Botones (interfaz: sin animación larga, sin ease-in) ---------- */
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.tool,
+.segmented button {
+  min-height: 44px;
+  padding: 0 0.85rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  background: var(--c-panel);
+  font-family: var(--f-display);
+  font-size: var(--step--1);
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: transform var(--dur-press) var(--ease-out);
+}
+.tool:active,
+.segmented button:active {
+  transform: scale(0.97);
+}
+.tool[aria-pressed="true"],
+.segmented button[aria-pressed="true"] {
+  background: var(--c-ink);
+  color: var(--c-field);
+  border-color: var(--c-ink);
+}
+@media (hover: hover) and (pointer: fine) {
+  .tool:hover,
+  .segmented button:hover {
+    border-color: var(--c-ink);
+  }
+}
+.segmented {
+  display: inline-flex;
+}
+.segmented button {
+  border-radius: 0;
+  margin-left: -1px;
+}
+.segmented button:first-child {
+  border-radius: var(--radius) 0 0 var(--radius);
+  margin-left: 0;
+}
+.segmented button:last-child {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* ---------- Cabecera ---------- */
+
+.masthead {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem var(--gutter);
+  pointer-events: none;
+}
+.masthead > * {
+  pointer-events: auto;
+}
+.masthead__brand {
+  font-family: var(--f-display);
+  font-stretch: var(--display-stretch);
+  font-weight: var(--display-weight);
+  text-transform: var(--display-case);
+  font-size: var(--step-1);
+  text-decoration: none;
+  line-height: 1;
+}
+.masthead__tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+@media (max-width: 860px) {
+  .masthead__brand {
+    display: none;
+  }
+  .masthead {
+    justify-content: flex-end;
+  }
+  .segmented button {
+    padding: 0 0.6rem;
+  }
+  .tool kbd,
+  .tool--present {
+    display: none;
+  }
+}
+
+/* ---------- Índice de progreso (pisos del recorrido) ---------- */
+
+.progress {
+  position: fixed;
+  top: 50%;
+  right: clamp(0.5rem, 1.6vw, 1.5rem);
+  transform: translateY(-50%);
+}
+.progress ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+.progress a {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 30px;
+  text-decoration: none;
+  font-family: var(--f-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--c-ink-soft);
+  border-right: 2px solid var(--c-line);
+}
+.progress a[aria-current="step"] {
+  color: var(--c-ink);
+  border-right-color: var(--c-flow);
+  border-right-width: 4px;
+}
+.progress__label {
+  position: absolute;
+  right: calc(100% + 0.5rem);
+  top: 50%;
+  translate: 0 -50%;
+  padding: 0.25rem 0.6rem;
+  background: var(--c-panel-solid);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(6px);
+  transition:
+    opacity 150ms var(--ease-out),
+    transform 150ms var(--ease-out);
+}
+.progress a:focus-visible .progress__label {
+  opacity: 1;
+  transform: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .progress a:hover .progress__label {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (max-width: 760px) {
+  .progress {
+    display: none;
+  }
+}
+
+/* ---------- Modo presentación ---------- */
+
+:root[data-presenting="true"] {
+  font-size: 113%;
+}
+:root[data-presenting="true"] .masthead__tools .segmented,
+:root[data-presenting="true"] .masthead__tools .tool:not(.tool--present) {
+  display: none;
+}
+:root[data-presenting="true"][data-idle="true"],
+:root[data-presenting="true"][data-idle="true"] * {
+  cursor: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip,
+  .progress__label {
+    transition: none;
+  }
+}

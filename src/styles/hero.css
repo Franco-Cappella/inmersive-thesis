@@ -1,0 +1,596 @@
+/* ---------- Hero: la tríada invertida ---------- */
+
+.hero {
+  position: relative;
+  height: 400svh; /* 3 viewports de scroll: IT → giro → OT → cierre */
+}
+
+.hero__sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 0.44fr) minmax(0, 0.56fr);
+  padding: 5.5rem var(--gutter) 3rem;
+}
+
+/* Velo lateral: el texto nunca va directo sobre el 3D (contraste estable ≥ 4.5:1) */
+.hero__sticky::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--c-field) 0%,
+    color-mix(in srgb, var(--c-field) 88%, transparent) 34%,
+    transparent 56%
+  );
+  pointer-events: none;
+}
+
+.hero__intro,
+.ficha {
+  position: relative;
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+}
+
+.hero__byline {
+  font-family: var(--f-display);
+  font-size: var(--step--1);
+  font-weight: 600;
+  color: var(--c-ink-soft);
+  margin-bottom: 1.1rem;
+}
+.hero__title {
+  font-size: var(--step-5);
+  line-height: 0.88;
+  max-width: 7.5ch;
+}
+.hero__question {
+  margin-top: 1.5rem;
+  max-width: 24ch;
+  font-size: var(--step-1);
+  line-height: 1.35;
+  font-style: italic;
+}
+
+/* ---------- Ficha IT/OT ---------- */
+
+.ficha {
+  width: min(440px, 100%);
+  padding: 1.4rem 1.5rem 1.2rem;
+  visibility: hidden; /* el timeline la muestra; en reduced motion la muestra data-fase */
+  opacity: 0;
+}
+.ficha__head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.ficha__sigla {
+  display: inline-flex;
+  gap: 0.08em;
+  font-size: clamp(3rem, 4.6vw, 4.4rem);
+}
+.ficha__nombres {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+.ficha__nombre {
+  font-family: var(--f-display);
+  font-stretch: var(--display-stretch);
+  font-weight: 700;
+  font-size: var(--step-1);
+  line-height: 1.1;
+}
+.ficha__lema {
+  font-size: var(--step-0);
+  color: var(--c-ink-soft);
+  font-style: italic;
+}
+
+/* Dos textos en el mismo lugar: el de IT sale hacia arriba y el de OT entra desde abajo */
+.swap {
+  display: grid;
+  overflow: hidden;
+}
+.swap > span {
+  grid-area: 1 / 1;
+}
+.v-ot {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.prio {
+  margin-top: 1.2rem;
+}
+.prio__titulo {
+  font-family: var(--f-display);
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--c-ink-soft);
+  margin-bottom: 0.35rem;
+}
+.prio__dagger {
+  margin-left: 0.15em;
+  color: var(--c-warn);
+  font-weight: 800;
+}
+.prio__tabla {
+  --row: 2.6rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.6rem 1fr;
+  grid-template-rows: repeat(3, var(--row));
+}
+/* La fila N° 1 queda marcada: lo que cambia es quién la ocupa */
+.prio__tabla::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--row);
+  background: var(--c-highlight);
+  border-left: 4px solid var(--c-flow);
+}
+.prio__rank {
+  position: relative;
+  grid-column: 1;
+  grid-row: var(--rank);
+  display: grid;
+  place-items: center;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: var(--step-1);
+  font-variant-numeric: tabular-nums;
+}
+.prio__name {
+  position: absolute;
+  left: 2.6rem;
+  right: 0;
+  top: calc((var(--rank) - 1) * var(--row));
+  height: var(--row);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--f-display);
+  font-stretch: var(--display-stretch);
+  font-weight: 700;
+  font-size: var(--step-1);
+}
+.prio__letra {
+  display: inline-grid;
+  place-items: center;
+  width: 1.55em;
+  height: 1.55em;
+  border-radius: 3px;
+  background: var(--c-tile);
+  color: var(--c-tile-ink);
+  font-size: 0.8em;
+  font-stretch: 100%;
+}
+
+.ficha__filas {
+  margin: 1rem 0 0;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--c-line);
+  display: grid;
+  gap: 0.4rem;
+}
+.ficha__fila {
+  display: grid;
+  grid-template-columns: 6.4rem 1fr;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+.ficha__fila dt {
+  font-family: var(--f-display);
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--c-ink-soft);
+}
+.ficha__fila dt sup {
+  margin-left: 0.2em;
+  font-variant-numeric: tabular-nums;
+}
+.ficha__fila dd {
+  margin: 0;
+  line-height: 1.35;
+}
+.ficha__pie {
+  margin-top: 0.9rem;
+  font-size: var(--step--1);
+  line-height: 1.4;
+  color: var(--c-ink-soft);
+}
+
+/* ---------- Cartel de paletas (split-flap) ---------- */
+
+.flap {
+  --h: 1.18em;
+  position: relative;
+  display: inline-block;
+  width: 0.82em;
+  height: var(--h);
+  perspective: 3.5em;
+  font-family: var(--f-display);
+  font-stretch: 75%;
+  font-weight: 800;
+  line-height: var(--h);
+}
+.flap::after {
+  /* la ranura del cartel */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 1px);
+  height: 2px;
+  background: var(--c-panel-solid);
+  z-index: 3;
+}
+.flap__half {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+  background: var(--c-tile);
+  color: var(--c-tile-ink);
+}
+.flap__half--top {
+  top: 0;
+  border-radius: 0.08em 0.08em 0 0;
+}
+.flap__half--bottom {
+  bottom: 0;
+  border-radius: 0 0 0.08em 0.08em;
+}
+.flap__glyph {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--h);
+  text-align: center;
+}
+.flap__half--top .flap__glyph {
+  top: 0;
+}
+.flap__half--bottom .flap__glyph {
+  bottom: 0;
+}
+.flap__leaf {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50%;
+  z-index: 2;
+  transform-origin: 50% 100%;
+  transform: rotateX(calc(var(--flap, 0) * -180deg));
+  transform-style: preserve-3d;
+}
+.flap__leaf .flap__half {
+  top: 0;
+  bottom: 0;
+  height: 100%;
+}
+.flap__face {
+  backface-visibility: hidden;
+}
+.flap__face--back {
+  transform: rotateX(180deg);
+}
+
+/* ---------- Pirámide SVG (respaldo y placeholder) ---------- */
+
+.hero__figure {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1;
+  place-self: center;
+  width: min(36vw, 440px);
+  transition:
+    opacity 700ms var(--ease-out),
+    visibility 700ms;
+}
+.hero[data-stage-ready="true"] .hero__figure {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.pyr-card {
+  perspective: 1400px;
+}
+.pyr-card__inner {
+  position: relative;
+  aspect-ratio: 300 / 300;
+  transform-style: preserve-3d;
+  transform: rotateX(calc(var(--flip, 0) * -180deg));
+}
+.pyr-card__face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  justify-items: center;
+  gap: 0.6rem;
+  backface-visibility: hidden;
+}
+.pyr-card__face--ot {
+  transform: rotateX(180deg);
+}
+.pyr-card svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.pyr-card polygon {
+  fill: var(--c-panel-solid);
+  stroke: var(--c-ink);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.pyr-card text {
+  font-family: var(--f-display);
+  font-weight: 800;
+  fill: var(--c-ink);
+}
+.pyr-card .is-first polygon {
+  fill: var(--c-flow);
+}
+.pyr-card .is-first text {
+  fill: var(--c-field);
+}
+.pyr-card__caption {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: var(--step-0);
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Cierre y guía de scroll ---------- */
+
+.hero__cierre {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 14svh;
+  max-width: 13ch;
+  font-family: var(--f-display);
+  font-stretch: var(--display-stretch);
+  font-weight: var(--display-weight);
+  text-transform: var(--display-case);
+  font-size: var(--step-4);
+  line-height: 0.92;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.hero__cue {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 1.6rem;
+  font-family: var(--f-display);
+  font-size: var(--step--1);
+  font-weight: 600;
+}
+.hero__cue-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.hero__cue-line {
+  position: relative;
+  width: 2px;
+  height: 2.4rem;
+  overflow: hidden;
+  background: var(--c-line);
+}
+.hero__cue-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--c-ink);
+  transform-origin: top;
+  animation: cue 1.8s var(--ease-in-out) infinite;
+}
+@keyframes cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  51% {
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+/* La tabla real (para lectores de pantalla en modo normal; visible en modo lectura) */
+.hero__tabla {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Celular / vertical: el 3D arriba, el panel abajo ---------- */
+
+@media (max-width: 760px), (orientation: portrait) and (max-width: 1100px) {
+  .hero__sticky {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    padding: 4.4rem 1rem 1rem;
+  }
+  .hero__sticky::before {
+    background: linear-gradient(
+      0deg,
+      var(--c-field) 0%,
+      color-mix(in srgb, var(--c-field) 90%, transparent) 42%,
+      transparent 66%
+    );
+  }
+  .hero__intro,
+  .ficha {
+    grid-row: 2;
+    align-self: end;
+  }
+  .hero__figure {
+    grid-column: 1;
+    grid-row: 1;
+    width: min(62vw, 300px);
+  }
+  .hero__title {
+    font-size: clamp(3rem, 15vw, 5rem);
+  }
+  .hero__question {
+    margin-top: 1rem;
+  }
+  .ficha {
+    width: 100%;
+    padding: 1rem 1rem 0.9rem;
+  }
+  .ficha__sigla {
+    font-size: 2.6rem;
+  }
+  .prio {
+    margin-top: 0.8rem;
+  }
+  .prio__tabla {
+    --row: 2.1rem;
+  }
+  .ficha__fila {
+    grid-template-columns: 5.2rem 1fr;
+  }
+  .hero__cierre {
+    bottom: auto;
+    top: 52svh;
+    left: 1rem;
+    font-size: clamp(2.4rem, 12vw, 3.6rem);
+  }
+  .hero__cue {
+    display: none;
+  }
+}
+@media (max-height: 760px) and (max-width: 760px) {
+  .ficha__filas,
+  .ficha__pie {
+    display: none;
+  }
+}
+
+/* ---------- Reduced motion: dos estados con fundidos cortos ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__cue-line::after {
+    animation: none;
+    transform: none;
+  }
+  .hero[data-fase] .hero__intro,
+  .hero[data-fase] .ficha,
+  .hero[data-fase] .hero__cierre,
+  .hero[data-fase] .v-it,
+  .hero[data-fase] .v-ot {
+    transition:
+      opacity 200ms var(--ease-out),
+      visibility 200ms;
+  }
+  .hero[data-fase="ficha"] .hero__intro,
+  .hero[data-fase="cierre"] .hero__intro,
+  .hero[data-fase="cierre"] .ficha {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .hero[data-fase="ficha"] .ficha,
+  .hero[data-fase="cierre"] .hero__cierre {
+    opacity: 1;
+    visibility: visible;
+  }
+  .hero[data-mundo="ot"] .flap {
+    --flap: 1;
+  }
+  .hero[data-mundo="ot"] .pyr-card {
+    --flip: 1;
+  }
+  .hero[data-mundo="ot"] .prio__name[data-id="c"] {
+    transform: translateY(200%);
+  }
+  .hero[data-mundo="ot"] .prio__name[data-id="a"] {
+    transform: translateY(-200%);
+  }
+  .hero[data-mundo="ot"] .v-it {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .hero[data-mundo="ot"] .v-ot {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* ---------- Modo lectura: todo estático y a la vista ---------- */
+
+main[data-reading="true"] .hero {
+  height: auto;
+}
+main[data-reading="true"] .hero__sticky {
+  position: static;
+  height: auto;
+  overflow: visible;
+  display: block;
+  padding: 7rem var(--gutter) 4rem;
+}
+main[data-reading="true"] .hero__sticky::before,
+main[data-reading="true"] .ficha,
+main[data-reading="true"] .hero__cue {
+  display: none;
+}
+main[data-reading="true"] .hero__figure {
+  opacity: 1;
+  visibility: visible;
+  width: min(100%, 760px);
+  margin: 3rem 0 1rem;
+}
+main[data-reading="true"] .pyr-card__inner {
+  transform: none;
+  aspect-ratio: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1rem, 4vw, 3rem);
+}
+main[data-reading="true"] .pyr-card__face {
+  position: static;
+  transform: none;
+  backface-visibility: visible;
+}
+main[data-reading="true"] .hero__cierre {
+  position: static;
+  opacity: 1;
+  visibility: visible;
+  margin: 1.5rem 0 2.5rem;
+  max-width: none;
+  font-size: var(--step-3);
+}
+main[data-reading="true"] .hero__tabla {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  max-width: 64rem;
+}

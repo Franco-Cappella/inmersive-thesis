@@ -1,0 +1,498 @@
+/* ---------- Capítulos: cada uno ocupa una pantalla, el texto va sobre un panel sólido ---------- */
+
+.chapter {
+  position: relative;
+  padding: clamp(4rem, 10svh, 7rem) var(--gutter);
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+}
+.chapter__inner {
+  position: relative;
+  width: min(100%, 46rem);
+  margin-left: auto;
+  padding: clamp(1.3rem, 3vw, 2.4rem);
+  background: var(--c-panel);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  backdrop-filter: blur(6px);
+  display: grid;
+  gap: 1.1rem;
+}
+
+.chapter__head {
+  display: grid;
+  gap: 0.6rem;
+}
+.chapter__num {
+  font-family: var(--f-display);
+  font-size: var(--step--1);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--c-flow);
+}
+.chapter h2 {
+  font-size: var(--step-3);
+  max-width: 14ch;
+}
+.chapter__bajada {
+  font-size: var(--step-0);
+  max-width: var(--measure);
+  line-height: 1.6;
+}
+
+/* ---------- Figuras ---------- */
+
+.fig {
+  margin: 0;
+}
+.fig__nota {
+  margin-top: 0.8rem;
+  font-size: var(--step--1);
+  color: var(--c-ink-soft);
+}
+
+/* Reloj del escenario */
+.fig--reloj {
+  display: grid;
+  gap: 0.9rem;
+}
+.fig-reloj__hora {
+  font-family: var(--f-display);
+  font-stretch: 75%;
+  font-weight: 800;
+  font-size: var(--step-4);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+  color: var(--c-ink);
+}
+.fig-reloj__pasos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+.fig-reloj__pasos li {
+  display: grid;
+  grid-template-columns: 4.6rem 1fr;
+  gap: 0.8rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--c-line);
+}
+.fig-reloj__pasos time {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.fig-reloj__cierre {
+  font-style: italic;
+  color: var(--c-ink-soft);
+}
+
+/* Brecha IT/OT */
+.fig--brecha {
+  display: grid;
+  gap: 0.9rem;
+}
+.fig-brecha__fila {
+  display: grid;
+  grid-template-columns: 5.2rem 6rem 1fr;
+  gap: 0.8rem;
+  align-items: center;
+}
+.fig-brecha__rotulo {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--step--1);
+  color: var(--c-ink-soft);
+}
+.fig-brecha__bloques {
+  display: flex;
+  gap: 4px;
+  transition: gap 700ms var(--ease-in-out);
+}
+.fig-brecha__bloques > span {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  background: var(--c-tile);
+  color: var(--c-tile-ink);
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+.fig-brecha__bloques--separados {
+  gap: 1.4rem;
+}
+.fig-brecha__bloques--separados > span {
+  background: transparent;
+  color: var(--c-ink);
+  border: 2px solid var(--c-ink);
+}
+.fig-brecha__consecuencia {
+  font-family: var(--f-display);
+  font-stretch: var(--display-stretch);
+  font-weight: var(--display-weight);
+  text-transform: var(--display-case);
+  font-size: var(--step-1);
+  line-height: 1.05;
+  color: var(--c-alarm);
+}
+
+/* Trama Modbus */
+.fig--trama {
+  display: grid;
+  gap: 1rem;
+}
+.fig-trama__frame {
+  margin: 0;
+  padding: 0.9rem;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+  background: var(--c-panel-solid);
+}
+.fig-trama__bytes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.fig-trama__bytes li {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--c-ink);
+  min-width: 4.4rem;
+}
+.fig-trama__bytes code {
+  font-family: var(--f-mono);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.fig-trama__bytes span {
+  font-size: 0.72rem;
+  line-height: 1.2;
+  color: var(--c-ink-soft);
+}
+.fig-trama__frame figcaption {
+  margin-top: 0.7rem;
+  font-size: var(--step--1);
+  color: var(--c-ink-soft);
+}
+.fig-trama__rasgos {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+.fig-trama__rasgos li {
+  display: grid;
+  gap: 0.1rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--c-warn);
+}
+.fig-trama__rasgos strong {
+  font-family: var(--f-display);
+  font-weight: 700;
+}
+
+/* Pregunta e hipótesis */
+.fig--pregunta {
+  display: grid;
+  gap: 1rem;
+}
+.fig-pregunta__q {
+  margin: 0;
+  font-family: var(--f-display);
+  font-stretch: var(--display-stretch);
+  font-weight: var(--display-weight);
+  font-size: var(--step-1);
+  line-height: 1.15;
+  padding-left: 1rem;
+  border-left: 4px solid var(--c-ink);
+}
+.fig-pregunta__apuesta {
+  margin: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+.fig-pregunta__apuesta div {
+  display: grid;
+  gap: 0.15rem;
+}
+.fig-pregunta__apuesta dt {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--step--1);
+  color: var(--c-flow);
+}
+.fig-pregunta__apuesta dd {
+  margin: 0;
+}
+
+/* Golpes (controles IT en planta) */
+.fig--golpes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+.fig--golpes li {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.8rem 0.95rem;
+  background: var(--c-panel-solid);
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+}
+.fig--golpes strong {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: var(--step-0);
+  color: var(--c-alarm);
+}
+
+/* Cifras */
+.fig--cifras {
+  display: grid;
+  gap: 1rem;
+}
+.cifra {
+  margin: 0;
+  display: grid;
+  gap: 0.25rem;
+}
+.cifra__valor {
+  font-family: var(--f-display);
+  font-stretch: 75%;
+  font-weight: 800;
+  font-size: var(--step-4);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+.cifra figcaption {
+  font-size: var(--step--1);
+  max-width: var(--measure);
+}
+
+/* Casos */
+.fig--casos,
+.fig--pilares {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+.fig--casos li,
+.fig--pilares li {
+  padding: 0.9rem 0 0.9rem 1rem;
+  border-left: 3px solid var(--c-line);
+}
+.fig--casos h3,
+.fig--pilares h3 {
+  font-size: var(--step-1);
+  margin-bottom: 0.4rem;
+}
+.fig--casos li:first-child,
+.fig--pilares li:first-child {
+  border-left-color: var(--c-alarm);
+}
+.fig--pilares li {
+  border-left-color: var(--c-flow);
+}
+
+/* Barras (encuesta SANS) */
+.fig--barras table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.fig--barras caption {
+  text-align: left;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: var(--step--1);
+  margin-bottom: 0.6rem;
+  color: var(--c-ink-soft);
+}
+.fig--barras th,
+.fig--barras td {
+  padding: 0.28rem 0;
+  text-align: left;
+  vertical-align: middle;
+  font-size: var(--step--1);
+  font-weight: 400;
+}
+.fig--barras th {
+  width: 48%;
+  padding-right: 0.8rem;
+}
+.fig--barras td {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.barra {
+  display: block;
+  flex: 1;
+  height: 0.9rem;
+  background: var(--c-flow);
+  transform-origin: left;
+  transform: scaleX(var(--v));
+}
+.fig--barras tr.is-top th,
+.fig--barras tr.is-top .barra {
+  color: var(--c-alarm);
+}
+.fig--barras tr.is-top .barra {
+  background: var(--c-alarm);
+}
+.barra__valor {
+  min-width: 3.4rem;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Cita final */
+.fig--cita p {
+  font-family: var(--f-display);
+  font-stretch: var(--display-stretch);
+  font-weight: var(--display-weight);
+  text-transform: var(--display-case);
+  font-size: var(--step-2);
+  line-height: 1.05;
+  margin: 0;
+}
+
+/* ---------- Referencias ---------- */
+
+.refs {
+  position: relative;
+  padding: clamp(4rem, 10svh, 7rem) var(--gutter);
+  background: var(--c-panel-solid);
+  border-top: 1px solid var(--c-line);
+}
+.refs__inner {
+  max-width: 52rem;
+  margin-left: auto;
+  display: grid;
+  gap: 1.2rem;
+}
+.refs h2 {
+  font-size: var(--step-3);
+}
+.refs__nota,
+.refs__pie {
+  font-size: var(--step--1);
+  color: var(--c-ink-soft);
+}
+.refs__lista {
+  margin: 0;
+  padding-left: 1.6rem;
+  display: grid;
+  gap: 0.7rem;
+  font-size: var(--step--1);
+}
+.refs__lista li::marker {
+  font-family: var(--f-display);
+  font-weight: 700;
+}
+.refs__lista li:target {
+  background: var(--c-highlight);
+}
+.refs__cita {
+  overflow-wrap: anywhere;
+}
+.refs__lista a {
+  overflow-wrap: anywhere;
+  color: var(--c-flow);
+}
+.refs__ia-titulo {
+  margin-top: 1.5rem;
+  font-size: var(--step-1) !important;
+}
+.refs__ia {
+  font-size: var(--step--1);
+  max-width: var(--measure);
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* ---------- Celular: los paneles ocupan casi todo el ancho ---------- */
+
+@media (max-width: 760px) {
+  .chapter {
+    padding: 4.5rem 1rem 3rem;
+  }
+  .chapter__inner {
+    width: 100%;
+    padding: 1.1rem;
+  }
+  .fig-brecha__fila {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+  .fig-brecha__bloques {
+    display: none;
+  }
+  .fig-reloj__pasos li {
+    grid-template-columns: 3.6rem 1fr;
+  }
+  .fig--cifras {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- Reduced motion y accesibilidad ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .fig-brecha__bloques {
+    transition: none;
+  }
+}
+
+/* Impresión y modo lectura: el 3D no existe y los paneles pasan a ser de página */
+@media print {
+  .stage,
+  .masthead,
+  .progress,
+  .skip {
+    display: none !important;
+  }
+  .chapter,
+  .hero__sticky {
+    min-height: 0;
+    height: auto !important;
+    position: static !important;
+    display: block;
+    padding: 1.2rem 0;
+  }
+  .chapter__inner,
+  .panel {
+    background: none;
+    backdrop-filter: none;
+    border: 0;
+    border-top: 1px solid #000;
+    border-radius: 0;
+    padding: 1rem 0 0;
+  }
+  .flap__leaf {
+    display: none;
+  }
+  .ficha,
+  .hero__tabla {
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    clip: auto !important;
+  }
+}

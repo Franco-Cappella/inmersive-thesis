@@ -1,0 +1,293 @@
+import type { SourceKey } from "./references";
+
+// Capítulos que siguen al hero. Cada uno condensa una parte de la tesina en
+// una idea, una figura y una o dos oraciones. Los datos y las citas tienen que
+// coincidir con TESINA_FINAL.md; lo que no tiene fuente va en `pendientes`.
+// `escena` describe lo que va a mostrar el mundo 3D cuando se construya
+// (docs/GUION.md) y sirve como descripción en texto de esa figura.
+
+export type Figura =
+  | {
+      tipo: "reloj";
+      etiqueta: string;
+      pasos: { hora: string; texto: string }[];
+      cierre: string;
+    }
+  | { tipo: "brecha"; antes: string; despues: string; consecuencia: string }
+  | {
+      tipo: "trama";
+      leyenda: string;
+      campos: { hex: string; nombre: string }[];
+      rasgos: { titulo: string; texto: string }[];
+    }
+  | { tipo: "pregunta"; pregunta: string; hipotesis: string; refutaria: string; sostendria: string }
+  | { tipo: "golpes"; items: { control: string; efecto: string }[] }
+  | {
+      tipo: "cifras";
+      items: { valor: string; texto: string; fuente: SourceKey }[];
+      nota: string;
+    }
+  | { tipo: "casos"; items: { nombre: string; texto: string; fuentes: SourceKey[] }[] }
+  | {
+      tipo: "barras";
+      pregunta: string;
+      items: { rotulo: string; valor: number }[];
+      nota: string;
+    }
+  | { tipo: "pilares"; items: { titulo: string; texto: string; fuentes: SourceKey[] }[] }
+  | { tipo: "cita"; texto: string };
+
+export type Chapter = {
+  id: string;
+  titulo: string; // de 3 a 8 palabras
+  bajada: string; // una o dos oraciones, sin viñetas
+  figura: Figura;
+  fuentes: SourceKey[];
+  pendientes?: string[];
+  escena: string;
+};
+
+export const chapters: Chapter[] = [
+  {
+    id: "escenario",
+    titulo: "03:14 AM: el parche que apagó la planta",
+    bajada:
+      "Escenario hipotético. El SOC corporativo despliega un parche de rutina y, a 800 kilómetros, una planta de procesamiento se detiene.",
+    figura: {
+      tipo: "reloj",
+      etiqueta: "Escenario hipotético",
+      pasos: [
+        { hora: "03:14", texto: "Alerta crítica de Windows: el parche se despliega en forma remota." },
+        { hora: "03:17", texto: "Las HMI se congelan y el SCADA pierde contacto con los PLC." },
+        { hora: "03:17", texto: "Sin datos de presión, salta la parada de emergencia." },
+        { hora: "+3 h", texto: "Válvula de alivio trabada. Pérdidas estimadas: USD 180.000." },
+      ],
+      cierre: "Ningún ciberataque tuvo lugar esa noche: la planta fue derribada por las políticas de ciberseguridad de su propia empresa.",
+    },
+    fuentes: [],
+    escena:
+      "La planta de noche vista desde arriba. Un paquete (el parche) baja desde la torre IT; las pantallas HMI se ponen en blanco, la cañería se detiene y la válvula pasa de ámbar a rojo.",
+  },
+  {
+    id: "convergencia",
+    titulo: "Industria 4.0: se rompe el air gap",
+    bajada:
+      "Para optimizar la cadena de suministro, las plantas conectaron sensores y controladores a la nube y al ERP. Esa convergencia expuso una incompatibilidad crítica entre los dos mundos.",
+    figura: {
+      tipo: "brecha",
+      antes: "IT y OT separadas por un aislamiento físico (air gap)",
+      despues: "Sensores y PLC conectados a plataformas en la nube y al ERP",
+      consecuencia: "Dos culturas, una sola red",
+    },
+    fuentes: ["nist-blog-legacy"],
+    pendientes: ["La convergencia se afirma sin fuente propia: el enlace de NIST es la fuente de la figura de esa sección."],
+    escena:
+      "La torre de red, del nivel 5 (empresa) al 0 (proceso). Entre IT y OT hay un hueco que se cierra; los paquetes empiezan a cruzar hacia la planta.",
+  },
+  {
+    id: "protocolos",
+    titulo: "Protocolos que confían en cualquiera",
+    bajada:
+      "Modbus TCP, PROFINET, EtherNet/IP y DNP3 nacieron en una época de redes cerradas, donde la confianza se asumía.",
+    figura: {
+      tipo: "trama",
+      leyenda: "Trama Modbus TCP de ejemplo: escribe el valor 100 en un registro del PLC. No lleva usuario, clave ni firma.",
+      campos: [
+        { hex: "00 01", nombre: "Transacción" },
+        { hex: "00 00", nombre: "Protocolo" },
+        { hex: "00 06", nombre: "Longitud" },
+        { hex: "01", nombre: "Unidad" },
+        { hex: "06", nombre: "Función: escribir registro" },
+        { hex: "00 01", nombre: "Dirección" },
+        { hex: "00 64", nombre: "Valor: 100" },
+      ],
+      rasgos: [
+        { titulo: "Sin autenticación", texto: "El PLC ejecuta cualquier trama válida sin verificar quién la envía." },
+        { titulo: "Texto plano", texto: "Nada se cifra, para no sumar latencia (jitter) en ciclos de milisegundos." },
+        { titulo: "Pilas frágiles", texto: "Un escaneo de puertos puede saturar la pila TCP/IP del controlador y tirarlo." },
+      ],
+    },
+    fuentes: [],
+    pendientes: ["La tesina no cita fuente para estas tres características."],
+    escena:
+      "Primer plano de un gabinete PLC. Llega una trama en texto plano y el PLC la ejecuta: la válvula se mueve sin que nadie se identifique.",
+  },
+  {
+    id: "pregunta",
+    titulo: "La pregunta y la apuesta",
+    bajada: "Antes de buscar fuentes, la hipótesis quedó por escrito, junto con la evidencia que la refutaría.",
+    figura: {
+      tipo: "pregunta",
+      pregunta:
+        "¿Por qué las estrategias tradicionales de ciberseguridad IT fracasan e incrementan la tasa de paradas no programadas al implementarse sin adaptación en entornos de Tecnologías Operativas (OT)?",
+      hipotesis:
+        "Parches automáticos, escaneo activo y MFA, aplicados tal cual, incrementan las paradas no programadas: en OT manda la disponibilidad; en IT, la confidencialidad.",
+      refutaria:
+        "Que la segmentación por zonas y conductos (ISA/IEC 62443) o un Zero Trust industrial adaptado permitan esos controles sin paradas, o que las grandes detenciones se expliquen mejor por ataques, errores humanos o fallas mecánicas.",
+      sostendria:
+        "Casos documentados y guías oficiales en los que un parche, un escaneo o una decisión pensada para IT haya detenido un proceso físico.",
+    },
+    fuentes: [],
+    escena: "Sin escena nueva: la pirámide invertida del inicio queda de fondo, atenuada, mientras se lee la pregunta.",
+  },
+  {
+    id: "conflicto",
+    titulo: "Tres controles IT, tres formas de parar",
+    bajada:
+      "Aplicar políticas corporativas en una planta sin adaptarlas equivale a usar herramientas de precisión en un entorno con tolerancia cero al fallo físico.",
+    figura: {
+      tipo: "golpes",
+      items: [
+        {
+          control: "Parche automático",
+          efecto: "Reiniciar el servidor SCADA corta el diálogo con los PLC. Sin datos, salta la parada de emergencia.",
+        },
+        {
+          control: "Escaneo activo",
+          efecto: "Una ráfaga de paquetes satura la pila TCP/IP de un PLC o RTU legado y bloquea el hardware.",
+        },
+        {
+          control: "MFA en plena alarma",
+          efecto: "Validar un token para corregir una sobrepresión suma segundos que pueden volver accidente una maniobra de rutina.",
+        },
+      ],
+    },
+    fuentes: [],
+    pendientes: ["La Sección 2 no cita fuentes para estos tres mecanismos."],
+    escena:
+      "Tres golpes sobre la misma planta: las pantallas del SCADA se apagan, una ráfaga de paquetes pone un PLC en rojo y un reloj de latencia corre mientras la presión sube.",
+  },
+  {
+    id: "costo",
+    titulo: "Lo que cuesta una hora detenida",
+    bajada: "Son paradas por cualquier causa, no solo por ciberseguridad, pero alcanzan para dimensionar el problema.",
+    figura: {
+      tipo: "cifras",
+      items: [
+        {
+          valor: "USD 125.000",
+          texto: "Mediana de una hora de parada no planificada, según 3.215 responsables de mantenimiento industrial.",
+          fuente: "abb-2023",
+        },
+        {
+          valor: "USD 2,3 M",
+          texto: "Costo de una hora de parada en la industria automotriz.",
+          fuente: "siemens-2024",
+        },
+      ],
+      nota: "Frente a esas cifras, los USD 180.000 del escenario inicial (tres horas) son una estimación conservadora.",
+    },
+    fuentes: ["abb-2023", "siemens-2024"],
+    escena: "La cañería se vacía y un contador corre en la sala de control. Las cifras crecen en HTML, no en 3D.",
+  },
+  {
+    id: "casos",
+    titulo: "Cuatro casos que no se leen en bloque",
+    bajada:
+      "Cada caso prueba algo distinto. Leídos con cuidado, muestran cómo la falta de segmentación y de visibilidad convierte un incidente IT en una detención física.",
+    figura: {
+      tipo: "casos",
+      items: [
+        {
+          nombre: "Colonial Pipeline",
+          texto:
+            "El ransomware afectó los sistemas IT. El oleoducto se detuvo para aislar el ataque y evitar que llegara a OT: la parada fue una decisión, no el código malicioso.",
+          fuentes: ["blount-2021"],
+        },
+        {
+          nombre: "Oldsmar",
+          texto:
+            "Escritorio remoto, contraseñas débiles y un sistema sin soporte expusieron el SCADA. En 2023 el exadministrador de la ciudad sostuvo que fue un error de un empleado, y las conclusiones oficiales nunca se publicaron.",
+          fuentes: ["cisa-aa21-042a", "tbt-oldsmar-2023"],
+        },
+        {
+          nombre: "Stuxnet",
+          texto: "Alteró la lógica de controladores programables y derivó en la destrucción física de centrifugadoras.",
+          fuentes: ["bbc-stuxnet"],
+        },
+        {
+          nombre: "Industroyer",
+          texto: "Ejecutó comandos sobre el protocolo IEC 60870-5-104 y desconectó subestaciones eléctricas.",
+          fuentes: ["eset-industroyer"],
+        },
+      ],
+    },
+    fuentes: ["blount-2021", "cisa-aa21-042a", "tbt-oldsmar-2023", "bbc-stuxnet", "eset-industroyer"],
+    escena:
+      "La torre de red: cada caso traza su recorrido en rojo, de IT hacia OT. En Colonial Pipeline el corte lo hace la propia empresa, sin que el ataque llegue a la planta.",
+  },
+  {
+    id: "datos",
+    titulo: "La puerta de entrada es IT",
+    bajada:
+      "En la encuesta SANS 2024, el vector inicial más citado en incidentes OT fue un compromiso en IT que logró pasar a la red de control.",
+    figura: {
+      tipo: "barras",
+      pregunta: "¿Cuáles fueron los vectores de ataque iniciales en sus incidentes OT? (selección múltiple)",
+      items: [
+        { rotulo: "Compromiso en IT que permitió pasar a OT", valor: 45.8 },
+        { rotulo: "Servicios remotos externos", valor: 23.7 },
+        { rotulo: "Dispositivo accesible desde internet", valor: 23.7 },
+        { rotulo: "Estación de ingeniería comprometida", valor: 20.3 },
+        { rotulo: "Medios extraíbles comprometidos", valor: 20.3 },
+        { rotulo: "Cadena de suministro comprometida", valor: 20.3 },
+        { rotulo: "Compromiso al navegar (drive-by)", valor: 18.5 },
+        { rotulo: "Adjunto de spearphishing", valor: 18.5 },
+        { rotulo: "Explotación de una aplicación expuesta", valor: 13.6 },
+        { rotulo: "Historiador de datos comprometido", valor: 10.2 },
+        { rotulo: "Compromiso inalámbrico", valor: 10.2 },
+        { rotulo: "Desconocido", valor: 8.5 },
+        { rotulo: "Activo transitorio (incluye laptops de proveedores)", valor: 8.5 },
+        { rotulo: "Otro", valor: 3.4 },
+      ],
+      nota: "Pregunta de selección múltiple: los porcentajes no suman 100.",
+    },
+    fuentes: ["sans-2024"],
+    escena: "El 3D se aparta (fondo atenuado) y el gráfico ocupa la pantalla: las barras crecen y la de 45,8 % se marca en rojo.",
+  },
+  {
+    id: "matiz",
+    titulo: "No es la seguridad: es el trasplante",
+    bajada:
+      "Sometida a su criterio de falsabilidad, la hipótesis se matiza: la parada no es una consecuencia fatal de la seguridad, sino de trasplantar herramientas corporativas sin adaptarlas.",
+    figura: {
+      tipo: "pilares",
+      items: [
+        {
+          titulo: "Zonas y conductos",
+          texto:
+            "Segmentación según ISA/IEC 62443 y el modelo Purdue, con DMZ de OT y Zero Trust industrial adaptado: un incidente corporativo no llega a los controladores.",
+          fuentes: ["isa-iec-62443", "cisa-ics-rp"],
+        },
+        {
+          titulo: "Escuchar en vez de golpear",
+          texto:
+            "Monitoreo pasivo con inspección profunda de paquetes (DPI) desde puertos espejo: interpreta Modbus TCP, PROFINET o DNP3 sin sumar latencia.",
+          fuentes: ["nist-800-82r3"],
+        },
+        {
+          titulo: "Probar antes de parchear",
+          texto:
+            "Parches validados en testbeds o gemelos digitales y desplegados en ventanas de mantenimiento o paradas programadas.",
+          fuentes: ["nist-800-82r3"],
+        },
+      ],
+    },
+    fuentes: ["isa-iec-62443", "cisa-ics-rp", "nist-800-82r3"],
+    escena:
+      "Aparecen volúmenes de zona y conductos con compuertas. El recorrido rojo de los casos choca contra un conducto y se detiene; un sensor pasivo escucha una copia del tráfico.",
+  },
+  {
+    id: "postura",
+    titulo: "Confirmada, con matiz",
+    bajada:
+      "Las herramientas IT paran la planta cuando se aplican de forma ciega y descontextualizada. La resiliencia está en mantener visibilidad constante sin sumar latencia ni interrupciones injustificadas.",
+    figura: {
+      tipo: "cita",
+      texto:
+        "La ciberseguridad industrial del siglo XXI no consiste en apagar la planta para protegerla, sino en dotarla de la resiliencia necesaria para operar de forma ininterrumpida en un entorno hiperconectado.",
+    },
+    fuentes: [],
+    escena: "La cámara se aleja: la planta sigue funcionando, segmentada, y la pirámide AIC queda estable sobre ella.",
+  },
+];
