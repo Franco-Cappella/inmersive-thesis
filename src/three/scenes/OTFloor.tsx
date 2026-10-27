@@ -2,8 +2,8 @@
 
 import { Edges, Grid, Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
-import { MeshBasicMaterial } from "three";
+import { useMemo, useRef } from "react";
+import { Color, MeshBasicMaterial, MeshStandardMaterial } from "three";
 import { rig, type Vec3 } from "@/scroll/rig";
 import { FlowPipe } from "../FlowPipe";
 import { FONT_URL, smooth } from "../helpers";
@@ -30,8 +30,11 @@ const CABINETS: Vec3[] = [
   [2.8, Y + 0.9, -2.6],
   [-5.2, Y + 0.9, -2.8],
 ];
+// El gabinete PLC al que llega el parche en el capítulo 01.
+export const PLC_POS = CABINETS[1];
 
-const otFlow = () => smooth(rig.hero.descent, 0.45, 0.95);
+// El proceso corre cuando llegamos a la planta y se corta cuando la planta se detiene (capítulo 01).
+const otFlow = () => smooth(rig.hero.descent, 0.45, 0.95) * (1 - smooth(rig.fx.halt, 0.55, 0.75));
 
 function Tank({ x, z, r, h, palette }: { x: number; z: number; r: number; h: number; palette: Palette }) {
   return (
@@ -64,6 +67,48 @@ function StatusLight({ position, palette }: { position: Vec3; palette: Palette }
   );
 }
 
+// Válvula de alivio sobre el colector principal. En el capítulo 01 se traba:
+// pasa a ámbar (advertencia) y después a rojo (alarma). El color es estado.
+export const VALVE_POS: Vec3 = [-3.2, OT_FLOOR_Y + 0.8, -3.6];
+
+function Valve({ palette }: { palette: Palette }) {
+  const body = useRef<MeshStandardMaterial>(null);
+  const wheel = useRef<MeshStandardMaterial>(null);
+  const c = useMemo(
+    () => ({ metal: new Color(palette.metal), ink: new Color(palette.ink), warn: new Color(palette.warn), alarm: new Color(palette.alarm), state: new Color() }),
+    [palette],
+  );
+  useFrame(() => {
+    if (!body.current || !wheel.current) return;
+    const h = rig.fx.halt;
+    const warn = smooth(h, 0.6, 0.7);
+    const alarm = smooth(h, 0.8, 0.92);
+    c.state.copy(c.warn).lerp(c.alarm, alarm);
+    body.current.color.copy(c.metal).lerp(c.state, warn);
+    body.current.emissive.copy(c.state);
+    body.current.emissiveIntensity = warn * (1.2 + alarm * 1.8);
+    wheel.current.color.copy(c.ink).lerp(c.state, warn);
+    wheel.current.emissive.copy(c.state);
+    wheel.current.emissiveIntensity = warn * (1.2 + alarm * 1.8);
+  });
+  return (
+    <group position={VALVE_POS}>
+      <mesh>
+        <boxGeometry args={[0.6, 0.55, 0.55]} />
+        <meshStandardMaterial ref={body} color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
+      </mesh>
+      <mesh position={[0, 0.55, 0]}>
+        <cylinderGeometry args={[0.05, 0.05, 0.5, 8]} />
+        <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
+      </mesh>
+      <mesh position={[0, 0.82, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.32, 0.045, 8, 28]} />
+        <meshStandardMaterial ref={wheel} color={palette.ink} roughness={0.6} />
+      </mesh>
+    </group>
+  );
+}
+
 export function OTFloor({ palette }: { palette: Palette }) {
   return (
     <group>
@@ -86,21 +131,7 @@ export function OTFloor({ palette }: { palette: Palette }) {
       {PIPES.map((p, i) => (
         <FlowPipe key={i} points={p} radius={i === 0 ? 0.2 : 0.14} palette={palette} amount={otFlow} speed={0.45 + i * 0.08} />
       ))}
-      {/* Válvula sobre el colector principal */}
-      <group position={[-3.2, OT_FLOOR_Y + 0.8, -3.6]}>
-        <mesh>
-          <boxGeometry args={[0.6, 0.55, 0.55]} />
-          <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
-        </mesh>
-        <mesh position={[0, 0.55, 0]}>
-          <cylinderGeometry args={[0.05, 0.05, 0.5, 8]} />
-          <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
-        </mesh>
-        <mesh position={[0, 0.82, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[0.32, 0.045, 8, 28]} />
-          <meshStandardMaterial color={palette.ink} roughness={0.6} />
-        </mesh>
-      </group>
+      <Valve palette={palette} />
       {CABINETS.map((p, i) => (
         <group key={i} position={p}>
           <mesh>

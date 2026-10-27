@@ -4,7 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { useRef } from "react";
+import { useRef, type CSSProperties } from "react";
 import type { Chapter as ChapterData } from "@/content/story";
 import { useUI } from "@/state/store";
 import { FiguraView } from "./Figuras";
@@ -60,7 +60,15 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
   );
 
   return (
-    <section ref={ref} id={ch.id} data-chapter={index} className="chapter" aria-labelledby={`${ch.id}-title`}>
+    <section
+      ref={ref}
+      id={ch.id}
+      data-chapter={index}
+      data-escena={ch.weight ? "" : undefined}
+      className="chapter"
+      style={ch.weight ? ({ "--weight": ch.weight } as CSSProperties) : undefined}
+      aria-labelledby={`${ch.id}-title`}
+    >
       <div className="chapter__inner">
         <header className="chapter__head">
           <span className="chapter__num" aria-hidden="true">

@@ -7,6 +7,17 @@
   display: grid;
   align-items: center;
 }
+/* Capítulo con escena 3D: dura `weight` pantallas y el panel queda fijo mientras la escena actúa */
+.chapter[data-escena] {
+  min-height: calc(var(--weight) * 100svh);
+  align-items: start;
+}
+@media (min-width: 761px) {
+  .chapter[data-escena] .chapter__inner {
+    position: sticky;
+    top: clamp(4.5rem, 10svh, 6.5rem);
+  }
+}
 .chapter__inner {
   position: relative;
   width: min(100%, 46rem);

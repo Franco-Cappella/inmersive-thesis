@@ -1,6 +1,8 @@
 // Estado CONTINUO compartido: GSAP lo escribe desde el DOM y useFrame lo lee en
 // el 3D. Nunca pasa por React. Este archivo no importa three: lo usa la capa DOM.
 
+import { FX_INICIAL, type SceneFx } from "@/content/story";
+
 export type Vec3 = [number, number, number];
 export type Shot = { position: Vec3; target: Vec3 };
 export type FlatShot = { px: number; py: number; pz: number; tx: number; ty: number; tz: number };
@@ -45,7 +47,7 @@ export const rig = {
     flip: 0, // 0 = IT (C arriba) · 1 = OT (A arriba)
     descent: 0, // 0 = piso IT · 1 = planta OT
   },
-  fx: { dim: 0 }, // 0..1 el mundo 3D se atenúa cuando empiezan los capítulos
+  fx: { ...FX_INICIAL } as SceneFx, // estado de la escena por capítulo (lo escribe useStoryTimeline)
   snap: false, // true con reduced motion: la cámara salta en vez de amortiguar
   requestFrame: () => {}, // lo reemplaza el Canvas con su invalidate()
 };

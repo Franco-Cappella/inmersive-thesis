@@ -11,7 +11,7 @@ export function ProgressNav() {
   return (
     <nav className="progress" aria-label={ui.indice}>
       <ol>
-        {stops.map((s) => (
+        {stops.filter((s) => !s.oculto).map((s) => (
           <li key={s.id}>
             <a
               href={`#${s.seccion}`}

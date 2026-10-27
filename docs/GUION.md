@@ -7,7 +7,7 @@ Texto: título de 3 a 8 palabras y una bajada de una o dos oraciones, en prosa. 
 | # | Capítulo (tesina) | Figura en pantalla | Qué hace el 3D | Estado |
 |---|---|---|---|---|
 | hero | Pregunta y tríada CIA/AIC (Sección 1) | Ficha IT/OT con cartel de paletas y prioridades que se reordenan | Pirámide C·I·A: gira y baja de IT a OT | **Hecho** |
-| 01 | Escenario hipotético: el parche que apagó la planta | Reloj 03:14 → +3 h. Marcado como *hipotético* | Un paquete (parche) baja de la torre IT; la válvula pasa a rojo | Pendiente 3D |
+| 01 | Escenario hipotético: el parche que apagó la planta | Reloj 03:14 → +3 h. Marcado como *hipotético* | El parche baja de un rack al PLC; HMI en blanco, flujo cortado, válvula ámbar → rojo, baliza ESD | **Hecho** |
 | 02 | Industria 4.0: se rompe el air gap | Antes / después: bloques IT y OT separados y unidos | Hueco entre IT y OT que se cierra; paquetes cruzan | Pendiente 3D |
 | 03 | Protocolos que confían en cualquiera | Trama Modbus con sus campos en hexadecimal | Primer plano de un PLC que ejecuta una trama sin identificar al emisor | Pendiente 3D |
 | 04 | La pregunta y la apuesta | Pregunta, hipótesis, refutación y sostén | Sin escena nueva: la pirámide queda de fondo, atenuada | Hecho en HTML |
@@ -19,9 +19,17 @@ Texto: título de 3 a 8 palabras y una bajada de una o dos oraciones, en prosa. 
 | 10 | Confirmada, con matiz | Cita de cierre | La cámara se aleja: la planta sigue operando, segmentada | Pendiente 3D |
 | refs | Bibliografía y declaración de IA | Lista con verificaciones marcadas | Sin 3D | Hecho |
 
+## Cómo se agrega la escena de un capítulo
+
+1. En `src/content/story.ts`, al capítulo: `weight` (cuántas pantallas dura), `camara` (`landscape` y `portrait`) y `fx` (solo lo que cambia; se hereda el resto).
+2. Si hace falta un estado nuevo, sumarlo a `SceneFx` y a `FX_INICIAL` (mismo archivo).
+3. La escena va en `src/three/scenes/` y lee `rig.fx` en `useFrame`. Se monta en `src/three/Experience.tsx`.
+4. El director (`src/scroll/useStoryTimeline.ts`) ya mueve la cámara durante la entrada del capítulo y anima los `fx` durante la estadía. No hay que tocarlo.
+5. `fx.dim = 1` tapa el 3D con el velo (capítulos sin escena). Un capítulo con escena propia tiene que volver a `dim: 0`.
+
 ## Movimientos por capítulo (para el 3D pendiente)
 
-- **01 · escenario.** Plano de la planta de noche desde arriba. El parche baja como un paquete. Las HMI se apagan (color cae a gris). La válvula de alivio pasa de ámbar a rojo cuando se traba.
+- **01 · escenario (hecho).** La planta desde arriba. El parche baja como un paquete ámbar por un cable desde un rack hasta el gabinete PLC. La HMI pasa de azul a un cuadro blanco, el flujo se corta, la válvula de alivio pasa de ámbar a rojo y se enciende la baliza de parada de emergencia.
 - **02 · convergencia.** La torre de red (niveles 5 a 0) aparece apilada. Entre IT y OT hay un hueco que se cierra con un cable de datos. Los paquetes empiezan a cruzar hacia la planta.
 - **03 · protocolos.** La cámara entra en un gabinete PLC. Una trama llega en texto plano; el PLC la ejecuta y la válvula se mueve sin que se identifique nadie.
 - **05 · controles.** Tres impactos en secuencia sobre la planta. Latencia representada como un reloj que corre y una presión que sube.

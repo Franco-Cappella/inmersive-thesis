@@ -56,6 +56,21 @@ const HERO_POINTS = [0, 0.3, 0.5, 0.8]; // progreso dentro del hero
       await page.evaluate((id) => document.getElementById(id).scrollIntoView(), id);
       await page.waitForTimeout(1500);
       await page.screenshot({ path: path.join(out, `${vp.name}-${id}.png`) });
+      // Capítulos con escena 3D: también a lo largo de la estadía (la escena "actúa").
+      const conEscena = await page.evaluate((id) => document.getElementById(id).hasAttribute("data-escena"), id);
+      if (!conEscena) continue;
+      for (const p of [0.35, 0.65, 1]) {
+        await page.evaluate(
+          ({ id, p }) => {
+            const el = document.getElementById(id);
+            const top = el.getBoundingClientRect().top + scrollY;
+            window.scrollTo(0, Math.round(top + p * (el.offsetHeight - innerHeight)));
+          },
+          { id, p },
+        );
+        await page.waitForTimeout(1800);
+        await page.screenshot({ path: path.join(out, `${vp.name}-${id}-${String(p).replace(".", "_")}.png`) });
+      }
     }
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);

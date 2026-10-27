@@ -95,6 +95,12 @@ const state = (page) =>
       log("reduced", p, JSON.stringify(await state(page)));
       await page.screenshot({ path: path.join(out, `reduced-${String(p).replace(".", "_")}.png`) });
     }
+    // Capítulo con escena: salta directo al estado final; al volver al hero, la escena se resetea.
+    await page.evaluate(() => document.getElementById("escenario").scrollIntoView());
+    await page.waitForTimeout(1500);
+    await page.screenshot({ path: path.join(out, "reduced-escenario.png") });
+    await heroTo(page, 0.8);
+    await page.screenshot({ path: path.join(out, "reduced-vuelta-hero.png") });
     await ctx.close();
   }
 

@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { chapters } from "@/content/story";
 import { ui } from "@/content/ui";
 import { initSmoothScroll } from "@/scroll/smoothScroll";
+import { useStoryTimeline } from "@/scroll/useStoryTimeline";
 import { useUI } from "@/state/store";
 import { Chapter } from "./Chapter";
 import { Hero } from "./Hero";
@@ -25,6 +26,7 @@ export function Site() {
   const estudio = useUI((s) => s.estudio);
 
   useEffect(() => useUI.getState().boot(), []);
+  useStoryTimeline(main);
   useEffect(() => initSmoothScroll(), []);
 
   // El estudio y los modos viven en <html> para que los tokens de CSS cambien en toda la página.

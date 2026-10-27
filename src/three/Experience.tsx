@@ -9,10 +9,12 @@ import { Bloom, EffectComposer, ToneMapping, Vignette } from "@react-three/postp
 import { ToneMappingMode } from "postprocessing";
 import { Suspense, useEffect, useMemo } from "react";
 import { NeutralToneMapping } from "three";
+import { chapters, fxOf } from "@/content/story";
 import { rig } from "@/scroll/rig";
 import { useUI } from "@/state/store";
 import { CameraRig } from "./CameraRig";
 import { palettes } from "./palette";
+import { Escenario } from "./scenes/Escenario";
 import { ITFloor } from "./scenes/ITFloor";
 import { OTFloor } from "./scenes/OTFloor";
 import { Pyramid } from "./scenes/Pyramid";
@@ -32,8 +34,12 @@ function FrameBridge() {
 export default function Experience() {
   const tier = useUI((s) => s.tier);
   const estudio = useUI((s) => s.estudio);
-  // El Canvas corre mientras el hero está en pantalla (active = inicio, it u ot).
-  const stageActive = useUI((s) => ["inicio", "it", "ot"].includes(s.active));
+  // El Canvas corre mientras se ve: en el hero y en los capítulos cuyo velo no lo tapa del todo.
+  const stageActive = useUI((s) => {
+    if (["inicio", "it", "ot"].includes(s.active)) return true;
+    const i = chapters.findIndex((c) => c.id === s.active);
+    return i >= 0 && fxOf(i).dim < 1;
+  });
   const setTier = useUI((s) => s.setTier);
   const setStageReady = useUI((s) => s.setStageReady);
   const palette = palettes[estudio];
@@ -71,6 +77,7 @@ export default function Experience() {
           <Pyramid palette={palette} />
           <ITFloor palette={palette} />
           <OTFloor palette={palette} />
+          <Escenario palette={palette} />
         </Suspense>
         <CameraRig />
         <FrameBridge />

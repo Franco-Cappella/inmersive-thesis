@@ -39,17 +39,6 @@ export function useHeroTimeline(scope: RefObject<HTMLElement | null>) {
         },
       });
 
-      // Velo sobre el Canvas: el mundo 3D se atenúa cuando sube el primer capítulo.
-      const veil = document.querySelector(".stage__veil");
-      const next = hero.nextElementSibling;
-      if (veil && next) {
-        gsap.fromTo(
-          veil,
-          { opacity: 0 },
-          { opacity: 1, ease: "none", scrollTrigger: { trigger: next, start: "top bottom", end: "top 35%", scrub: true } },
-        );
-      }
-
       const mm = gsap.matchMedia();
       // Con la forma de objeto, GSAP ejecuta el callback si ALGUNA condición coincide:
       // por eso "motion" tiene que estar siempre en la lista.

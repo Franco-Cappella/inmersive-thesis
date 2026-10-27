@@ -1,3 +1,4 @@
+import type { Shot } from "@/scroll/rig";
 import type { SourceKey } from "./references";
 
 // Capítulos que siguen al hero. Cada uno condensa una parte de la tesina en
@@ -37,6 +38,19 @@ export type Figura =
   | { tipo: "pilares"; items: { titulo: string; texto: string; fuentes: SourceKey[] }[] }
   | { tipo: "cita"; texto: string };
 
+// Estado del mundo 3D que cambia de capítulo en capítulo (0..1). Se acumula:
+// cada capítulo declara solo lo que CAMBIA y hereda el resto del anterior.
+export type SceneFx = {
+  dim: number; // velo sobre el 3D: 1 = el capítulo se lee sobre el campo liso
+  patch: number; // 01: el parche viaja de la torre IT al PLC de la planta
+  halt: number; // 01: la planta se detiene (HMI en blanco, flujo cortado, válvula en alarma)
+};
+export const FX_INICIAL: SceneFx = { dim: 0, patch: 0, halt: 0 };
+
+// Estado acumulado al terminar el capítulo i (i = -1: el final del hero).
+export const fxOf = (i: number): SceneFx =>
+  chapters.slice(0, i + 1).reduce<SceneFx>((acc, ch) => ({ ...acc, ...ch.fx }), { ...FX_INICIAL });
+
 export type Chapter = {
   id: string;
   titulo: string; // de 3 a 8 palabras
@@ -45,6 +59,10 @@ export type Chapter = {
   fuentes: SourceKey[];
   pendientes?: string[];
   escena: string;
+  // Solo los capítulos con escena 3D construida:
+  weight?: number; // alto de la sección en viewports: cuánto scroll dura la escena
+  camara?: { landscape: Shot; portrait: Shot }; // sin cámara, se queda la del capítulo anterior
+  fx?: Partial<SceneFx>;
 };
 
 export const chapters: Chapter[] = [
@@ -66,7 +84,13 @@ export const chapters: Chapter[] = [
     },
     fuentes: [],
     escena:
-      "La planta de noche vista desde arriba. Un paquete (el parche) baja desde la torre IT; las pantallas HMI se ponen en blanco, la cañería se detiene y la válvula pasa de ámbar a rojo.",
+      "La planta vista desde arriba. Un paquete (el parche) baja desde un rack de la oficina hasta un gabinete PLC; la pantalla HMI se pone en blanco, el flujo de las cañerías se corta y la válvula pasa de ámbar a rojo mientras se enciende la baliza de parada de emergencia.",
+    weight: 2.2,
+    camara: {
+      landscape: { position: [-7.5, -1.6, 8.5], target: [-0.6, -6.3, -3.2] },
+      portrait: { position: [-3.4, -2.2, 12.5], target: [-3.6, -7.3, -3.4] },
+    },
+    fx: { patch: 1, halt: 1 },
   },
   {
     id: "convergencia",
@@ -81,6 +105,8 @@ export const chapters: Chapter[] = [
     },
     fuentes: ["nist-blog-legacy"],
     pendientes: ["La convergencia se afirma sin fuente propia: el enlace de NIST es la fuente de la figura de esa sección."],
+    // Sin escena propia todavía: el 3D se atenúa y la planta vuelve a funcionar.
+    fx: { dim: 1, patch: 0, halt: 0 },
     escena:
       "La torre de red, del nivel 5 (empresa) al 0 (proceso). Entre IT y OT hay un hueco que se cierra; los paquetes empiezan a cruzar hacia la planta.",
   },

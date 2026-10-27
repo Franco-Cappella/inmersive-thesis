@@ -1,0 +1,115 @@
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import type { RefObject } from "react";
+import { chapters, FX_INICIAL, fxOf, type SceneFx } from "@/content/story";
+import { useUI } from "@/state/store";
+import { flat, heroShots, rig, type FlatShot } from "./rig";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+// Cámara al terminar el capítulo i: la propia o la última declarada antes.
+// Antes del primer capítulo, el shot "out" con el que termina el hero.
+function camOf(i: number, portrait: boolean): FlatShot {
+  for (let k = i; k >= 0; k--) {
+    const c = chapters[k].camara;
+    if (c) return flat(portrait ? c.portrait : c.landscape);
+  }
+  return flat(heroShots.out[portrait ? "portrait" : "landscape"]);
+}
+
+const sameShot = (a: FlatShot, b: FlatShot) =>
+  (Object.keys(a) as (keyof FlatShot)[]).every((k) => a[k] === b[k]);
+
+const pick = (fx: SceneFx, keys: (keyof SceneFx)[]) => Object.fromEntries(keys.map((k) => [k, fx[k]]));
+
+// El director de los capítulos. Por capítulo i:
+//  ENTRADA (la sección sube: "top bottom" → "top top"): la cámara viaja del keyframe i-1 al i
+//          y el velo pasa del dim anterior al propio.
+//  ESTADÍA ("top top" → "bottom bottom"): se animan los fx que cambian en i (la escena "actúa").
+// Todo fromTo con valores explícitos + immediateRender:false → reversible y sin depender del orden.
+export function useStoryTimeline(scope: RefObject<HTMLElement | null>) {
+  const reading = useUI((s) => s.reading);
+
+  useGSAP(
+    () => {
+      if (reading) return;
+      const sections = gsap.utils.toArray<HTMLElement>("[data-chapter]");
+      const veil = document.querySelector<HTMLElement>(".stage__veil");
+      if (!sections.length) return;
+
+      const mm = gsap.matchMedia();
+      mm.add(
+        {
+          motion: "(prefers-reduced-motion: no-preference)",
+          reduce: "(prefers-reduced-motion: reduce)",
+          portrait: "(orientation: portrait)",
+        },
+        (ctx) => {
+          const { reduce, portrait } = ctx.conditions as Record<string, boolean>;
+          const cam = (i: number) => camOf(i, portrait);
+
+          if (reduce) {
+            // Sin interpolación: cada capítulo aplica su estado final al cruzar el centro.
+            const apply = (i: number) => {
+              Object.assign(rig.cam, cam(i));
+              Object.assign(rig.fx, fxOf(i));
+              if (veil) veil.style.opacity = String(rig.fx.dim);
+              rig.requestFrame();
+            };
+            sections.forEach((el, i) =>
+              ScrollTrigger.create({
+                trigger: el,
+                start: "top center",
+                end: "bottom center",
+                onToggle: (self) => self.isActive && apply(i),
+              }),
+            );
+            ScrollTrigger.create({
+              trigger: sections[0],
+              start: "top center",
+              onLeaveBack: () => {
+                Object.assign(rig.fx, FX_INICIAL); // de vuelta en el hero
+                if (veil) veil.style.opacity = "0";
+                rig.requestFrame();
+              },
+            });
+            return () => {
+              if (veil) veil.style.opacity = "";
+            };
+          }
+
+          sections.forEach((el, i) => {
+            const entry = { trigger: el, start: "top bottom", end: "top top", scrub: true };
+            if (!sameShot(cam(i - 1), cam(i)))
+              gsap.fromTo(rig.cam, cam(i - 1), {
+                ...cam(i),
+                ease: "power2.inOut",
+                immediateRender: false,
+                scrollTrigger: entry,
+              });
+
+            const before = fxOf(i - 1);
+            const after = fxOf(i);
+            if (veil && before.dim !== after.dim)
+              gsap.fromTo(
+                veil,
+                { opacity: before.dim },
+                { opacity: after.dim, ease: "none", immediateRender: false, scrollTrigger: entry },
+              );
+
+            const keys = (Object.keys(after) as (keyof SceneFx)[]).filter((k) => k !== "dim" && before[k] !== after[k]);
+            if (keys.length)
+              gsap.fromTo(rig.fx, pick(before, keys), {
+                ...pick(after, keys),
+                ease: "none",
+                immediateRender: false,
+                scrollTrigger: { trigger: el, start: "top top", end: "bottom bottom", scrub: true },
+              });
+          });
+        },
+      );
+    },
+    { scope, dependencies: [reading], revertOnUpdate: true },
+  );
+}
