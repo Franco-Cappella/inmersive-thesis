@@ -35,6 +35,7 @@ type UI = {
   tierFijo: boolean; // ?calidad= en la URL: el PerformanceMonitor ya no lo cambia
   reading: boolean;
   presenting: boolean;
+  ensayo: boolean; // ?ensayo: cronómetro y número de parada en el modo presentación (para ensayar)
   estudio: Estudio;
   stageReady: boolean; // el Canvas ya dibujó su primer frame
   boot: () => void;
@@ -55,6 +56,7 @@ export const useUI = create<UI>((set, get) => ({
   tierFijo: false,
   reading: false,
   presenting: false,
+  ensayo: false,
   estudio: "sala",
   stageReady: false,
   boot: () => {
@@ -70,6 +72,7 @@ export const useUI = create<UI>((set, get) => ({
       tierFijo: fijo !== null,
       reading: q.has("lectura"),
       presenting: q.has("presentacion"),
+      ensayo: q.has("ensayo"),
       estudio: isEstudio(estudio) ? estudio : "sala",
     });
   },

@@ -400,3 +400,37 @@ button {
   color: var(--c-flow-text);
   font-weight: 700;
 }
+
+/* ---------- Cronómetro del ensayo (?presentacion&ensayo) ---------- */
+
+.ensayo {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 40;
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  padding: 0.45rem 0.8rem;
+  background: var(--c-panel-solid);
+  border: 1px solid var(--c-line);
+  border-left: 4px solid var(--c-ink-soft);
+  border-radius: var(--radius);
+  font-family: var(--f-display);
+  font-variant-numeric: tabular-nums;
+  color: var(--c-ink);
+}
+.ensayo__titulo {
+  font-size: var(--step--1);
+  color: var(--c-ink-soft);
+}
+.ensayo__reloj {
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+.ensayo[data-estado="advertencia"] {
+  border-left-color: var(--c-warn);
+}
+.ensayo[data-estado="alarma"] {
+  border-left-color: var(--c-alarm);
+}

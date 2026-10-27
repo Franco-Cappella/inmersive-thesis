@@ -39,3 +39,10 @@ export function stepStop(dir: 1 | -1) {
   const target = dir === 1 ? ys.find((y) => y > ref + 4) : ys.findLast((y) => y < ref - 4);
   if (target !== undefined) go(target, true);
 }
+
+// Parada en la que está el scroll (1 = la primera) y cuántas hay. La usa el cronómetro del ensayo.
+export function stopProgress() {
+  const ys = stops.map(stopY).filter((y): y is number => y !== null);
+  const index = ys.filter((y) => y <= window.scrollY + 4).length;
+  return { index, total: ys.length };
+}

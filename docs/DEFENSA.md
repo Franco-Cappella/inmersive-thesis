@@ -10,7 +10,7 @@ Lista adaptada de la sección 14 de la skill a este proyecto (Next.js en export 
   - `python3 -m http.server 8000` parado adentro de `out/` y abrir `http://localhost:8000`.
   - `file://` (doble clic en `index.html`) **no** sirve: los módulos de JavaScript necesitan un servidor.
 - [ ] Con el sitio servido y **el wifi apagado**: `node scripts/offline.cjs http://localhost:PUERTO` (ver el README). Tiene que decir "externos: 0" y llegar hasta "Ref" con la consola limpia.
-- [ ] Ensayo con el proyector o la resolución real, en `?presentacion`, contando el tiempo (5 a 9 minutos). La tabla de abajo propone un reparto.
+- [ ] Ensayo con el proyector o la resolución real, en `?presentacion&ensayo`: el cronómetro arranca con la primera flecha, muestra la parada actual y se pone ámbar a los 8 minutos y rojo a los 9. La tabla de abajo propone un reparto. El día de la defensa, abrir sin `&ensayo`.
 - [ ] Si la compu no sostiene el 3D (se ve entrecortado): abrir con `?calidad=baja`; si tampoco, `?calidad=estatica` o `?lectura`.
 - [ ] Grabar el video de respaldo en esa misma compu: `node scripts/video.cjs http://localhost:PUERTO video 4` y pasarlo a mp4 (README).
 - [ ] Tener abierta la tesina: cada dato del sitio sale de ahí, con su fuente en Referencias.

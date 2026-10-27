@@ -10,6 +10,7 @@ import { initSmoothScroll } from "@/scroll/smoothScroll";
 import { useStoryTimeline } from "@/scroll/useStoryTimeline";
 import { useUI } from "@/state/store";
 import { Chapter } from "./Chapter";
+import { Ensayo } from "./Ensayo";
 import { Hero } from "./Hero";
 import { Masthead } from "./Masthead";
 import { stepStop } from "./navigation";
@@ -105,6 +106,7 @@ export function Site() {
       <Stage />
       <Masthead />
       <ProgressNav />
+      <Ensayo />
       <main ref={main} id="contenido" data-reading={reading}>
         <Hero />
         {chapters.map((ch, i) => (
