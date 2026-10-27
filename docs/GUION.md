@@ -13,7 +13,7 @@ Texto: título de 3 a 8 palabras y una bajada de una o dos oraciones, en prosa. 
 | 04 | La pregunta y la apuesta | Pregunta, hipótesis, refutación y sostén | Sin escena nueva: la pirámide queda de fondo, atenuada | Hecho en HTML |
 | 05 | Tres controles IT, tres formas de parar | Parche, escaneo y MFA como tres golpes sobre la planta | Tres golpes sobre la misma planta: SCADA apagado, PLC en rojo, reloj de latencia | Pendiente 3D |
 | 06 | Lo que cuesta una hora detenida | Cifras grandes: USD 125.000 y USD 2,3 M | Un contador corre en la sala de control (las cifras en HTML) | Hecho en HTML |
-| 07 | Cuatro casos que no se leen en bloque | Colonial Pipeline, Oldsmar, Stuxnet, Industroyer | La torre de red: cada caso traza su recorrido en rojo de IT hacia OT | Pendiente 3D |
+| 07 | Cuatro casos que no se leen en bloque | Colonial Pipeline, Oldsmar, Stuxnet, Industroyer (cada uno se enciende cuando actúa) | Un caso por tramo: Colonial (racks en rojo, corte y planta detenida), Oldsmar (ámbar a la válvula), Stuxnet e Industroyer (rojo hasta un PLC) | **Hecho** |
 | 08 | La puerta de entrada es IT | Barras SANS 2024 (45,8 % compromiso en IT) | El 3D se atenúa y el gráfico toma la pantalla | Hecho en HTML |
 | 09 | No es la seguridad: es el trasplante | Tres pilares: zonas y conductos, monitoreo pasivo, probar antes de parchear | Compuertas de zona y conductos; el recorrido rojo choca y se detiene | Pendiente 3D |
 | 10 | Confirmada, con matiz | Cita de cierre | La cámara se aleja: la planta sigue operando, segmentada | Pendiente 3D |
@@ -36,7 +36,7 @@ Texto: título de 3 a 8 palabras y una bajada de una o dos oraciones, en prosa. 
 - **02 · convergencia (hecho).** Vista de los dos pisos. Primero aparece el borde del air gap (en tinta); después bajan tres enlaces (dos desde los racks de la oficina y uno desde la nube, fuera de cuadro) hasta el gabinete PLC, la válvula y un tanque; el borde pasa a ámbar y los paquetes cruzan hacia la planta.
 - **03 · protocolos.** La cámara entra en un gabinete PLC. Una trama llega en texto plano; el PLC la ejecuta y la válvula se mueve sin que se identifique nadie.
 - **05 · controles.** Tres impactos en secuencia sobre la planta. Latencia representada como un reloj que corre y una presión que sube.
-- **07 · casos.** Cada caso traza su camino en rojo desde la torre IT. En Colonial Pipeline el corte lo hace la propia empresa, sin que el ataque llegue a la planta (el rojo se apaga en el nivel OT).
+- **07 · casos (hecho).** Un caso por tramo de la estadía, sincronizado con la lista del texto. Colonial Pipeline: los racks de la oficina se ponen en rojo, la empresa corta los enlaces (pasan a gris) y la planta se detiene sin que el rojo baje. Oldsmar: recorrido en **ámbar** (exposición, no ataque comprobado) desde el acceso remoto hasta la válvula. Stuxnet e Industroyer: recorridos rojos hasta un controlador cada uno, que pasa a alarma.
 - **09 · matiz.** Aparecen volúmenes de zona y conductos con compuertas. El recorrido rojo se estrella contra un conducto. Un sensor pasivo escucha una copia del tráfico.
 - **10 · postura.** La cámara sube y se aleja. La pirámide AIC queda estable sobre una planta que sigue funcionando.
 

@@ -5,7 +5,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 ## Estado actual
 
 - **Hero:** completo en lo funcional. La pirámide C·I·A se arma al cargar, gira 180° y baja de IT a OT con el scroll. La ficha IT/OT cambia con paletas y la lista de prioridades rueda fila por fila. Tiene respaldo SVG, modo reduced motion y modo lectura.
-- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **Los capítulos 01 y 02 ya tienen su escena 3D**; los demás usan `dim: 1` (el velo tapa el 3D) hasta que se construya la suya.
+- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **Los capítulos 01, 02 y 07 ya tienen su escena 3D**; los demás usan `dim: 1` (el velo tapa el 3D) hasta que se construya la suya.
 - **Verificación:** `scripts/capturas.cjs` (hero y capítulos en desktop y celular, consola, scroll horizontal) y `scripts/modos.cjs` (estudios, lectura, presentación, reduced motion, sin WebGL, scroll inverso). Última corrida: todo bien, consola limpia.
 
 ## Bitácora
@@ -32,21 +32,26 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - Modo lectura: los capítulos con escena vuelven a su altura natural y sin panel fijo.
 - Capítulo 03: los campos de la trama Modbus aparecen en orden, como llegan por la red.
 
+### Sesión 3 (27/10/2026, loop autónomo)
+- Escena 07 (`src/three/scenes/Casos.tsx`): un caso por tramo de `fx.attack` (`CASOS_TRAMOS` en `src/scroll/timing.ts`), con la lista del texto encendiéndose al mismo ritmo. Colonial: racks en rojo, enlaces cortados y planta detenida por decisión, sin que el rojo baje. Oldsmar en ámbar (exposición, caso en discusión). Stuxnet e Industroyer: rojo hasta un PLC, que pasa a alarma.
+- `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
+- El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
+
 ## Deploy
 
 El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: cada push a `main` actualiza producción y cada rama genera una URL de preview. Las sesiones de Claude no tienen acceso a Vercel (la red lo bloquea y no hay credenciales): se trabaja contra el build local y se verifica con `scripts/capturas.cjs`.
 
 ## Próximo paso
 
-**Escena 3D del capítulo 07 (casos: los recorridos en rojo).** Es la "audacia" de la dirección de arte (la otra es el descenso). Ver `docs/GUION.md`, "Cómo se agrega la escena de un capítulo".
+**Escena 3D del capítulo 09 (matiz: zonas y conductos que bloquean el rojo).**
 
-1. `src/content/story.ts`: al capítulo `casos`, `weight`, `camara` y `fx: { dim: 0, attack: 1 }` (sumar `attack` a `SceneFx`/`FX_INICIAL`). Los capítulos 03 a 06 siguen con `dim: 1`; el 08 (datos) tiene que volver a `dim: 1`.
-2. `src/three/scenes/Casos.tsx`: un recorrido rojo (`palette.alarm`) por caso, de la oficina o la nube hacia la planta, reutilizando los enlaces del 02. Colonial Pipeline: el rojo se queda en IT y la planta se detiene igual (corte por decisión, sin que el ataque llegue a OT). Oldsmar: el recorrido llega a la válvula por acceso remoto. Stuxnet e Industroyer: llegan a un PLC.
-3. El texto del capítulo nombra cada caso: el color nunca es el único portador de significado.
+1. `src/content/story.ts`: al capítulo `matiz`, `weight`, `camara` (la misma vista de los dos pisos sirve) y `fx: { dim: 0, zones: 1 }`; sumar `zones` a `SceneFx`/`FX_INICIAL`. `attack` queda en 1: los recorridos de los casos siguen ahí, pero los conductos los cortan.
+2. `src/three/scenes/Matiz.tsx`: volúmenes de zona (oficina, DMZ, planta) y conductos con compuertas sobre el borde del air gap. Con `zones`, el tramo OT de cada recorrido rojo se apaga en la compuerta, los PLC vuelven a azul (señales en `signals.ts`) y un sensor pasivo escucha una copia del tráfico.
+3. El 10 (postura) vuelve a `dim: 1` o tiene su escena (pirámide AIC con `triad: 1`).
 
 ## Cola (en orden)
 
-1. Escenas 07 (casos en rojo) y 09 (zonas y conductos que bloquean el rojo).
+1. Escena 09 (zonas y conductos que bloquean el rojo).
 2. Pasada de arte del hero y de los estudios.
 3. Escenas 3D restantes: 03 (PLC que ejecuta una trama), 05 (tres golpes), 10 (postura: vuelve la pirámide AIC con `triad: 1`).
 

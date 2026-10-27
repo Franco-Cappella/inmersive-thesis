@@ -13,9 +13,9 @@ import { pipePath } from "../paths";
 // Piso IT (arriba): un datacenter de racks con LEDs de estado y paquetes por las bandejas.
 export const IT_FLOOR_Y = 0.35;
 
-const RACK = { w: 1.0, h: 2.3, d: 1.2 };
-const ROWS = [-4.6, -7.6, -10.6];
-const RACKS: Vec3[] = ROWS.flatMap((z) =>
+export const RACK = { w: 1.0, h: 2.3, d: 1.2 };
+export const RACK_ROWS = [-4.6, -7.6, -10.6];
+export const RACKS: Vec3[] = RACK_ROWS.flatMap((z) =>
   Array.from({ length: 17 }, (_, i) => [-9.6 + i * 1.2, IT_FLOOR_Y + RACK.h / 2, z] as Vec3),
 );
 const LEDS: Vec3[] = RACKS.flatMap(([x, , z]) =>

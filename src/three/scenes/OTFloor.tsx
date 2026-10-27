@@ -6,8 +6,9 @@ import { useMemo, useRef } from "react";
 import { Color, MeshBasicMaterial, MeshStandardMaterial } from "three";
 import { rig, type Vec3 } from "@/scroll/rig";
 import { FlowPipe } from "../FlowPipe";
-import { FONT_URL, smooth } from "../helpers";
+import { FONT_URL, glow, smooth } from "../helpers";
 import type { Palette } from "../palette";
+import { oldsmarExposure, plantFlow, plcCompromised } from "../signals";
 
 // Planta OT (abajo): tanques, cañerías con flujo, una válvula y gabinetes PLC.
 export const OT_FLOOR_Y = -8;
@@ -33,8 +34,8 @@ const CABINETS: Vec3[] = [
 // El gabinete PLC al que llega el parche en el capítulo 01.
 export const PLC_POS = CABINETS[1];
 
-// El proceso corre cuando llegamos a la planta y se corta cuando la planta se detiene (capítulo 01).
-const otFlow = () => smooth(rig.hero.descent, 0.45, 0.95) * (1 - smooth(rig.fx.halt, 0.55, 0.75));
+// El proceso corre cuando llegamos a la planta y se corta si la planta se detiene (ver signals.ts).
+const otFlow = plantFlow;
 
 function Tank({ x, z, r, h, palette }: { x: number; z: number; r: number; h: number; palette: Palette }) {
   return (
@@ -52,12 +53,17 @@ function Tank({ x, z, r, h, palette }: { x: number; z: number; r: number; h: num
   );
 }
 
-function StatusLight({ position, palette }: { position: Vec3; palette: Palette }) {
+// Luz de estado del gabinete: azul en marcha; roja si el controlador está comprometido (capítulo 07).
+function StatusLight({ position, palette, cabinet }: { position: Vec3; palette: Palette; cabinet: number }) {
   const material = useRef<MeshBasicMaterial>(null);
+  const alarm = useMemo(() => glow(palette.alarm, 3), [palette]);
   useFrame((state) => {
     if (!material.current) return;
     const pulse = 0.75 + 0.25 * Math.sin(state.clock.elapsedTime * 2.4);
-    material.current.color.set(palette.flow).multiplyScalar(1 + 2.2 * otFlow() * pulse);
+    material.current.color
+      .set(palette.flow)
+      .multiplyScalar(1 + 2.2 * otFlow() * pulse)
+      .lerp(alarm, plcCompromised(cabinet));
   });
   return (
     <mesh position={position}>
@@ -81,7 +87,8 @@ function Valve({ palette }: { palette: Palette }) {
   useFrame(() => {
     if (!body.current || !wheel.current) return;
     const h = rig.fx.halt;
-    const warn = smooth(h, 0.6, 0.7);
+    // 01: se traba (ámbar → rojo). 07, Oldsmar: queda expuesta (solo ámbar: el caso está en discusión).
+    const warn = Math.max(smooth(h, 0.6, 0.7), oldsmarExposure());
     const alarm = smooth(h, 0.8, 0.92);
     c.state.copy(c.warn).lerp(c.alarm, alarm);
     body.current.color.copy(c.metal).lerp(c.state, warn);
@@ -139,7 +146,7 @@ export function OTFloor({ palette }: { palette: Palette }) {
             <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
             <Edges threshold={20} color={palette.edge[0]} lineWidth={1} transparent opacity={palette.edge[1] * 0.7} />
           </mesh>
-          <StatusLight position={[0.2, 0.55, 0.31]} palette={palette} />
+          <StatusLight position={[0.2, 0.55, 0.31]} palette={palette} cabinet={i} />
         </group>
       ))}
       {palette.sodium && (

@@ -8,6 +8,7 @@ import { rig, type Vec3 } from "@/scroll/rig";
 import { glow, range, smooth } from "../helpers";
 import { PacketFlow } from "../PacketFlow";
 import type { Palette } from "../palette";
+import { colonialCut } from "../signals";
 import { pipePath } from "../paths";
 import { IT_FLOOR_Y } from "./ITFloor";
 
@@ -44,11 +45,15 @@ function Link({ points, palette, delay }: { points: Vec3[]; palette: Palette; de
   const mesh = useRef<Group>(null);
   const total = geometry.index?.count ?? 0;
   const color = useMemo(() => glow(palette.flow, 1.8), [palette]);
+  const cutColor = useMemo(() => new Color(palette.ink).multiplyScalar(0.6), [palette]);
   const packet = useMemo(() => glow(palette.flow, 3), [palette]);
+  const material = useRef<MeshBasicMaterial>(null);
 
   useFrame(() => {
     const reveal = range(rig.fx.bridge, 0.25 + delay, 0.65 + delay);
     if (mesh.current) mesh.current.visible = reveal > 0;
+    // 07, Colonial Pipeline: la empresa corta los enlaces con la planta (pasan a gris y dejan de llevar paquetes).
+    if (material.current) material.current.color.copy(color).lerp(cutColor, colonialCut());
     // Revelar la ruta: drawRange sobre los índices del tubo, que van a lo largo del recorrido.
     geometry.setDrawRange(0, Math.floor((total * reveal) / 6) * 6);
   });
@@ -57,10 +62,10 @@ function Link({ points, palette, delay }: { points: Vec3[]; palette: Palette; de
     <>
       <group ref={mesh} visible={false}>
         <mesh geometry={geometry}>
-          <meshBasicMaterial color={color} toneMapped={false} />
+          <meshBasicMaterial ref={material} color={color} toneMapped={false} />
         </mesh>
       </group>
-      <PacketFlow curve={curve} count={10} speed={0.06} size={0.11} color={packet} visibility={() => smooth(rig.fx.bridge, 0.6 + delay, 0.8)} />
+      <PacketFlow curve={curve} count={10} speed={0.06} size={0.11} color={packet} visibility={() => smooth(rig.fx.bridge, 0.6 + delay, 0.8) * (1 - colonialCut())} />
     </>
   );
 }

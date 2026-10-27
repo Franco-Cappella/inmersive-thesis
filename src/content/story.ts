@@ -46,8 +46,9 @@ export type SceneFx = {
   patch: number; // 01: el parche viaja de la torre IT al PLC de la planta
   halt: number; // 01: la planta se detiene (HMI en blanco, flujo cortado, válvula en alarma)
   bridge: number; // 02: se rompe el air gap: enlaces de IT (y la nube) a la planta y paquetes que cruzan
+  attack: number; // 07: los cuatro casos, uno por tramo (ver CASOS_TRAMOS en src/scroll/timing.ts)
 };
-export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, patch: 0, halt: 0, bridge: 0 };
+export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, patch: 0, halt: 0, bridge: 0, attack: 0 };
 
 // Estado acumulado al terminar el capítulo i (i = -1: el final del hero).
 export const fxOf = (i: number): SceneFx =>
@@ -249,7 +250,13 @@ export const chapters: Chapter[] = [
     },
     fuentes: ["blount-2021", "cisa-aa21-042a", "tbt-oldsmar-2023", "bbc-stuxnet", "eset-industroyer"],
     escena:
-      "La torre de red: cada caso traza su recorrido en rojo, de IT hacia OT. En Colonial Pipeline el corte lo hace la propia empresa, sin que el ataque llegue a la planta.",
+      "La misma vista de los dos pisos. Cada caso actúa por turno: en Colonial Pipeline los racks de la oficina se ponen en rojo, la empresa corta los enlaces con la planta y la planta se detiene sin que el ataque baje; en Oldsmar un recorrido en ámbar llega a la válvula desde el acceso remoto (exposición: el caso quedó en discusión); en Stuxnet e Industroyer los recorridos rojos llegan a un controlador cada uno.",
+    weight: 2.6,
+    camara: {
+      landscape: { position: [-2.5, -0.4, 20], target: [6.5, -2.8, -4] },
+      portrait: { position: [-1.2, -1, 25.5], target: [-1.2, -2.6, -4] },
+    },
+    fx: { dim: 0, attack: 1 },
   },
   {
     id: "datos",
@@ -278,6 +285,7 @@ export const chapters: Chapter[] = [
       nota: "Pregunta de selección múltiple: los porcentajes no suman 100.",
     },
     fuentes: ["sans-2024"],
+    fx: { dim: 1 }, // el gráfico va en HTML: el 3D se tapa
     escena: "El 3D se aparta (fondo atenuado) y el gráfico ocupa la pantalla: las barras crecen y la de 45,8 % se marca en rojo.",
   },
   {

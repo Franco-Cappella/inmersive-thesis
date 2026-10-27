@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useRef, type CSSProperties } from "react";
 import type { Chapter as ChapterData } from "@/content/story";
-import { ESCENARIO_PASOS } from "@/scroll/timing";
+import { CASOS_TRAMOS, ESCENARIO_PASOS } from "@/scroll/timing";
 import { useUI } from "@/state/store";
 import { FiguraView } from "./Figuras";
 import { SourceRefs } from "./Sources";
@@ -46,15 +46,21 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           stagger: 0.08,
           scrollTrigger: { trigger: section, start: "top 62%", toggleActions: "play none none reverse" },
         });
-        // Capítulo 01: los pasos del reloj se encienden a medida que la escena 3D actúa (mismo scroll).
-        const pasos = section.querySelectorAll<HTMLElement>(".fig-reloj__pasos li");
-        if (!reading && section.hasAttribute("data-escena") && pasos.length) {
+        // Texto al ritmo de la escena 3D (mismo scroll): los pasos del reloj del 01 y los casos del 07
+        // se encienden cuando actúa su parte de la escena. Los tiempos viven en src/scroll/timing.ts.
+        const sincronizados: [string, number[]][] = [
+          [".fig-reloj__pasos li", ESCENARIO_PASOS],
+          [".fig--casos > li", CASOS_TRAMOS.map(([inicio]) => inicio)],
+        ];
+        for (const [selector, tiempos] of sincronizados) {
+          const items = section.querySelectorAll<HTMLElement>(selector);
+          if (reading || !section.hasAttribute("data-escena") || !items.length) continue;
           const tl = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: { trigger: section, start: "top top", end: "bottom bottom", scrub: true },
           });
-          pasos.forEach((li, i) =>
-            tl.fromTo(li, { opacity: 0.3 }, { opacity: 1, duration: 0.05 }, ESCENARIO_PASOS[i] ?? i / pasos.length),
+          items.forEach((li, i) =>
+            tl.fromTo(li, { opacity: 0.3 }, { opacity: 1, duration: 0.05 }, tiempos[i] ?? i / items.length),
           );
           tl.set({}, {}, 1); // el timeline dura exactamente la estadía
         }

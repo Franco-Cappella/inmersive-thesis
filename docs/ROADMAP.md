@@ -20,7 +20,8 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - [x] **Director de capítulos** (`useStoryTimeline`): cámara por capítulo, `fx` acumulados y velo (`dim`) por capítulo. Reversible y con reduced motion.
 - [x] Escena 3D del capítulo 01 (el parche que apaga la planta).
 - [x] Escena 3D del capítulo 02 (se rompe el air gap).
-- [ ] Escenas 3D de los demás capítulos (03, 05, 07, 09, 10 según `docs/GUION.md`). Hoy usan `dim: 1`.
+- [x] Escena 3D del capítulo 07 (los cuatro casos, sincronizados con la lista del texto).
+- [ ] Escenas 3D de los demás capítulos (03, 05, 09, 10 según `docs/GUION.md`). Hoy usan `dim: 1`.
 - [x] Animaciones de figuras HTML: contador en las cifras de costo, brecha IT/OT que se cierra, barras SANS que crecen.
 - [x] Reloj del 01: los pasos se encienden con la escena 3D.
 - [x] Trama Modbus (03): los campos aparecen en orden.
