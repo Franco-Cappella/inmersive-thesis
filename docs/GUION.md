@@ -40,6 +40,10 @@ Texto: título de 3 a 8 palabras y una bajada de una o dos oraciones, en prosa. 
 - **09 · matiz (hecho).** Misma vista que el 07, con los recorridos de los casos todavía ahí. Un pilar por tramo de la estadía, sincronizado con la lista del texto. Zonas y conductos: la DMZ se cierra sobre el air gap (el borde punteado del 02 se apaga), aparecen las zonas (oficina y dos celdas de planta) y una compuerta en cada enlace legítimo; cada recorrido se retrae hasta la DMZ y queda una marca donde se frenó; los controladores y la válvula vuelven a la normalidad, los racks de la oficina siguen en rojo. Escuchar en vez de golpear: un puerto espejo en un enlace le copia el tráfico a un sensor pasivo, que no le envía nada a la red. Probar antes de parchear: el parche baja de la DMZ a un gemelo digital del controlador, que pasa de prueba (ámbar) a validado (azul).
 - **10 · postura (hecho).** La cámara sube y se aleja hasta ver la torre entera: los racks de la oficina siguen en rojo, los ataques frenados sobre la DMZ y la planta funcionando, con sus compuertas, el sensor y el gemelo. Durante la estadía, la pirámide vuelve donde terminó el hero y se rearma capa por capa en el orden de prioridad de OT: A, I, C.
 
+## Descripción en texto
+
+El Canvas es decorativo (`aria-hidden`). En los capítulos con escena, el campo `escena` de `src/content/story.ts` se agrega al panel como párrafo oculto a la vista ("Qué muestra la ilustración: …"). Si cambia una escena, se actualiza su `escena`.
+
 ## Reglas de movimiento
 
 - La cámara y los estados 3D se mueven con el scroll (`scrub`), nunca con tiempo fijo.

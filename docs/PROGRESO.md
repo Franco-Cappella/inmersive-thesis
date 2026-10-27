@@ -37,6 +37,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
 - El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
 - Escena 09 (`src/three/scenes/Matiz.tsx`): un pilar por tramo de `fx.zones` (`MATIZ_TRAMOS`), con la lista de pilares encendiéndose al mismo ritmo. La DMZ se cierra sobre el air gap, aparecen las zonas y una compuerta por enlace legítimo; los recorridos de los casos se retraen hasta la DMZ (señal `segmentation` en `signals.ts`) y la planta vuelve a azul. Después, un sensor pasivo en un puerto espejo y un gemelo digital que valida el parche. Verificada en los tres estudios, celular, reduced motion y scroll de vuelta al 07.
+- Descripción en texto de cada escena: en los capítulos con escena, el campo `escena` de `story.ts` se lee como párrafo oculto a la vista ("Qué muestra la ilustración: …"), porque el Canvas es decorativo. Se corrigieron las descripciones del 04, el 09 y el 10 para que coincidan con lo que hoy hace el 3D.
 - Celular durante las escenas: hasta 760 px, la estadía de cada capítulo con escena empieza cuando el panel ya subió (`stayOf` en `useStoryTimeline.ts`; la sección suma ese espacio con `padding-bottom` en `chapters.css`). La escena actúa con la pantalla libre y las listas sincronizadas se leen enteras, sin atenuar.
 - Pasada de arte (detalle): `src/three/scenes/PlantDetails.tsx` (bridas y soportes en las cañerías, aros y faldones en los tanques, rejillas y manija en los gabinetes) y juntas entre servidores en los racks (`ITFloor.tsx`). Cinco `InstancedMesh`, en metal o tinta; verificado en los tres estudios. Bundle medido otra vez: carga inicial 239 KB y chunk 3D 319 KB gzip (`docs/DECISIONES.md`).
 - Accesibilidad: `scripts/a11y.cjs` (axe-core 4.14 sobre el build, cinco vistas, más el orden de Tab). Encontró el azul de estado como texto chico en Sala (3,9:1): se agregaron `--c-flow-text` y `--c-warn-text` (ver `docs/ESTILO.md`). Los enlaces del índice tienen nombre explícito (antes se leía "0103:14 AM" o "IT IT:"). Ahora: sin violaciones.
@@ -55,12 +56,11 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 **Lo que queda depende de Franco o de la compu de la defensa** (ver "Bloqueado por Franco" y la fase 5 de `docs/ROADMAP.md`). Mientras tanto, mejoras posibles sin decidir nada por él:
 
 1. Encuadres `portrait`: en el celular el sujeto queda en el medio y abajo sobra piso; se pueden subir un poco (`camara.portrait` de cada capítulo en `story.ts`).
-2. Una pasada de textos alternativos: cada capítulo describe su escena en `escena` (`story.ts`); revisar que coincidan con lo que hoy muestra el 3D después de todos los cambios.
-3. Ensayo cronometrado del modo presentación con `scripts/video.cjs` (la duración del video es una buena estimación del recorrido).
+2. Ensayo cronometrado del modo presentación con `scripts/video.cjs` (la duración del video es una buena estimación del recorrido).
 
 ## Cola (en orden)
 
-1. Encuadres `portrait` y revisión de los textos `escena` contra lo que muestra el 3D.
+1. Encuadres `portrait` (en el celular sobra piso abajo).
 2. Probar con un lector de pantalla real y ensayar la presentación con tiempos (5 a 9 minutos).
 3. Atmósfera propia del estudio que elija Franco.
 4. En la compu de la defensa: correr `scripts/offline.cjs` con el wifi apagado y grabar el video con `scripts/video.cjs`.

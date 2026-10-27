@@ -9,6 +9,7 @@ export const ui = {
   pendiente: "Fuente pendiente",
   verificar: "Verificar",
   hipotetico: "Escenario hipotético",
+  escena: "Qué muestra la ilustración:",
   antes: "Antes",
   despues: "Después",
   hipotesis: "Hipótesis",

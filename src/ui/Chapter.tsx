@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useRef, type CSSProperties } from "react";
 import type { Chapter as ChapterData } from "@/content/story";
+import { ui } from "@/content/ui";
 import { CASOS_TRAMOS, CONFLICTO_TRAMOS, ESCENARIO_PASOS, MATIZ_TRAMOS } from "@/scroll/timing";
 import { useUI } from "@/state/store";
 import { FiguraView } from "./Figuras";
@@ -155,6 +156,12 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
         <div data-reveal>
           <FiguraView figura={ch.figura} />
         </div>
+        {/* El Canvas es decorativo (aria-hidden): la escena se describe en texto para quien no la ve */}
+        {ch.weight && (
+          <p className="sr-only">
+            {ui.escena} {ch.escena}
+          </p>
+        )}
         <div data-reveal>
           <SourceRefs keys={ch.fuentes} pending={ch.pendientes} />
         </div>

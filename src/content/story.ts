@@ -4,8 +4,9 @@ import type { SourceKey } from "./references";
 // Capítulos que siguen al hero. Cada uno condensa una parte de la tesina en
 // una idea, una figura y una o dos oraciones. Los datos y las citas tienen que
 // coincidir con TESINA_FINAL.md; lo que no tiene fuente va en `pendientes`.
-// `escena` describe lo que va a mostrar el mundo 3D cuando se construya
-// (docs/GUION.md) y sirve como descripción en texto de esa figura.
+// `escena` describe lo que muestra el mundo 3D (docs/GUION.md). En los capítulos con escena
+// construida se lee como descripción en texto de la ilustración (oculta a la vista, para lectores
+// de pantalla): tiene que coincidir con lo que hoy hace el 3D.
 
 export type Figura =
   | {
@@ -171,7 +172,7 @@ export const chapters: Chapter[] = [
         "Casos documentados y guías oficiales en los que un parche, un escaneo o una decisión pensada para IT haya detenido un proceso físico.",
     },
     fuentes: [],
-    escena: "Sin escena nueva: la pirámide invertida del inicio queda de fondo, atenuada, mientras se lee la pregunta.",
+    escena: "Sin escena: la pregunta y la hipótesis se leen sobre el campo liso; el velo tapa el 3D.",
     fx: { dim: 1 }, // la pregunta y la hipótesis se leen sobre el campo liso
   },
   {
@@ -333,7 +334,7 @@ export const chapters: Chapter[] = [
     },
     fuentes: ["isa-iec-62443", "cisa-ics-rp", "nist-800-82r3"],
     escena:
-      "La misma vista de los dos pisos, con los recorridos de los casos todavía ahí. Aparecen las zonas (oficina, DMZ y dos celdas de planta) y una compuerta en cada cruce del air gap: el rojo se retrae hasta la compuerta y los controladores vuelven a la normalidad, mientras el tráfico legítimo sigue pasando. Después, un sensor pasivo recibe copias del tráfico desde un puerto espejo, y un gemelo digital del controlador pasa de prueba (ámbar) a validado (azul).",
+      "La misma vista de los dos pisos, con los recorridos de los casos todavía ahí. Una DMZ se cierra sobre el air gap y aparecen las zonas (la oficina y dos celdas de planta), con una compuerta en cada enlace legítimo: los recorridos de los casos se retraen hasta la DMZ, donde quedan frenados, y los controladores vuelven a la normalidad mientras el tráfico legítimo sigue pasando. Después, un sensor pasivo recibe copias del tráfico desde un puerto espejo, y un parche baja a un gemelo digital del controlador, que pasa de prueba (ámbar) a validado (azul).",
     weight: 2.6,
     fx: { dim: 0, zones: 1 },
   },
@@ -348,7 +349,8 @@ export const chapters: Chapter[] = [
         "La ciberseguridad industrial del siglo XXI no consiste en apagar la planta para protegerla, sino en dotarla de la resiliencia necesaria para operar de forma ininterrumpida en un entorno hiperconectado.",
     },
     fuentes: [],
-    escena: "La cámara se aleja: la planta sigue funcionando, segmentada, y la pirámide AIC queda estable sobre ella.",
+    escena:
+      "La cámara sube y se aleja hasta ver la torre entera: la oficina sigue con su incidente, los ataques quedan frenados sobre la DMZ y la planta funciona, segmentada. La pirámide vuelve y se rearma capa por capa en el orden de OT: disponibilidad, integridad y confidencialidad.",
     weight: 1.8,
     camara: {
       landscape: { position: [-8, 4, 31], target: [10, -3.2, -5] },
