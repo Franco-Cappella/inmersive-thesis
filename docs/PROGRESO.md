@@ -37,6 +37,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
 - El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
 - Escena 09 (`src/three/scenes/Matiz.tsx`): un pilar por tramo de `fx.zones` (`MATIZ_TRAMOS`), con la lista de pilares encendiéndose al mismo ritmo. La DMZ se cierra sobre el air gap, aparecen las zonas y una compuerta por enlace legítimo; los recorridos de los casos se retraen hasta la DMZ (señal `segmentation` en `signals.ts`) y la planta vuelve a azul. Después, un sensor pasivo en un puerto espejo y un gemelo digital que valida el parche. Verificada en los tres estudios, celular, reduced motion y scroll de vuelta al 07.
+- Accesibilidad: `scripts/a11y.cjs` (axe-core 4.14 sobre el build, cinco vistas, más el orden de Tab). Encontró el azul de estado como texto chico en Sala (3,9:1): se agregaron `--c-flow-text` y `--c-warn-text` (ver `docs/ESTILO.md`). Los enlaces del índice tienen nombre explícito (antes se leía "0103:14 AM" o "IT IT:"). Ahora: sin violaciones.
 - Escena 03 (`src/three/scenes/Protocolos.tsx`): la trama Modbus de la figura baja por el cable como una tarjeta en texto plano (los bytes salen de `story.ts`), entra al gabinete, la luz del PLC destella y la válvula gira (`valveTurn` en `signals.ts`; el volante ahora tiene rayos para que se vea girar). El 04 vuelve a `dim: 1`.
 - Escena 05 (`src/three/scenes/Conflicto.tsx`): un golpe por tramo de `fx.hits` (`CONFLICTO_TRAMOS`), con la lista del texto y una parada de presentación por golpe. Parche (barra de actualización, HMI apagada, parada de emergencia), escaneo (ráfaga y controlador bloqueado en rojo) y MFA (reloj de token y válvula en alarma). Las reacciones de la planta salen de señales nuevas en `signals.ts` (`scadaReboot`, `esdTrip`, `scanLock`, `overpressure`) que también leen `Escenario.tsx` y `OTFloor.tsx`. El 06 vuelve a `dim: 1` y el 07 resetea `hits`.
 - Modo presentación: una parada oculta al final de cada caso del 07 y de cada pilar del 09 (`src/content/stops.ts`, desde `src/scroll/timing.ts`), y viajes que duran según la distancia (`src/ui/navigation.ts`). El recorrido completo son 23 paradas.
@@ -49,16 +50,16 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 ## Próximo paso
 
-**Revisión de accesibilidad (axe-core y teclado).**
+**Pasada de arte del 3D (igual para los tres estudios hasta que Franco elija uno).**
 
-1. `node scripts/a11y.cjs http://localhost:4321` (axe-core 4.14 sobre el build: escritorio, celular y modo lectura, WCAG 2.2 AA, más un recorrido con Tab).
-2. Corregir lo que encuentre (contraste del texto atenuado de las listas sincronizadas, nombres accesibles, foco visible) sin tocar el contenido.
-3. Documentar el comando en el README y en `CLAUDE.md`; marcar la fase 5 del ROADMAP.
+1. Detalle procedural, sin modelos externos: frentes de rack con ranuras de servidores (instanciadas), bridas y soportes en las cañerías, aros en los tanques, puerta y rejillas en los gabinetes.
+2. Respetar la regla de color: todo lo nuevo en metal o tinta; nada de color decorativo. En Plano, que lo nuevo tenga aristas como el resto.
+3. Verificar el costo: `PerformanceMonitor` no tiene que bajar de tier en la compu de la defensa. Medir draw calls antes y después (`renderer.info`).
 
 ## Cola (en orden)
 
-1. Revisión de accesibilidad (axe-core y teclado).
-2. Pasada de arte del hero y de los estudios: detalle de racks, cañerías y gabinetes (bridas, soportes, frentes), igual para los tres estudios hasta que Franco elija uno.
+1. Pasada de arte del hero y de los estudios: detalle de racks, cañerías y gabinetes (bridas, soportes, frentes), igual para los tres estudios hasta que Franco elija uno.
+2. Probar con un lector de pantalla real y ensayar la presentación con tiempos (5 a 9 minutos).
 4. En la compu de la defensa: correr `scripts/offline.cjs` con el wifi apagado y grabar el video con `scripts/video.cjs`.
 
 ## Bloqueado por Franco

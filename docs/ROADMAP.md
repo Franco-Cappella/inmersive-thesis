@@ -42,7 +42,8 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - [ ] Probarlo también en la compu de la defensa, con el wifi apagado y el build servido desde `out/`.
 - [x] Script del video de respaldo (`scripts/video.cjs`): graba el recorrido en modo presentación a 1920×1080.
 - [ ] Grabar el video en la compu de la defensa (acá el 3D se dibuja por software y sale entrecortado).
-- [ ] Revisión de accesibilidad con teclado y lector de pantalla.
+- [x] Revisión de accesibilidad automatizada (`scripts/a11y.cjs`, axe-core, WCAG 2.2 AA): sin violaciones en escritorio, celular, modo lectura y los tres estudios. Orden de Tab lógico y foco visible.
+- [ ] Probar con un lector de pantalla real (NVDA o VoiceOver) antes de la defensa.
 
 ## Bloqueado por Franco
 - Resolver los pendientes de rigor de `docs/PENDIENTES-TESINA.md` antes de presentar el sitio.

@@ -16,6 +16,9 @@ export function ProgressNav() {
             <a
               href={`#${s.seccion}`}
               aria-current={active === s.id ? "step" : undefined}
+              // Nombre explícito: sin esto el número y el título se leen pegados ("0103:14 AM").
+              // Tiene que incluir lo que se ve ("IT:" y "OT:" ya empiezan así; "Ref" no está entero en "Referencias").
+              aria-label={s.nombre.startsWith(`${s.corto}:`) ? s.nombre : `${s.corto}. ${s.nombre}`}
               onClick={(e) => {
                 e.preventDefault();
                 goToStop(s.id);

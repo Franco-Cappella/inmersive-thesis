@@ -9,7 +9,9 @@
   --c-ink-soft: #4a4f54;
   --c-metal: #8a9096;
   --c-flow: #2f6f8f;
+  --c-flow-text: #245a75; /* el azul de estado como texto chico: 5,3:1 sobre el panel (el de estado da 3,9:1) */
   --c-warn: #d99a1e;
+  --c-warn-text: #7a4f00; /* el ámbar como texto: 5:1 sobre el panel */
   --c-alarm: #c62828;
   --c-focus: #1f2326;
   --c-panel: rgb(214 217 219 / 0.92);
@@ -32,7 +34,9 @@
   --c-ink-soft: #4b5563;
   --c-metal: #f3f2ec;
   --c-flow: #1f5f8b;
+  --c-flow-text: #1f5f8b;
   --c-warn: #c27c0e;
+  --c-warn-text: #7a4f00;
   --c-alarm: #b3261e;
   --c-focus: #1b2430;
   --c-panel: rgb(248 247 242 / 0.94);
@@ -55,7 +59,9 @@
   --c-ink-soft: #a3a9ae;
   --c-metal: #2c3339;
   --c-flow: #4aa3c8;
+  --c-flow-text: #4aa3c8;
   --c-warn: #f0a020;
+  --c-warn-text: #f0a020;
   --c-alarm: #ff5a47;
   --c-focus: #e9e6df;
   --c-panel: rgb(18 23 27 / 0.9);

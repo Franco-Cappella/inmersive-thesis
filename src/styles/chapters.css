@@ -48,7 +48,7 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   font-size: var(--step--1);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  color: var(--c-flow);
+  color: var(--c-flow-text);
 }
 .chapter h2 {
   font-size: var(--step-3);
@@ -248,7 +248,7 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   font-family: var(--f-display);
   font-weight: 700;
   font-size: var(--step--1);
-  color: var(--c-flow);
+  color: var(--c-flow-text);
 }
 .fig-pregunta__apuesta dd {
   margin: 0;
@@ -431,7 +431,7 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
 }
 .refs__lista a {
   overflow-wrap: anywhere;
-  color: var(--c-flow);
+  color: var(--c-flow-text);
 }
 .refs__ia-titulo {
   margin-top: 1.5rem;

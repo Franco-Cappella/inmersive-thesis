@@ -129,7 +129,7 @@
 }
 .prio__dagger {
   margin-left: 0.15em;
-  color: var(--c-warn);
+  color: var(--c-warn-text);
   font-weight: 800;
 }
 /* Tres filas fijas (1, 2, 3): lo que rueda es quién ocupa cada puesto, como en el cartel */
