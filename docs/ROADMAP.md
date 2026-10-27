@@ -34,7 +34,7 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 
 ## Fase 5 · Verificación y defensa — parcial
 - [x] Capturas del recorrido completo en celular y desktop, scroll hacia atrás incluido (`scripts/capturas.cjs`, `scripts/modos.cjs`).
-- [x] Modo presentación: ← → recorren IT, OT y los capítulos en orden.
+- [x] Modo presentación: ← → recorren IT, OT y los capítulos en orden. En el 07 y el 09 hay una parada por caso y por pilar (el texto y la escena avanzan juntos), y el viaje dura según lo que recorre (de 1,2 a 3,2 s).
 - [ ] Modo presentación ensayado con el proyector y con tiempos (5 a 9 minutos).
 - [ ] Probar sin conexión con el wifi apagado.
 - [ ] Video de respaldo del recorrido.
