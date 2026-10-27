@@ -37,6 +37,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
 - El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
 - Escena 09 (`src/three/scenes/Matiz.tsx`): un pilar por tramo de `fx.zones` (`MATIZ_TRAMOS`), con la lista de pilares encendiéndose al mismo ritmo. La DMZ se cierra sobre el air gap, aparecen las zonas y una compuerta por enlace legítimo; los recorridos de los casos se retraen hasta la DMZ (señal `segmentation` en `signals.ts`) y la planta vuelve a azul. Después, un sensor pasivo en un puerto espejo y un gemelo digital que valida el parche. Verificada en los tres estudios, celular, reduced motion y scroll de vuelta al 07.
+- `docs/DEFENSA.md`: la lista del día de la defensa adaptada a este proyecto (servidores sin internet probados: `npx serve out` y `python3 -m http.server` dentro de `out/`), las 27 paradas con lo que muestra cada una y un tiempo sugerido, y los respaldos en orden.
 - Encuadres del celular revisados al final de cada escena: están centrados; solo se acercó el cierre del 10 (la torre y la pirámide quedaban chicas).
 - Calidad fija desde la URL para la compu de la defensa: `?calidad=baja` (sin posprocesado, resolución 1×) y `?calidad=estatica` (sin 3D). Con la calidad fija, el `PerformanceMonitor` ya no la cambia (`tierFijo` en `src/state/store.ts`). El tier queda visible en `data-tier` del `.stage` para las pruebas.
 - Imagen para compartir: `src/app/opengraph-image.png` (captura del hero a 1200×630) con texto alternativo, y metadatos Open Graph y de tarjeta grande (`layout.tsx`). En Vercel la URL absoluta sale del dominio de producción (ver `docs/DECISIONES.md`).
@@ -58,7 +59,7 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 **Lo que queda depende de Franco o de la compu de la defensa** (ver "Bloqueado por Franco" y la fase 5 de `docs/ROADMAP.md`). Mientras tanto, mejoras posibles sin decidir nada por él:
 
-1. Ensayo cronometrado del modo presentación con `scripts/video.cjs` (la duración del video es una buena estimación del recorrido).
+1. Nada urgente: el sitio está completo para lo que se puede decidir sin Franco. Si hay tiempo, revisar con Franco `docs/DEFENSA.md` y ajustar los tiempos en un ensayo real.
 
 ## Cola (en orden)
 

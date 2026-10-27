@@ -39,7 +39,7 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 ## Fase 5 · Verificación y defensa — parcial
 - [x] Capturas del recorrido completo en celular y desktop, scroll hacia atrás incluido (`scripts/capturas.cjs`, `scripts/modos.cjs`).
 - [x] Modo presentación: ← → recorren IT, OT y los capítulos en orden. En el 07 y el 09 hay una parada por caso y por pilar (el texto y la escena avanzan juntos), y el viaje dura según lo que recorre (de 1,2 a 3,2 s).
-- [ ] Modo presentación ensayado con el proyector y con tiempos (5 a 9 minutos).
+- [ ] Modo presentación ensayado con el proyector y con tiempos (5 a 9 minutos). `docs/DEFENSA.md` tiene las 27 paradas con un reparto sugerido de unos 7 min 50 s.
 - [x] Prueba sin conexión automatizada (`scripts/offline.cjs`): 0 pedidos externos y el recorrido completo (23 paradas) con la red cortada, consola limpia.
 - [ ] Probarlo también en la compu de la defensa, con el wifi apagado y el build servido desde `out/`.
 - [x] Script del video de respaldo (`scripts/video.cjs`): graba el recorrido en modo presentación a 1920×1080.
