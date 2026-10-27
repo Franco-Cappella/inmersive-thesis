@@ -1,6 +1,6 @@
 # Pendientes de rigor en la tesina
 
-Revisión del `TESINA_FINAL.md` contra las figuras y las fuentes. Lo que está acá **bloquea la presentación** hasta resolverse, porque el sitio cita la tesina tal cual.
+Revisión de `docs/fuente/TESINA_FINAL.md` contra las figuras y las fuentes. Lo que está acá **bloquea la presentación** hasta resolverse, porque el sitio cita la tesina tal cual.
 
 ## 1 · Las figuras no coinciden con sus pies de figura (importante)
 

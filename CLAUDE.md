@@ -5,7 +5,7 @@
 Antes de tocar nada, leer **`docs/PROGRESO.md`**: dice por dónde va el trabajo y cuál es el próximo paso.
 
 - Las decisiones de diseño y técnica vienen de la skill `tesina-itot-web-inmersiva`. La única diferencia acordada: se usa **Next.js en export estático** en lugar de Vite (`docs/DECISIONES.md`).
-- El contenido sale de la tesina (`TESINA_FINAL.md`, no está en el repo). Nunca inventar un dato: si falta la fuente, va como pendiente en `src/content/` y en `docs/PENDIENTES-TESINA.md`.
+- El contenido sale de la tesina: copia de texto en **`docs/fuente/TESINA_FINAL.md`** (sin imágenes). Nunca inventar un dato: si falta la fuente, va como pendiente en `src/content/` y en `docs/PENDIENTES-TESINA.md`.
 - Todo el texto vive en `src/content/`. Los componentes no tienen texto propio.
 
 ## Reglas de arquitectura
