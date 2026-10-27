@@ -21,6 +21,8 @@ El azul y el ámbar de estado están elegidos para la maqueta y las barras, no p
 
 ## Los tres estudios
 
+**Lámina comparativa:** `docs/estudios.jpg` muestra los mismos cuatro momentos (hero IT, hero OT, el 07 y el cierre del 10) en los tres estudios, para elegir de un vistazo. Para regenerarla: capturar esos momentos con `?estudio=` y armar la grilla (el procedimiento está en `docs/PROGRESO.md`, sesión 3).
+
 Los tres están implementados en `src/styles/tokens.css` y `src/three/palette.ts`. Se eligen con el selector del encabezado o con `?estudio=`.
 
 | Estudio | Campo | Material | Luz | Tipografía del display | Cuándo conviene |

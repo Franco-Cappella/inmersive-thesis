@@ -384,7 +384,8 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   font-family: var(--f-display);
   font-stretch: var(--display-stretch);
   font-weight: var(--display-weight);
-  text-transform: var(--display-case);
+  /* Una cita de cuatro renglones en mayúsculas (estudio Plano) se lee mal: va en caja normal */
+  text-transform: none;
   font-size: var(--step-2);
   line-height: 1.05;
   margin: 0;

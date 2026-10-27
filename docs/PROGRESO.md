@@ -37,6 +37,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
 - El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
 - Escena 09 (`src/three/scenes/Matiz.tsx`): un pilar por tramo de `fx.zones` (`MATIZ_TRAMOS`), con la lista de pilares encendiéndose al mismo ritmo. La DMZ se cierra sobre el air gap, aparecen las zonas y una compuerta por enlace legítimo; los recorridos de los casos se retraen hasta la DMZ (señal `segmentation` en `signals.ts`) y la planta vuelve a azul. Después, un sensor pasivo en un puerto espejo y un gemelo digital que valida el parche. Verificada en los tres estudios, celular, reduced motion y scroll de vuelta al 07.
+- Lámina comparativa de estudios (`docs/estudios.jpg`): hero IT, hero OT, el 07 y el cierre del 10 en Sala, Plano y Noche, capturados a 1440×900 con `?estudio=` y armados en una grilla de 3 × 4 (Pillow). Al armarla apareció la cita del 10 en mayúsculas en Plano: ahora la cita va siempre en caja normal.
 - Impresión y PDF: `scripts/pdf.cjs` imprime el modo lectura en A4. Al probarlo aparecieron fallas que también tenía imprimir desde el navegador: capítulos en blanco (las animaciones de entrada dejan estilos en línea al volver arriba), capítulos con escena con su alto de varias pantallas, cifras impresas como "USD 0" (el contador vuelve a 0) y barras del 08 sin fondo. Se corrigieron en la hoja de impresión (`chapters.css`); además, en el modo lectura las cifras ya no animan. Hay reglas de corte de página (tablas, cifras, ítems y títulos enteros).
 - Cronómetro de ensayo (`src/ui/Ensayo.tsx`): con `?presentacion&ensayo` muestra el tiempo desde la primera flecha y la parada actual (`stopProgress` en `navigation.ts`); el borde pasa a ámbar a los 8 minutos y a rojo a los 9.
 - Página 404 en castellano (`src/app/not-found.tsx`, textos en `ui.ts`): sale como `out/404.html`, con el panel del sitio y un enlace al inicio.
@@ -74,6 +75,6 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 ## Bloqueado por Franco
 
 - Confirmar Next.js en lugar de Vite (`docs/DECISIONES.md`).
-- Elegir el estudio de dirección de arte (`docs/ESTILO.md`).
+- Elegir el estudio de dirección de arte (`docs/ESTILO.md`). Para decidir de un vistazo: `docs/estudios.jpg` (los mismos cuatro momentos en los tres estudios).
 - Resolver `docs/PENDIENTES-TESINA.md`, sobre todo las figuras 3 y 4 de la tesina.
 - Título oficial, apellido, institución y materia para la portada.
