@@ -57,3 +57,9 @@ Falta el título oficial, la institución, la materia, el año y el apellido. El
 ## 9 · Frase de la declaración de IA
 
 Dice "Gemini(Google)" sin espacio. Corregir el texto al pasar a la versión final.
+
+## 10 · La trama Modbus del capítulo 03 es un ejemplo del sitio
+
+La figura del 03 muestra una trama Modbus TCP byte por byte (escribe el valor 100 en un registro: función 06, dirección 0x0001, valor 0x0064), y la escena 3D la usa. **La tesina no trae ninguna trama**: es un ejemplo armado para el sitio, con el formato estándar de Modbus TCP, y está rotulado "de ejemplo". No afirma ningún dato de la tesina, pero conviene que Franco decida si lo quiere mostrar y, si lo quiere sostener con una fuente, citar la especificación de Modbus (Modbus Organization: *MODBUS Application Protocol Specification* y *MODBUS Messaging on TCP/IP Implementation Guide*; verificar versión y fecha contra el original antes de citarlas).
+
+Control de integridad hecho al cierre de la sesión 3: de los números que muestra el sitio, todos están en la tesina salvo este ejemplo y la hora 03:17, que sale del texto ("03:14 AM" más "tres minutos después"). La cita de cierre del 10 está textual.
