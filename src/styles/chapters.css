@@ -12,10 +12,23 @@
   min-height: calc(var(--weight) * 100svh);
   align-items: start;
 }
-@media (min-width: 761px) {
+/* Panel fijo al costado de la escena: solo si entra (pantalla ancha y horizontal). La condición
+   contraria es APILADO en src/scroll/layout.ts. */
+@media (min-width: 761px) and (orientation: landscape) {
   .chapter[data-escena] .chapter__inner {
     position: sticky;
     top: clamp(4.5rem, 10svh, 6.5rem);
+  }
+}
+/* Apilado (celular o pantalla vertical): primero el texto y después la escena actúa sola, con la
+   pantalla libre. El director empieza la estadía cuando el panel ya subió (stayOf en useStoryTimeline). */
+@media (max-width: 760px), (orientation: portrait) {
+  .chapter[data-escena] {
+    min-height: 0;
+    padding-bottom: calc((var(--weight) - 1) * 100svh + 30svh);
+  }
+  main[data-reading="true"] .chapter[data-escena] {
+    padding-bottom: 3rem;
   }
 }
 /* Modo lectura: sin 3D no hace falta el scroll extra de la escena ni el panel fijo */
@@ -450,15 +463,6 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
 @media (max-width: 760px) {
   .chapter {
     padding: 4.5rem 1rem 3rem;
-  }
-  /* Capítulo con escena: primero el texto y después la escena actúa sola, con la pantalla libre.
-     El director empieza la estadía cuando el panel ya subió (useStoryTimeline, condición "narrow"). */
-  .chapter[data-escena] {
-    min-height: 0;
-    padding-bottom: calc((var(--weight) - 1) * 100svh + 30svh);
-  }
-  main[data-reading="true"] .chapter[data-escena] {
-    padding-bottom: 3rem;
   }
   .chapter__inner {
     width: 100%;

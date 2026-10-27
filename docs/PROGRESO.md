@@ -2,11 +2,15 @@
 
 Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de trabajo (antes del commit).
 
-## Estado actual
+## Estado actual: fase 8 de 8 (verificación y defensa)
 
-- **Hero:** completo en lo funcional. La pirámide C·I·A se arma al cargar, gira 180° y baja de IT a OT con el scroll. La ficha IT/OT cambia con paletas y la lista de prioridades rueda fila por fila. Tiene respaldo SVG, modo reduced motion y modo lectura.
-- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **Todos los capítulos con escena prevista ya la tienen** (01, 02, 03, 05, 07, 09 y 10); el 04, el 06 y el 08 se leen sobre el velo (`dim: 1`), como dice el guion.
-- **Verificación:** `scripts/capturas.cjs` (hero y capítulos en desktop y celular, consola, scroll horizontal) y `scripts/modos.cjs` (estudios, lectura, presentación, reduced motion, sin WebGL, scroll inverso). Última corrida: todo bien, consola limpia.
+Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente, contrato (guion, estilo y tres estudios), base del proyecto, esqueleto HTML, director de scroll, las siete escenas 3D con su pasada de arte, y efectos, tiers y respaldos. La fase 8 está hecha en todo lo que se puede automatizar; lo que falta depende de Franco o de la compu de la defensa (ver "Próximo paso").
+
+- **Hero:** la pirámide C·I·A se arma al cargar, gira 180° y baja de IT a OT con el scroll. La ficha IT/OT cambia con paletas y la lista de prioridades rueda fila por fila. Respaldo SVG, reduced motion y modo lectura.
+- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. **Todos los capítulos con escena prevista la tienen** (01, 02, 03, 05, 07, 09 y 10); el 04, el 06 y el 08 se leen sobre el velo (`dim: 1`), como dice el guion. Las listas del 01, 05, 07 y 09 se encienden al ritmo de su escena.
+- **Modos:** lectura (`L`), presentación (`P`, 27 paradas, `?ensayo` con cronómetro), reduced motion, sin WebGL, calidad fija por URL (`?calidad=baja` y `?calidad=estatica`) e impresión (PDF con `scripts/pdf.cjs`).
+- **Pantallas:** escritorio y tableta horizontal con el panel fijo al costado de la escena; celular y cualquier pantalla vertical con el texto primero y la escena después, con la pantalla libre.
+- **Verificación:** `capturas.cjs`, `modos.cjs`, `offline.cjs`, `a11y.cjs` y `npm run lint`. Última corrida (cierre de la sesión 3): consola limpia, 0 pedidos externos, el recorrido completo sin red y axe-core sin violaciones.
 
 ## Bitácora
 
@@ -55,6 +59,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - Escena 05 (`src/three/scenes/Conflicto.tsx`): un golpe por tramo de `fx.hits` (`CONFLICTO_TRAMOS`), con la lista del texto y una parada de presentación por golpe. Parche (barra de actualización, HMI apagada, parada de emergencia), escaneo (ráfaga y controlador bloqueado en rojo) y MFA (reloj de token y válvula en alarma). Las reacciones de la planta salen de señales nuevas en `signals.ts` (`scadaReboot`, `esdTrip`, `scanLock`, `overpressure`) que también leen `Escenario.tsx` y `OTFloor.tsx`. El 06 vuelve a `dim: 1` y el 07 resetea `hits`.
 - Modo presentación: una parada oculta al final de cada caso del 07 y de cada pilar del 09 (`src/content/stops.ts`, desde `src/scroll/timing.ts`), y viajes que duran según la distancia (`src/ui/navigation.ts`). El recorrido completo son 23 paradas.
 - Preparación de la defensa: `scripts/offline.cjs` (ningún pedido sale de localhost y el recorrido sigue andando con la red cortada) y `scripts/video.cjs` (graba el recorrido en modo presentación). Los dos esperan con `load` y no con `networkidle`: el worker de troika (un blob) deja una conexión abierta y `networkidle` no llega nunca. Documentados en el README y en `CLAUDE.md`.
+- Pantallas verticales (tableta parada, monitor girado): a 768×1024 el panel fijo ocupaba todo el ancho y tapaba la escena mientras actuaba. El flujo apilado del celular ahora vale para cualquier pantalla vertical. La condición vive en `src/scroll/layout.ts` (`APILADO`) y se repite en `chapters.css`; el panel fijo queda solo para pantallas anchas y horizontales. Verificado en 768×1024 (apilado) y 1024×768 (panel al costado).
 - Escena 10 (sin archivo propio: cámara y `fx.triad` en `story.ts`): la cámara sube y se aleja hasta ver la torre entera y la pirámide se rearma capa por capa en el orden A, I, C (`Pyramid.tsx`, cada capa escala con `fx.triad`). `src/three/FogRig.tsx` aleja la niebla cuando el encuadre se aleja (ver `docs/DECISIONES.md`).
 
 ## Deploy
@@ -63,15 +68,12 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 ## Próximo paso
 
-**Lo que queda depende de Franco o de la compu de la defensa** (ver "Bloqueado por Franco" y la fase 5 de `docs/ROADMAP.md`). Mientras tanto, mejoras posibles sin decidir nada por él:
+No queda nada que se pueda hacer sin Franco. En orden:
 
-1. Nada urgente: el sitio está completo para lo que se puede decidir sin Franco. Si hay tiempo, revisar con Franco `docs/DEFENSA.md` y ajustar los tiempos en un ensayo real.
-
-## Cola (en orden)
-
-1. Probar con un lector de pantalla real y ensayar la presentación con tiempos (5 a 9 minutos).
-2. Atmósfera propia del estudio que elija Franco.
-3. En la compu de la defensa: correr `scripts/offline.cjs` con el wifi apagado y grabar el video con `scripts/video.cjs`.
+1. **Franco decide** (ver "Bloqueado por Franco"): el estudio de arte (`docs/estudios.jpg`), Next.js o Vite, los pendientes de la tesina y los datos de portada.
+2. **Con el estudio elegido:** dejarlo como default (`src/state/store.ts` y el `data-estudio` de `layout.tsx`) y darle su atmósfera propia (luz, niebla y materiales en `src/three/palette.ts`). Volver a generar `docs/estudios.jpg` y la imagen para compartir.
+3. **En la compu de la defensa**, siguiendo `docs/DEFENSA.md`: servir `out/` sin internet, correr `scripts/offline.cjs` con el wifi apagado, ensayar con `?presentacion&ensayo` (5 a 9 minutos) y grabar el video con `scripts/video.cjs`.
+4. **Probar con un lector de pantalla real** (NVDA o VoiceOver) al menos un capítulo con escena.
 
 ## Bloqueado por Franco
 

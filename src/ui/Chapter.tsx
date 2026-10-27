@@ -7,6 +7,7 @@ import { SplitText } from "gsap/SplitText";
 import { useRef, type CSSProperties } from "react";
 import type { Chapter as ChapterData } from "@/content/story";
 import { ui } from "@/content/ui";
+import { APILADO } from "@/scroll/layout";
 import { CASOS_TRAMOS, CONFLICTO_TRAMOS, ESCENARIO_PASOS, MATIZ_TRAMOS } from "@/scroll/timing";
 import { useUI } from "@/state/store";
 import { FiguraView } from "./Figuras";
@@ -24,7 +25,7 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
       if (!section) return;
       const mm = gsap.matchMedia();
       // Forma de objeto: el callback corre si alguna condición coincide, por eso se mira `motion` adentro.
-      mm.add({ motion: "(prefers-reduced-motion: no-preference)", narrow: "(max-width: 760px)" }, (ctx) => {
+      mm.add({ motion: "(prefers-reduced-motion: no-preference)", narrow: APILADO }, (ctx) => {
         const { motion, narrow } = ctx.conditions as Record<string, boolean>;
         if (!motion) return;
         const title = section.querySelector("h2");
@@ -58,7 +59,8 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           [".fig--casos > li", CASOS_TRAMOS.map(([inicio]) => inicio)],
           [".fig--pilares > li", MATIZ_TRAMOS.map(([inicio]) => inicio)],
         ];
-        // En el celular la escena actúa después del texto (stayOf): ahí la lista se lee entera, sin atenuar.
+        // Apilado (celular o pantalla vertical) la escena actúa después del texto (stayOf): ahí la lista
+        // se lee entera, sin atenuar.
         for (const [selector, tiempos] of sincronizados) {
           const items = section.querySelectorAll<HTMLElement>(selector);
           if (reading || narrow || !section.hasAttribute("data-escena") || !items.length) continue;

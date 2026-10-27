@@ -4,6 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { RefObject } from "react";
 import { chapters, FX_INICIAL, fxOf, type SceneFx } from "@/content/story";
 import { useUI } from "@/state/store";
+import { APILADO } from "./layout";
 import { flat, heroShots, rig, type FlatShot } from "./rig";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -24,8 +25,9 @@ const sameShot = (a: FlatShot, b: FlatShot) =>
 const pick = (fx: SceneFx, keys: (keyof SceneFx)[]) => Object.fromEntries(keys.map((k) => [k, fx[k]]));
 
 // La estadía de un capítulo. En escritorio, mientras la sección está fija con el panel al costado.
-// En el celular (narrow) el panel tapa la escena: la estadía empieza cuando el panel ya subió
-// (su borde de abajo pasa el 70 % de la pantalla) y termina con la sección (ver chapters.css).
+// Cuando el panel no entra al costado (APILADO: celular o pantalla vertical) taparía la escena:
+// la estadía empieza cuando el panel ya subió (su borde de abajo pasa el 70 % de la pantalla)
+// y termina con la sección (ver chapters.css).
 export function stayOf(el: HTMLElement, narrow: boolean): ScrollTrigger.Vars {
   const panel = el.querySelector<HTMLElement>(".chapter__inner");
   if (narrow && panel && el.hasAttribute("data-escena"))
@@ -55,7 +57,7 @@ export function useStoryTimeline(scope: RefObject<HTMLElement | null>) {
           motion: "(prefers-reduced-motion: no-preference)",
           reduce: "(prefers-reduced-motion: reduce)",
           portrait: "(orientation: portrait)",
-          narrow: "(max-width: 760px)",
+          narrow: APILADO,
         },
         (ctx) => {
           const { reduce, portrait, narrow } = ctx.conditions as Record<string, boolean>;

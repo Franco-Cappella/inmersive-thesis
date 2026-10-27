@@ -1,10 +1,10 @@
 # Roadmap
 
-Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `docs/PROGRESO.md`. Lo marcado como **hecho** se verificó en Chromium (desktop 1440×900 y celular 390×844) con consola limpia.
+Estado al cierre de la sesión 3: el sitio está en la fase 8 de 8 del flujo de la skill (verificación y defensa). El detalle de por dónde va el trabajo está en `docs/PROGRESO.md`. Lo marcado como **hecho** se verificó en Chromium (escritorio 1440×900, celular 390×844 y tableta 768×1024 y 1024×768) con consola limpia.
 
 ## Fase 1 · Base del proyecto — hecho
 - Next.js 16 con export estático, stack fijado, TypeScript sin errores, `npm run build` correcto.
-- Contenido de la tesina en `src/content/` (hero, 9 capítulos, bibliografía, declaración de IA).
+- Contenido de la tesina en `src/content/` (hero, 10 capítulos, bibliografía, declaración de IA).
 
 ## Fase 2 · Hero (pirámide IT → OT) — hecho en lo principal
 - [x] Pirámide 3D con C · I · A: se arma al cargar, gira 180° y baja de la planta IT a la OT con el scroll.
@@ -15,8 +15,8 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - [ ] Atmósfera propia de cada estudio (luz, niebla, materiales), cuando Franco elija uno.
 - [ ] Revisar en una compu real de la defensa (GPU integrada): el tier bajo tiene que sostener 30 fps. Si no llega, abrir con `?calidad=baja` (fija el tier bajo desde el principio) o `?calidad=estatica` (sin 3D).
 
-## Fase 3 · Capítulos — hecho en el esqueleto
-- [x] 9 capítulos con título, bajada, figura en HTML y fuentes enlazadas.
+## Fase 3 · Capítulos — hecho
+- [x] 10 capítulos con título, bajada, figura en HTML y fuentes enlazadas.
 - [x] Índice de progreso, atajos L / P / ← →, modo lectura.
 - [x] **Director de capítulos** (`useStoryTimeline`): cámara por capítulo, `fx` acumulados y velo (`dim`) por capítulo. Reversible y con reduced motion.
 - [x] Escena 3D del capítulo 01 (el parche que apaga la planta).
@@ -29,7 +29,7 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - Los capítulos 04, 06 y 08 no llevan escena: se leen sobre el velo (`dim: 1`).
 - [x] Animaciones de figuras HTML: contador en las cifras de costo, brecha IT/OT que se cierra, barras SANS que crecen.
 - [x] Reloj del 01: los pasos se encienden con la escena 3D.
-- [x] Celular: en los capítulos con escena, primero el texto y después la escena actúa con la pantalla libre (antes el panel la tapaba mientras actuaba).
+- [x] Celular y pantallas verticales (tableta parada): en los capítulos con escena, primero el texto y después la escena actúa con la pantalla libre (antes el panel la tapaba mientras actuaba).
 - [x] Trama Modbus (03): los campos aparecen en orden.
 
 ## Fase 4 · Estudios de dirección — parcial
@@ -38,9 +38,10 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 
 ## Fase 5 · Verificación y defensa — parcial
 - [x] Capturas del recorrido completo en celular y desktop, scroll hacia atrás incluido (`scripts/capturas.cjs`, `scripts/modos.cjs`).
-- [x] Modo presentación: ← → recorren IT, OT y los capítulos en orden. En el 07 y el 09 hay una parada por caso y por pilar (el texto y la escena avanzan juntos), y el viaje dura según lo que recorre (de 1,2 a 3,2 s).
+- [x] Modo presentación: ← → recorren IT, OT y los capítulos en orden. En el 05, el 07 y el 09 hay una parada por golpe, por caso y por pilar (el texto y la escena avanzan juntos), y el viaje dura según lo que recorre (de 1,2 a 3,2 s). Con `?ensayo`, cronómetro y número de parada.
+- [x] PDF del modo lectura para el jurado (`scripts/pdf.cjs`) e impresión desde el navegador corregida.
 - [ ] Modo presentación ensayado con el proyector y con tiempos (5 a 9 minutos). `docs/DEFENSA.md` tiene las 27 paradas con un reparto sugerido de unos 7 min 50 s.
-- [x] Prueba sin conexión automatizada (`scripts/offline.cjs`): 0 pedidos externos y el recorrido completo (23 paradas) con la red cortada, consola limpia.
+- [x] Prueba sin conexión automatizada (`scripts/offline.cjs`): 0 pedidos externos y el recorrido completo (27 paradas) con la red cortada, consola limpia.
 - [ ] Probarlo también en la compu de la defensa, con el wifi apagado y el build servido desde `out/`.
 - [x] Script del video de respaldo (`scripts/video.cjs`): graba el recorrido en modo presentación a 1920×1080.
 - [ ] Grabar el video en la compu de la defensa (acá el 3D se dibuja por software y sale entrecortado).
