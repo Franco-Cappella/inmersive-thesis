@@ -46,10 +46,11 @@ export type SceneFx = {
   patch: number; // 01: el parche viaja de la torre IT al PLC de la planta
   halt: number; // 01: la planta se detiene (HMI en blanco, flujo cortado, válvula en alarma)
   bridge: number; // 02: se rompe el air gap: enlaces de IT (y la nube) a la planta y paquetes que cruzan
+  hits: number; // 05: tres controles IT, tres formas de parar, uno por tramo (ver CONFLICTO_TRAMOS)
   attack: number; // 07: los cuatro casos, uno por tramo (ver CASOS_TRAMOS en src/scroll/timing.ts)
   zones: number; // 09: zonas y conductos, monitoreo pasivo y gemelo digital (ver MATIZ_TRAMOS)
 };
-export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, patch: 0, halt: 0, bridge: 0, attack: 0, zones: 0 };
+export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, patch: 0, halt: 0, bridge: 0, hits: 0, attack: 0, zones: 0 };
 
 // Estado acumulado al terminar el capítulo i (i = -1: el final del hero).
 export const fxOf = (i: number): SceneFx =>
@@ -192,7 +193,13 @@ export const chapters: Chapter[] = [
     fuentes: [],
     pendientes: ["La Sección 2 no cita fuentes para estos tres mecanismos."],
     escena:
-      "Tres golpes sobre la misma planta: las pantallas del SCADA se apagan, una ráfaga de paquetes pone un PLC en rojo y un reloj de latencia corre mientras la presión sube.",
+      "Tres golpes sobre la misma planta, uno por vez, y en cada uno la planta se detiene: una actualización reinicia el SCADA y la pantalla de la HMI se apaga hasta que salta la parada de emergencia; una ráfaga de paquetes de un escáner baja hasta el controlador, que queda bloqueado en rojo; y un reloj de token corre junto a la válvula mientras la presión sube, hasta que llega tarde.",
+    weight: 2.4,
+    camara: {
+      landscape: { position: [-9.5, -3.6, 5.5], target: [1.5, -6.8, -4] },
+      portrait: { position: [-3.6, -3.4, 11.5], target: [-3.8, -6.6, -3.4] },
+    },
+    fx: { dim: 0, hits: 1 },
   },
   {
     id: "costo",
@@ -215,7 +222,8 @@ export const chapters: Chapter[] = [
       nota: "Frente a esas cifras, los USD 180.000 del escenario inicial (tres horas) son una estimación conservadora.",
     },
     fuentes: ["abb-2023", "siemens-2024"],
-    escena: "La cañería se vacía y un contador corre en la sala de control. Las cifras crecen en HTML, no en 3D.",
+    escena: "La planta queda detenida detrás del velo, como la dejó el último golpe. Las cifras crecen en HTML, no en 3D.",
+    fx: { dim: 1 },
   },
   {
     id: "casos",
@@ -257,7 +265,7 @@ export const chapters: Chapter[] = [
       landscape: { position: [-2.5, -0.4, 20], target: [6.5, -2.8, -4] },
       portrait: { position: [-1.2, -1, 25.5], target: [-1.2, -2.6, -4] },
     },
-    fx: { dim: 0, attack: 1 },
+    fx: { dim: 0, attack: 1, hits: 0 },
   },
   {
     id: "datos",

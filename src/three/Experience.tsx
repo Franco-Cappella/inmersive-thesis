@@ -16,6 +16,7 @@ import { CameraRig } from "./CameraRig";
 import { FogRig } from "./FogRig";
 import { palettes } from "./palette";
 import { Casos } from "./scenes/Casos";
+import { Conflicto } from "./scenes/Conflicto";
 import { Convergencia } from "./scenes/Convergencia";
 import { Escenario } from "./scenes/Escenario";
 import { ITFloor } from "./scenes/ITFloor";
@@ -83,6 +84,7 @@ export default function Experience() {
           <OTFloor palette={palette} />
           <Escenario palette={palette} />
           <Convergencia palette={palette} />
+          <Conflicto palette={palette} />
           <Casos palette={palette} />
           <Matiz palette={palette} />
         </Suspense>

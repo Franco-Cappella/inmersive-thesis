@@ -5,7 +5,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 ## Estado actual
 
 - **Hero:** completo en lo funcional. La pirámide C·I·A se arma al cargar, gira 180° y baja de IT a OT con el scroll. La ficha IT/OT cambia con paletas y la lista de prioridades rueda fila por fila. Tiene respaldo SVG, modo reduced motion y modo lectura.
-- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **Los capítulos 01, 02, 07, 09 y 10 ya tienen su escena 3D**; el 03, el 05 y el 08 usan `dim: 1` (el velo tapa el 3D).
+- **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. El **director de capítulos** (`src/scroll/useStoryTimeline.ts`) mueve la cámara y anima la escena por capítulo. **Los capítulos 01, 02, 05, 07, 09 y 10 ya tienen su escena 3D**; el 03, el 04, el 06 y el 08 usan `dim: 1` (el velo tapa el 3D).
 - **Verificación:** `scripts/capturas.cjs` (hero y capítulos en desktop y celular, consola, scroll horizontal) y `scripts/modos.cjs` (estudios, lectura, presentación, reduced motion, sin WebGL, scroll inverso). Última corrida: todo bien, consola limpia.
 
 ## Bitácora
@@ -37,6 +37,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
 - El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
 - Escena 09 (`src/three/scenes/Matiz.tsx`): un pilar por tramo de `fx.zones` (`MATIZ_TRAMOS`), con la lista de pilares encendiéndose al mismo ritmo. La DMZ se cierra sobre el air gap, aparecen las zonas y una compuerta por enlace legítimo; los recorridos de los casos se retraen hasta la DMZ (señal `segmentation` en `signals.ts`) y la planta vuelve a azul. Después, un sensor pasivo en un puerto espejo y un gemelo digital que valida el parche. Verificada en los tres estudios, celular, reduced motion y scroll de vuelta al 07.
+- Escena 05 (`src/three/scenes/Conflicto.tsx`): un golpe por tramo de `fx.hits` (`CONFLICTO_TRAMOS`), con la lista del texto y una parada de presentación por golpe. Parche (barra de actualización, HMI apagada, parada de emergencia), escaneo (ráfaga y controlador bloqueado en rojo) y MFA (reloj de token y válvula en alarma). Las reacciones de la planta salen de señales nuevas en `signals.ts` (`scadaReboot`, `esdTrip`, `scanLock`, `overpressure`) que también leen `Escenario.tsx` y `OTFloor.tsx`. El 06 vuelve a `dim: 1` y el 07 resetea `hits`.
 - Modo presentación: una parada oculta al final de cada caso del 07 y de cada pilar del 09 (`src/content/stops.ts`, desde `src/scroll/timing.ts`), y viajes que duran según la distancia (`src/ui/navigation.ts`). El recorrido completo son 23 paradas.
 - Preparación de la defensa: `scripts/offline.cjs` (ningún pedido sale de localhost y el recorrido sigue andando con la red cortada) y `scripts/video.cjs` (graba el recorrido en modo presentación). Los dos esperan con `load` y no con `networkidle`: el worker de troika (un blob) deja una conexión abierta y `networkidle` no llega nunca. Documentados en el README y en `CLAUDE.md`.
 - Escena 10 (sin archivo propio: cámara y `fx.triad` en `story.ts`): la cámara sube y se aleja hasta ver la torre entera y la pirámide se rearma capa por capa en el orden A, I, C (`Pyramid.tsx`, cada capa escala con `fx.triad`). `src/three/FogRig.tsx` aleja la niebla cuando el encuadre se aleja (ver `docs/DECISIONES.md`).
@@ -47,17 +48,16 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 ## Próximo paso
 
-**Escena 3D del capítulo 05 (tres controles IT, tres formas de parar).**
+**Escena 3D del capítulo 03 (protocolos que confían en cualquiera).**
 
-1. Leer el capítulo `conflicto` en `src/content/story.ts` y su sección en `docs/fuente/TESINA_FINAL.md`: parche, escaneo activo y MFA, cada uno con su forma de parar la planta.
-2. Una escena por tramos, como el 07 y el 09 (`CONFLICTO_TRAMOS` en `src/scroll/timing.ts`, lista del texto sincronizada en `Chapter.tsx` y paradas por tramo en `src/content/stops.ts`): el parche reinicia un controlador, el escaneo satura un equipo viejo y el MFA deja a un operador frente a una HMI bloqueada. La latencia como un reloj que corre.
-3. `weight`, `camara` y `fx` propios; volver a `dim: 0` y revisar que el 06 (que hoy deja ver la planta) no se pise con la escena.
+1. Leer el capítulo `protocolos` en `src/content/story.ts` (la trama Modbus de la figura) y la Sección 2 de `docs/fuente/TESINA_FINAL.md` (sin autenticación, texto plano, pilas frágiles).
+2. Idea del guion: la cámara se acerca a un gabinete PLC; una trama llega en texto plano y el PLC la ejecuta sin preguntar quién la manda (la válvula se mueve). Se puede sincronizar con los campos de la trama Modbus, que ya aparecen en orden en el HTML (`Chapter.tsx`).
+3. `weight`, `camara` y `fx` propios (`frame`, por ejemplo); volver a `dim: 0` en el 03 y poner `dim: 1` en el 04.
 
 ## Cola (en orden)
 
-1. Escena 05 (tres golpes).
-2. Escena 03 (PLC que ejecuta una trama sin identificar al emisor).
-3. Pasada de arte del hero y de los estudios.
+1. Escena 03 (PLC que ejecuta una trama sin identificar al emisor).
+2. Pasada de arte del hero y de los estudios.
 4. En la compu de la defensa: correr `scripts/offline.cjs` con el wifi apagado y grabar el video con `scripts/video.cjs`.
 
 ## Bloqueado por Franco

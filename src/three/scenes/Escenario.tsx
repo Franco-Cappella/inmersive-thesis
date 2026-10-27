@@ -8,10 +8,12 @@ import { rig, type Vec3 } from "@/scroll/rig";
 import { glow, range, smooth } from "../helpers";
 import type { Palette } from "../palette";
 import { pipePath } from "../paths";
+import { esdTrip, scadaReboot } from "../signals";
 import { IT_FLOOR_Y } from "./ITFloor";
 import { PLC_POS } from "./OTFloor";
 
-// Capítulo 01 · "03:14 AM" (escenario hipotético de la tesina).
+// Capítulo 01 · "03:14 AM" (escenario hipotético de la tesina). La HMI y la baliza también
+// actúan en el golpe del parche del capítulo 05 (scadaReboot, esdTrip en signals.ts).
 // Línea de tiempo dentro de la estadía del capítulo (fx.patch y fx.halt van de 0 a 1 juntos).
 // Si cambian estos tiempos, actualizar ESCENARIO_PASOS en src/scroll/timing.ts (el reloj del texto):
 //   patch 0.05–0.50  el parche baja de un rack de la oficina al gabinete PLC
@@ -20,7 +22,8 @@ import { PLC_POS } from "./OTFloor";
 //   halt  0.60–0.92  la válvula de alivio pasa de ámbar a rojo (OTFloor) · baliza de parada de emergencia
 
 const [px, py, pz] = PLC_POS;
-const ROUTE: Vec3[] = [
+// Del rack al techo del gabinete PLC. También la usa la ráfaga del escaneo en el capítulo 05.
+export const ROUTE: Vec3[] = [
   [-3.6, IT_FLOOR_Y + 1.7, -3.95], // frente de un rack del piso IT
   [-3.6, -5.4, -3.95],
   [px, -5.4, pz],
@@ -39,6 +42,7 @@ export function Escenario({ palette }: { palette: Palette }) {
       patch: glow(palette.warn, 3.2),
       screenOk: new Color(palette.flow).multiplyScalar(1.4),
       screenFrozen: new Color("#ffffff").multiplyScalar(2.2),
+      screenOff: new Color(palette.ink).multiplyScalar(0.12),
       alarm: glow(palette.alarm, 3),
       off: new Color(palette.ink).multiplyScalar(0.4),
       tmp: new Vector3(),
@@ -54,9 +58,11 @@ export function Escenario({ palette }: { palette: Palette }) {
       curve.getPointAt(Math.min(travel, 0.999), packet.current.position);
     }
     if (cable.current) cable.current.visible = patch > 0.01;
-    if (screen.current) screen.current.color.copy(c.screenOk).lerp(c.screenFrozen, smooth(halt, 0.5, 0.58));
+    // 05, parche: el SCADA se reinicia y la pantalla se apaga (en el 01 se congela en blanco).
+    if (screen.current)
+      screen.current.color.copy(c.screenOk).lerp(c.screenFrozen, smooth(halt, 0.5, 0.58)).lerp(c.screenOff, scadaReboot());
     if (beacon.current) {
-      const on = smooth(halt, 0.62, 0.7);
+      const on = Math.max(smooth(halt, 0.62, 0.7), esdTrip());
       const pulse = rig.snap ? 1 : 0.55 + 0.45 * Math.sin(state.clock.elapsedTime * 7);
       beacon.current.color.copy(c.off).lerp(c.alarm, on * pulse);
     }

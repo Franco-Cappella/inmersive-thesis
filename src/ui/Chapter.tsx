@@ -6,7 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useRef, type CSSProperties } from "react";
 import type { Chapter as ChapterData } from "@/content/story";
-import { CASOS_TRAMOS, ESCENARIO_PASOS, MATIZ_TRAMOS } from "@/scroll/timing";
+import { CASOS_TRAMOS, CONFLICTO_TRAMOS, ESCENARIO_PASOS, MATIZ_TRAMOS } from "@/scroll/timing";
 import { useUI } from "@/state/store";
 import { FiguraView } from "./Figuras";
 import { SourceRefs } from "./Sources";
@@ -46,10 +46,11 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           stagger: 0.08,
           scrollTrigger: { trigger: section, start: "top 62%", toggleActions: "play none none reverse" },
         });
-        // Texto al ritmo de la escena 3D (mismo scroll): los pasos del reloj del 01, los casos del 07 y
-        // los pilares del 09 se encienden cuando actúa su parte de la escena. Los tiempos viven en src/scroll/timing.ts.
+        // Texto al ritmo de la escena 3D (mismo scroll): los pasos del reloj del 01, los golpes del 05,
+        // los casos del 07 y los pilares del 09 se encienden cuando actúa su parte de la escena. Los tiempos viven en src/scroll/timing.ts.
         const sincronizados: [string, number[]][] = [
           [".fig-reloj__pasos li", ESCENARIO_PASOS],
+          [".fig--golpes > li", CONFLICTO_TRAMOS.map(([inicio]) => inicio)],
           [".fig--casos > li", CASOS_TRAMOS.map(([inicio]) => inicio)],
           [".fig--pilares > li", MATIZ_TRAMOS.map(([inicio]) => inicio)],
         ];

@@ -8,7 +8,7 @@ import { rig, type Vec3 } from "@/scroll/rig";
 import { FlowPipe } from "../FlowPipe";
 import { FONT_URL, glow, smooth } from "../helpers";
 import type { Palette } from "../palette";
-import { oldsmarExposure, plantFlow, plcCompromised } from "../signals";
+import { hitBeat, oldsmarExposure, overpressure, plantFlow, plcCompromised } from "../signals";
 
 // Planta OT (abajo): tanques, cañerías con flujo, una válvula y gabinetes PLC.
 export const OT_FLOOR_Y = -8;
@@ -87,9 +87,10 @@ function Valve({ palette }: { palette: Palette }) {
   useFrame(() => {
     if (!body.current || !wheel.current) return;
     const h = rig.fx.halt;
-    // 01: se traba (ámbar → rojo). 07, Oldsmar: queda expuesta (solo ámbar: el caso está en discusión).
-    const warn = Math.max(smooth(h, 0.6, 0.7), oldsmarExposure());
-    const alarm = smooth(h, 0.8, 0.92);
+    // 01: se traba (ámbar → rojo). 05, MFA: la presión sube (ámbar) y la maniobra llega tarde (rojo).
+    // 07, Oldsmar: queda expuesta (solo ámbar: el caso está en discusión).
+    const warn = Math.max(smooth(h, 0.6, 0.7), smooth(hitBeat(2), 0.1, 0.25), oldsmarExposure());
+    const alarm = Math.max(smooth(h, 0.8, 0.92), overpressure());
     c.state.copy(c.warn).lerp(c.alarm, alarm);
     body.current.color.copy(c.metal).lerp(c.state, warn);
     body.current.emissive.copy(c.state);
