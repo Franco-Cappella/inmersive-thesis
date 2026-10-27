@@ -122,8 +122,6 @@ export function useHeroTimeline(scope: RefObject<HTMLElement | null>) {
           )
           .fromTo(".pyr-card", { "--flip": 0 }, { "--flip": 1, ease: "power2.inOut", duration: 0.36 }, 0.34)
           .fromTo(".flap", { "--flap": 0 }, { "--flap": 1, ease: "power1.inOut", duration: 0.1 }, 0.46)
-          .to(".prio__name[data-id='c']", { keyframes: { "0%": { yPercent: 0, x: 0 }, "50%": { yPercent: 100, x: 34 }, "100%": { yPercent: 200, x: 0 }, easeEach: "sine.inOut" }, duration: 0.26 }, 0.38)
-          .to(".prio__name[data-id='a']", { keyframes: { "0%": { yPercent: 0, x: 0 }, "50%": { yPercent: -100, x: -34 }, "100%": { yPercent: -200, x: 0 }, easeEach: "sine.inOut" }, duration: 0.26 }, 0.38)
           .to(".swap .v-it", { yPercent: -100, autoAlpha: 0, duration: 0.06, stagger: 0.015 }, 0.46)
           .fromTo(".swap .v-ot", { yPercent: 100, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.06, stagger: 0.015 }, 0.48)
           .to(".ficha", { autoAlpha: 0, y: -48, duration: 0.07 }, 0.84)

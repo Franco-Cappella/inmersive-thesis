@@ -90,9 +90,9 @@ function PyramidLayer({ layer, index, palette }: { layer: Layer; index: number; 
     // Color = estado: azul en la prioridad N° 1 de cada mundo, ámbar durante el choque.
     const first = layer.id === "c" ? 1 - smooth(flip, 0.3, 0.5) : layer.id === "a" ? smooth(flip, 0.5, 0.7) : 0;
     const clash = bell(range(flip, 0.22, 0.78));
-    mat.color.copy(c.surface).lerp(c.flow, first * 0.82).lerp(c.warn, clash * 0.55);
+    mat.color.copy(c.surface).lerp(c.flow, first * 0.82).lerp(c.warn, clash * 0.45);
     mat.emissive.copy(c.flow).lerp(c.warn, clash);
-    mat.emissiveIntensity = first * 1.6 + clash * 1.3;
+    mat.emissiveIntensity = first * 1.6 + clash * 0.45; // poco emisivo en el choque: que se lea el volumen
     if (edges.current) edges.current.material.color.copy(c.ink).lerp(c.warn, clash);
   });
 

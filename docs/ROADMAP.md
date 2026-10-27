@@ -1,6 +1,6 @@
 # Roadmap
 
-Estado al cierre de esta fase. Lo marcado como **hecho** se verificó en Chromium (desktop 1440×900 y celular 390×844) con consola limpia.
+Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `docs/PROGRESO.md`. Lo marcado como **hecho** se verificó en Chromium (desktop 1440×900 y celular 390×844) con consola limpia.
 
 ## Fase 1 · Base del proyecto — hecho
 - Next.js 16 con export estático, stack fijado, TypeScript sin errores, `npm run build` correcto.
@@ -9,7 +9,7 @@ Estado al cierre de esta fase. Lo marcado como **hecho** se verificó en Chromiu
 ## Fase 2 · Hero (pirámide IT → OT) — hecho en lo principal
 - [x] Pirámide 3D con C · I · A: se arma al cargar, gira 180° y baja de la planta IT a la OT con el scroll.
 - [x] Color por estado: la prioridad N° 1 de cada mundo se marca en azul; el choque de prioridades en ámbar.
-- [x] Ficha IT/OT con cartel de paletas (split-flap) y las prioridades que se reordenan.
+- [x] Ficha IT/OT con cartel de paletas (split-flap); cada fila de prioridades rueda su contenido (ya no se cruzan los nombres).
 - [x] Respaldo SVG sin WebGL y para reduced motion; tabla de la tesina como contenido real.
 - [ ] **Pasada de arte:** los racks y las cañerías son primitivas grises. Falta modelado y la atmósfera de cada estudio.
 - [ ] Revisar en una compu real de la defensa (GPU integrada): el tier bajo tiene que sostener 30 fps.

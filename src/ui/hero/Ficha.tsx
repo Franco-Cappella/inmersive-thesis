@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { hero } from "@/content/hero";
 import { refById, refNumber } from "@/content/references";
 import { Flap, Tile } from "./Flap";
@@ -30,18 +29,30 @@ export function Ficha() {
         <p className="prio__titulo">
           Prioridades<span className="prio__dagger">†</span>
         </p>
-        <div className="prio__tabla">
-          {[1, 2, 3].map((n) => (
-            <span key={n} className="prio__rank" style={{ "--rank": n } as CSSProperties}>
-              {n}
-            </span>
-          ))}
-          {hero.triada.map((t) => (
-            <span key={t.id} className="prio__name" data-id={t.id} style={{ "--rank": t.it } as CSSProperties}>
-              <span className="prio__letra">{t.letra}</span> {t.nombre}
-            </span>
-          ))}
-        </div>
+        <ol className="prio__tabla">
+          {[1, 2, 3].map((n) => {
+            const enIT = hero.triada.find((t) => t.it === n)!;
+            const enOT = hero.triada.find((t) => t.ot === n)!;
+            const valor = (t: typeof enIT) => (
+              <>
+                <span className="prio__letra">{t.letra}</span> {t.nombre}
+              </>
+            );
+            return (
+              <li key={n} className="prio__fila">
+                <span className="prio__rank">{n}</span>
+                {enIT.id === enOT.id ? (
+                  <span className="prio__name">{valor(enIT)}</span>
+                ) : (
+                  <span className="prio__name swap">
+                    <span className="v-it">{valor(enIT)}</span>
+                    <span className="v-ot">{valor(enOT)}</span>
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ol>
       </div>
 
       <dl className="ficha__filas">

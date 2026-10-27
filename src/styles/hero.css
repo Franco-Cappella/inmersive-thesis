@@ -121,28 +121,25 @@
   color: var(--c-warn);
   font-weight: 800;
 }
+/* Tres filas fijas (1, 2, 3): lo que rueda es quién ocupa cada puesto, como en el cartel */
 .prio__tabla {
   --row: 2.6rem;
-  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.prio__fila {
   display: grid;
   grid-template-columns: 2.6rem 1fr;
-  grid-template-rows: repeat(3, var(--row));
+  align-items: center;
+  height: var(--row);
 }
 /* La fila N° 1 queda marcada: lo que cambia es quién la ocupa */
-.prio__tabla::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: var(--row);
+.prio__fila:first-child {
   background: var(--c-highlight);
-  border-left: 4px solid var(--c-flow);
+  box-shadow: inset 4px 0 0 var(--c-flow);
 }
 .prio__rank {
-  position: relative;
-  grid-column: 1;
-  grid-row: var(--rank);
   display: grid;
   place-items: center;
   font-family: var(--f-display);
@@ -151,18 +148,20 @@
   font-variant-numeric: tabular-nums;
 }
 .prio__name {
-  position: absolute;
-  left: 2.6rem;
-  right: 0;
-  top: calc((var(--rank) - 1) * var(--row));
-  height: var(--row);
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
   font-family: var(--f-display);
   font-stretch: var(--display-stretch);
   font-weight: 700;
   font-size: var(--step-1);
+}
+.prio__name,
+.prio__name > .v-it,
+.prio__name > .v-ot {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.prio__name.swap {
+  display: grid;
 }
 .prio__letra {
   display: inline-grid;
@@ -525,12 +524,6 @@
   }
   .hero[data-mundo="ot"] .pyr-card {
     --flip: 1;
-  }
-  .hero[data-mundo="ot"] .prio__name[data-id="c"] {
-    transform: translateY(200%);
-  }
-  .hero[data-mundo="ot"] .prio__name[data-id="a"] {
-    transform: translateY(-200%);
   }
   .hero[data-mundo="ot"] .v-it {
     opacity: 0;
