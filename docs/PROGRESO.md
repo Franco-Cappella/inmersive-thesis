@@ -28,6 +28,8 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - Director: lo que un capítulo apaga se resetea durante la entrada (la planta del 01 vuelve a funcionar al entrar al 02); lo que prende actúa en la estadía.
 - `fx.triad`: la pirámide del hero se guarda al empezar los capítulos.
 - Figuras HTML: las cifras de costo cuentan desde 0 (el lector de pantalla lee el valor final de una copia oculta) y los bloques IT/OT de "después" se juntan al entrar. Solo sin reduced motion.
+- Capítulo 01: los pasos del reloj (03:14 → +3 h) se encienden sincronizados con la escena 3D. Los tiempos compartidos entre escena y texto viven en `src/scroll/timing.ts` (la capa DOM no puede importar las escenas).
+- Modo lectura: los capítulos con escena vuelven a su altura natural y sin panel fijo.
 
 ## Deploy
 
@@ -44,7 +46,7 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 ## Cola (en orden)
 
 1. Escenas 07 (casos en rojo) y 09 (zonas y conductos que bloquean el rojo).
-2. Animaciones de las figuras HTML que faltan (reloj del 01, trama Modbus campo por campo).
+2. Animación de la trama Modbus campo por campo (capítulo 03).
 3. Pasada de arte del hero y de los estudios.
 
 ## Bloqueado por Franco

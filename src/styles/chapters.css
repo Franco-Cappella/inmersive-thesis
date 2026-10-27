@@ -18,6 +18,14 @@
     top: clamp(4.5rem, 10svh, 6.5rem);
   }
 }
+/* Modo lectura: sin 3D no hace falta el scroll extra de la escena ni el panel fijo */
+main[data-reading="true"] .chapter[data-escena] {
+  min-height: auto;
+}
+main[data-reading="true"] .chapter[data-escena] .chapter__inner {
+  position: relative;
+  top: auto;
+}
 .chapter__inner {
   position: relative;
   width: min(100%, 46rem);

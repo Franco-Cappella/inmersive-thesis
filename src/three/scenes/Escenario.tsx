@@ -12,7 +12,8 @@ import { IT_FLOOR_Y } from "./ITFloor";
 import { PLC_POS } from "./OTFloor";
 
 // Capítulo 01 · "03:14 AM" (escenario hipotético de la tesina).
-// Línea de tiempo dentro de la estadía del capítulo (fx.patch y fx.halt van de 0 a 1 juntos):
+// Línea de tiempo dentro de la estadía del capítulo (fx.patch y fx.halt van de 0 a 1 juntos).
+// Si cambian estos tiempos, actualizar ESCENARIO_PASOS en src/scroll/timing.ts (el reloj del texto):
 //   patch 0.05–0.50  el parche baja de un rack de la oficina al gabinete PLC
 //   halt  0.50–0.58  la HMI se congela en un cuadro blanco
 //   halt  0.55–0.75  el flujo de las cañerías se corta (OTFloor)

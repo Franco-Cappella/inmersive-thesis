@@ -28,6 +28,7 @@ Texto: título de 3 a 8 palabras y una bajada de una o dos oraciones, en prosa. 
 5. `fx.dim = 1` tapa el 3D con el velo (capítulos sin escena). Un capítulo con escena propia tiene que volver a `dim: 0`.
 6. Convención del director: lo que un capítulo **apaga** (un valor que baja, por ejemplo la planta detenida del 01) se resetea durante la entrada; lo que **prende** (un valor que sube) actúa durante la estadía, con el panel fijo.
 7. `fx.triad` guarda la pirámide del hero (el 01 la pone en 0). Si un capítulo la quiere de vuelta (la postura final), la pone en 1.
+8. Si el texto del panel tiene que moverse al ritmo de la escena (como el reloj del 01), los tiempos van en `src/scroll/timing.ts` y se usan en las dos capas.
 
 ## Movimientos por capítulo (para el 3D pendiente)
 

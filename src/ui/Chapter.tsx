@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import { useRef, type CSSProperties } from "react";
 import type { Chapter as ChapterData } from "@/content/story";
+import { ESCENARIO_PASOS } from "@/scroll/timing";
 import { useUI } from "@/state/store";
 import { FiguraView } from "./Figuras";
 import { SourceRefs } from "./Sources";
@@ -45,6 +46,18 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           stagger: 0.08,
           scrollTrigger: { trigger: section, start: "top 62%", toggleActions: "play none none reverse" },
         });
+        // Capítulo 01: los pasos del reloj se encienden a medida que la escena 3D actúa (mismo scroll).
+        const pasos = section.querySelectorAll<HTMLElement>(".fig-reloj__pasos li");
+        if (!reading && section.hasAttribute("data-escena") && pasos.length) {
+          const tl = gsap.timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: { trigger: section, start: "top top", end: "bottom bottom", scrub: true },
+          });
+          pasos.forEach((li, i) =>
+            tl.fromTo(li, { opacity: 0.3 }, { opacity: 1, duration: 0.05 }, ESCENARIO_PASOS[i] ?? i / pasos.length),
+          );
+          tl.set({}, {}, 1); // el timeline dura exactamente la estadía
+        }
         // Cifras: cuentan desde 0 hasta el valor de la tesina (formato es-AR: 125.000 · 2,3).
         section.querySelectorAll<HTMLElement>("[data-contador]").forEach((el) => {
           const original = el.textContent ?? "";
