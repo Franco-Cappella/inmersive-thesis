@@ -23,6 +23,7 @@ npm run dev            # http://localhost:3000
 npm run build          # export estático en out/
 npx serve out -l 4321  # servir el build
 node scripts/capturas.cjs http://localhost:4321 /ruta/de/salida   # capturas + consola (requiere Playwright)
+node scripts/modos.cjs http://localhost:4321 /ruta/de/salida      # estudios, lectura, presentación, reduced motion, sin WebGL
 ```
 
 ## Al cerrar una tanda de trabajo

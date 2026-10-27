@@ -11,6 +11,17 @@ La skill `tesina-itot-web-inmersiva` fija Vite + React como SPA y descarta Next.
 
 Si Franco prefiere Vite, la migración es mecánica: `src/content`, `src/scroll`, `src/three` y `src/ui` no dependen de Next, solo `app/` y `next/dynamic`.
 
+## Presupuesto de JavaScript (medido el 27/10/2026)
+
+| Parte | gzip | Presupuesto de la skill | Comentario |
+|---|---|---|---|
+| Carga inicial total | 237 KB | ≤ 150 KB | Excedido por el costo fijo de Next |
+| · React DOM + runtime de Next | ~170 KB | — | Viene con el framework; con Vite sería ~60 KB |
+| · Código propio + GSAP + Lenis | ~66 KB | — | Dentro de lo razonable |
+| Chunk 3D (three, R3F, drei, postprocessing) | 312 KB | ≤ 350 KB | Se carga diferido; no entra en la carga inicial |
+
+Para medirlo de nuevo: sumar el gzip de los `<script>` de `out/index.html` y buscar el chunk que contiene `WebGLRenderer` (tiene que quedar fuera de la carga inicial). Si en algún momento la carga inicial importa más que Next, es el argumento más concreto para volver a Vite.
+
 ## Stack (versiones fijadas)
 
 | Paquete | Versión | Motivo |
@@ -32,3 +43,6 @@ Si Franco prefiere Vite, la migración es mecánica: `src/content`, `src/scroll`
 - **`matchMedia` sin la condición base:** con la forma de objeto, GSAP ejecuta el callback si *alguna* condición coincide. Sin `(prefers-reduced-motion: no-preference)` en la lista, el timeline del hero nunca corría.
 - **Canvas en `demand` durante el scroll:** la lógica "3D activo solo en `inicio`" dejaba congelada la escena, porque el propio timeline cambia la sección activa a `it` / `ot`. Ahora el loop corre mientras el hero está en pantalla.
 - **Texto de la guía de scroll sobre la pregunta en celular:** se oculta en vertical.
+- **Presentación salteaba la parada IT:** la flecha calculaba la siguiente parada por sección activa; ahora la calcula por posición de scroll (`src/ui/navigation.ts`).
+- **Encabezado tapado por el velo del hero:** `main` pintaba encima; el encabezado y el índice ahora van con `z-index: 30` y una franja de fondo.
+- **Título cortado en el estudio Plano:** el tamaño del título se ajusta al ancho de su columna con unidades de contenedor (`cqi`).

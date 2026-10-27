@@ -66,10 +66,10 @@ export function Site() {
       else if (key === "p") s.togglePresenting();
       else if (s.presenting && ["arrowright", "arrowdown", "pagedown", " "].includes(key)) {
         e.preventDefault();
-        stepStop(s.active, 1);
+        stepStop(1);
       } else if (s.presenting && ["arrowleft", "arrowup", "pageup"].includes(key)) {
         e.preventDefault();
-        stepStop(s.active, -1);
+        stepStop(-1);
       }
     };
     window.addEventListener("keydown", onKey);

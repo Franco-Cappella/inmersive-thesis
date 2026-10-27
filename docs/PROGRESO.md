@@ -6,7 +6,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 
 - **Hero:** completo en lo funcional. La pirámide C·I·A se arma al cargar, gira 180° y baja de IT a OT con el scroll. La ficha IT/OT cambia con paletas y la lista de prioridades rueda fila por fila. Tiene respaldo SVG, modo reduced motion y modo lectura.
 - **Capítulos 01–10:** esqueleto en HTML con el contenido condensado, figuras y fuentes. **Todavía sin escenas 3D:** después del hero, un velo tapa el Canvas.
-- **Verificación:** `scripts/capturas.cjs` saca capturas del hero y de cada capítulo (desktop y celular), revisa la consola y el scroll horizontal. Última corrida: consola limpia y sin scroll horizontal.
+- **Verificación:** `scripts/capturas.cjs` (hero y capítulos en desktop y celular, consola, scroll horizontal) y `scripts/modos.cjs` (estudios, lectura, presentación, reduced motion, sin WebGL, scroll inverso). Última corrida: todo bien, consola limpia.
 
 ## Bitácora
 
@@ -16,6 +16,9 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - Bugs corregidos: `matchMedia` sin la condición base (el timeline no corría) y Canvas en `demand` durante el hero (la escena quedaba congelada).
 - Lista de prioridades: antes se cruzaban los nombres a mitad del giro; ahora cada fila rueda su contenido como el cartel de paletas.
 - Agregados `CLAUDE.md`, este archivo y `scripts/capturas.cjs`.
+- Verificación de modos con `scripts/modos.cjs`: estudios Plano y Noche, lectura, presentación, reduced motion, sin WebGL, scroll de ida y vuelta y tirón con la rueda. Todo responde.
+- Corregidos: presentación que salteaba la parada IT, encabezado tapado por el velo, título cortado en Plano, letras de contorno en Plano, guía de scroll visible en reduced motion, tabla del modo lectura sin estilo.
+- Medido el bundle: carga inicial 237 KB gzip (Next ~170 KB de eso), chunk 3D 312 KB diferido. Ver `docs/DECISIONES.md`.
 
 ## Próximo paso
 
@@ -28,11 +31,10 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 
 ## Cola (en orden)
 
-1. Verificar estudios Plano y Noche, modo presentación, modo lectura, reduced motion, scroll hacia atrás y tamaño del bundle.
-2. Director de capítulos + escena 01.
-3. Escenas 02 (air gap), 07 (casos en rojo) y 09 (zonas y conductos).
-4. Animaciones de las figuras HTML (contadores, reloj, brecha).
-5. Pasada de arte del hero y de los estudios.
+1. Director de capítulos + escena 01.
+2. Escenas 02 (air gap), 07 (casos en rojo) y 09 (zonas y conductos).
+3. Animaciones de las figuras HTML (contadores, reloj, brecha).
+4. Pasada de arte del hero y de los estudios.
 
 ## Bloqueado por Franco
 

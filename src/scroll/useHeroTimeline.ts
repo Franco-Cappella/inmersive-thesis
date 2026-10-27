@@ -112,6 +112,9 @@ export function useHeroTimeline(scope: RefObject<HTMLElement | null>) {
           .fromTo(rig.hero, { flip: 0 }, { flip: 1, ...once, ease: "power2.inOut", duration: 0.36 }, 0.34);
 
         // HTML: el primer tween de cada pieza fija su estado inicial; los siguientes son .to().
+        // La marca del encabezado repite el h1: aparece recién cuando el título se va.
+        const brand = document.querySelector(".masthead__brand");
+        if (brand) tl.fromTo(brand, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.05 }, 0.09);
         tl.fromTo(".hero__cue", { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.03 }, 0)
           .fromTo(".hero__intro", { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -70, duration: 0.09 }, 0.05)
           .fromTo(

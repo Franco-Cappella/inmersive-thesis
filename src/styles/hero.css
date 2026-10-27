@@ -44,10 +44,21 @@
   color: var(--c-ink-soft);
   margin-bottom: 1.1rem;
 }
+.hero__intro {
+  container-type: inline-size; /* el título se ajusta al ancho de su columna */
+}
 .hero__title {
-  font-size: var(--step-5);
+  /* --fit: ancho de "invertida" en cada estudio; evita que la palabra se corte */
+  font-size: min(var(--step-5), calc(var(--title-fit, 23) * 1cqi));
   line-height: 0.88;
   max-width: 7.5ch;
+}
+:root[data-estudio="plano"] .hero__title {
+  --title-fit: 14.5;
+  max-width: none;
+}
+:root[data-estudio="noche"] .hero__title {
+  --title-fit: 27;
 }
 .hero__question {
   margin-top: 1.5rem;
@@ -454,7 +465,7 @@
     width: min(62vw, 300px);
   }
   .hero__title {
-    font-size: clamp(3rem, 15vw, 5rem);
+    font-size: min(clamp(3rem, 15vw, 5rem), calc(var(--title-fit, 23) * 1cqi));
   }
   .hero__question {
     margin-top: 1rem;
@@ -498,6 +509,10 @@
   .hero__cue-line::after {
     animation: none;
     transform: none;
+  }
+  .hero[data-fase="ficha"] .hero__cue,
+  .hero[data-fase="cierre"] .hero__cue {
+    visibility: hidden;
   }
   .hero[data-fase] .hero__intro,
   .hero[data-fase] .ficha,
@@ -586,4 +601,29 @@ main[data-reading="true"] .hero__tabla {
   clip: auto;
   white-space: normal;
   max-width: 64rem;
+}
+
+main[data-reading="true"] .hero__tabla table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+  line-height: 1.5;
+}
+main[data-reading="true"] .hero__tabla caption {
+  text-align: left;
+  font-family: var(--f-display);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+main[data-reading="true"] .hero__tabla th,
+main[data-reading="true"] .hero__tabla td {
+  padding: 0.7rem 0.9rem 0.7rem 0;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid var(--c-line);
+}
+main[data-reading="true"] .hero__tabla th {
+  font-family: var(--f-display);
+  font-weight: 700;
+  white-space: nowrap;
 }

@@ -21,11 +21,12 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - [ ] Pasar a las figuras de los capítulos las animaciones de la guía (`docs/GUION.md`, columna "Movimiento").
 
 ## Fase 4 · Estudios de dirección — parcial
-- [x] Los 3 estudios (Sala de control, Plano P&ID, Planta de noche) están en los tokens y la paleta del 3D.
+- [x] Los 3 estudios (Sala de control, Plano P&ID, Planta de noche) están en los tokens y la paleta del 3D, verificados con capturas.
 - [ ] Elegir uno con Franco (ver `docs/ESTILO.md`). Hoy el default es "Sala de control".
 
-## Fase 5 · Verificación y defensa — pendiente
-- [ ] Capturas del recorrido completo en celular y desktop, scroll hacia atrás incluido.
+## Fase 5 · Verificación y defensa — parcial
+- [x] Capturas del recorrido completo en celular y desktop, scroll hacia atrás incluido (`scripts/capturas.cjs`, `scripts/modos.cjs`).
+- [x] Modo presentación: ← → recorren IT, OT y los capítulos en orden.
 - [ ] Modo presentación ensayado con el proyector y con tiempos (5 a 9 minutos).
 - [ ] Probar sin conexión con el wifi apagado.
 - [ ] Video de respaldo del recorrido.

@@ -112,9 +112,8 @@ export function ITFloor({ palette }: { palette: Palette }) {
         font={FONT_URL}
         fontSize={9}
         position={[1.5, IT_FLOOR_Y + 4.3, -15]}
-        color={palette.letters}
-        fillOpacity={palette.lettersOutline ? 0 : 1}
-        outlineWidth={palette.lettersOutline ? 0.05 : 0}
+        color={palette.lettersOutline ? palette.field : palette.letters}
+        outlineWidth={palette.lettersOutline ? 0.06 : 0}
         outlineColor={palette.ink}
         anchorX="center"
         anchorY="middle"

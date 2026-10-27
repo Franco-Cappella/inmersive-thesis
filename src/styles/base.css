@@ -107,11 +107,14 @@ kbd {
   background: var(--c-field);
   opacity: 0;
 }
-main,
-.masthead,
-.progress {
+main {
   position: relative;
   z-index: 10;
+}
+/* El encabezado y el índice van por encima de main (si no, el velo del hero los tapa) */
+.masthead,
+.progress {
+  z-index: 30;
 }
 
 /* ---------- Paneles y piezas comunes ---------- */
@@ -241,6 +244,12 @@ button {
   gap: 1rem;
   padding: 0.75rem var(--gutter);
   pointer-events: none;
+  /* franja translúcida: el texto que pasa por debajo no se mezcla con los botones */
+  background: linear-gradient(
+    var(--c-field) 0%,
+    color-mix(in srgb, var(--c-field) 82%, transparent) 70%,
+    transparent 100%
+  );
 }
 .masthead > * {
   pointer-events: auto;

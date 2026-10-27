@@ -12,7 +12,7 @@ export type Palette = {
   warn: string; // advertencia: el choque de prioridades
   alarm: string; // alarma / ataque
   letters: string; // letras gigantes IT / OT
-  lettersOutline: boolean; // plano: letras dibujadas solo con contorno
+  lettersOutline: boolean; // plano: letras dibujadas con contorno de tinta y relleno del color del papel
   grid: [cell: string, section: string];
   fog: [near: number, far: number];
   hemi: [sky: string, ground: string, intensity: number];
