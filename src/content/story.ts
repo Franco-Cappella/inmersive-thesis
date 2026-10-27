@@ -354,7 +354,7 @@ export const chapters: Chapter[] = [
     weight: 1.8,
     camara: {
       landscape: { position: [-8, 4, 31], target: [10, -3.2, -5] },
-      portrait: { position: [-1, 4, 40], target: [-1, -2.5, -5] },
+      portrait: { position: [0, 2.6, 32], target: [0, -3.4, -4] },
     },
     fx: { triad: 1 },
   },
