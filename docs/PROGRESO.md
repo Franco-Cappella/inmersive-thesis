@@ -27,6 +27,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - Escena 02 (`src/three/scenes/Convergencia.tsx`): borde del air gap entre los pisos, tres enlaces que bajan (racks y nube → PLC, válvula, tanque) revelados con `drawRange`, borde en ámbar y paquetes que cruzan a la planta.
 - Director: lo que un capítulo apaga se resetea durante la entrada (la planta del 01 vuelve a funcionar al entrar al 02); lo que prende actúa en la estadía.
 - `fx.triad`: la pirámide del hero se guarda al empezar los capítulos.
+- Figuras HTML: las cifras de costo cuentan desde 0 (el lector de pantalla lee el valor final de una copia oculta) y los bloques IT/OT de "después" se juntan al entrar. Solo sin reduced motion.
 
 ## Deploy
 
@@ -43,7 +44,7 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 ## Cola (en orden)
 
 1. Escenas 07 (casos en rojo) y 09 (zonas y conductos que bloquean el rojo).
-2. Animaciones de las figuras HTML (contadores, reloj, brecha).
+2. Animaciones de las figuras HTML que faltan (reloj del 01, trama Modbus campo por campo).
 3. Pasada de arte del hero y de los estudios.
 
 ## Bloqueado por Franco

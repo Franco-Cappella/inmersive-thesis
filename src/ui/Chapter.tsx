@@ -45,6 +45,37 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           stagger: 0.08,
           scrollTrigger: { trigger: section, start: "top 62%", toggleActions: "play none none reverse" },
         });
+        // Cifras: cuentan desde 0 hasta el valor de la tesina (formato es-AR: 125.000 · 2,3).
+        section.querySelectorAll<HTMLElement>("[data-contador]").forEach((el) => {
+          const original = el.textContent ?? "";
+          const m = original.match(/(\d{1,3}(?:\.\d{3})+|\d+)(?:,(\d+))?/);
+          if (!m || m.index === undefined) return;
+          const decimals = m[2]?.length ?? 0;
+          const value = parseFloat(`${m[1].replace(/\./g, "")}.${m[2] ?? "0"}`);
+          const [before, after] = [original.slice(0, m.index), original.slice(m.index + m[0].length)];
+          const fmt = (v: number) =>
+            v.toLocaleString("es-AR", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+          const n = { v: 0 };
+          el.textContent = before + fmt(0) + after;
+          gsap.to(n, {
+            v: value,
+            duration: 1.6,
+            ease: "power2.out",
+            onUpdate: () => {
+              el.textContent = before + fmt(n.v) + after;
+            },
+            scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none reverse" },
+          });
+        });
+        // Brecha: los bloques IT y OT de "después" se juntan al entrar.
+        section.querySelectorAll(".fig-brecha__bloques:not(.fig-brecha__bloques--separados)").forEach((el) =>
+          gsap.from(el, {
+            gap: "1.4rem",
+            duration: 0.9,
+            ease: "power3.inOut",
+            scrollTrigger: { trigger: el, start: "top 80%", toggleActions: "play none none reverse" },
+          }),
+        );
         const bars = section.querySelectorAll(".barra");
         if (bars.length)
           gsap.from(bars, {
@@ -53,6 +84,12 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
             ease: "power3.out",
             stagger: 0.04,
             scrollTrigger: { trigger: bars[0], start: "top 80%", toggleActions: "play none none reverse" },
+          });
+        // Al revertir (modo lectura, cambio de preferencia) las cifras vuelven a su texto original.
+        return () =>
+          section.querySelectorAll<HTMLElement>("[data-contador]").forEach((el) => {
+            const final = el.nextElementSibling?.textContent;
+            if (final) el.textContent = final;
           });
       });
     },

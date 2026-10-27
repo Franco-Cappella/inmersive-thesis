@@ -21,7 +21,8 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - [x] Escena 3D del capítulo 01 (el parche que apaga la planta).
 - [x] Escena 3D del capítulo 02 (se rompe el air gap).
 - [ ] Escenas 3D de los demás capítulos (03, 05, 07, 09, 10 según `docs/GUION.md`). Hoy usan `dim: 1`.
-- [ ] Pasar a las figuras de los capítulos las animaciones de la guía (`docs/GUION.md`, columna "Movimiento").
+- [x] Animaciones de figuras HTML: contador en las cifras de costo, brecha IT/OT que se cierra, barras SANS que crecen.
+- [ ] Animaciones de figuras HTML que faltan: reloj del 01 y trama Modbus campo por campo.
 
 ## Fase 4 · Estudios de dirección — parcial
 - [x] Los 3 estudios (Sala de control, Plano P&ID, Planta de noche) están en los tokens y la paleta del 3D, verificados con capturas.

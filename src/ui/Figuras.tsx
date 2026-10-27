@@ -108,7 +108,13 @@ export function FiguraView({ figura }: { figura: Figura }) {
         <div className="fig fig--cifras">
           {figura.items.map((c) => (
             <figure key={c.valor} className="cifra">
-              <p className="cifra__valor">{c.valor}</p>
+              <p className="cifra__valor">
+                {/* el contador anima la copia visible; el lector de pantalla lee el valor final */}
+                <span aria-hidden="true" data-contador>
+                  {c.valor}
+                </span>
+                <span className="sr-only">{c.valor}</span>
+              </p>
               <figcaption>
                 {c.texto} <SourceRefs keys={[c.fuente]} />
               </figcaption>
