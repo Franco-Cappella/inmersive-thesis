@@ -22,6 +22,10 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - Director de capítulos: cámara por capítulo durante la entrada, `fx` durante la estadía, velo por `dim`. Reemplaza el velo fijo que tenía el hero.
 - Escena 01 (`src/three/scenes/Escenario.tsx` + reacciones en `OTFloor.tsx`): parche que baja, HMI en blanco, flujo cortado, válvula ámbar → rojo y baliza ESD. En escritorio el panel queda fijo mientras la escena actúa. En presentación, los capítulos con escena tienen una parada oculta al final (la flecha muestra la escena terminada antes de pasar al siguiente).
 
+## Deploy
+
+El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: cada push a `main` actualiza producción y cada rama genera una URL de preview. Las sesiones de Claude no tienen acceso a Vercel (la red lo bloquea y no hay credenciales): se trabaja contra el build local y se verifica con `scripts/capturas.cjs`.
+
 ## Próximo paso
 
 **Escena 3D del capítulo 02 (convergencia: se rompe el air gap).** Ver `docs/GUION.md`, sección "Cómo se agrega la escena de un capítulo".
