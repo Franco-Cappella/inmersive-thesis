@@ -37,6 +37,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
 - El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
 - Escena 09 (`src/three/scenes/Matiz.tsx`): un pilar por tramo de `fx.zones` (`MATIZ_TRAMOS`), con la lista de pilares encendiéndose al mismo ritmo. La DMZ se cierra sobre el air gap, aparecen las zonas y una compuerta por enlace legítimo; los recorridos de los casos se retraen hasta la DMZ (señal `segmentation` en `signals.ts`) y la planta vuelve a azul. Después, un sensor pasivo en un puerto espejo y un gemelo digital que valida el parche. Verificada en los tres estudios, celular, reduced motion y scroll de vuelta al 07.
+- Celular durante las escenas: hasta 760 px, la estadía de cada capítulo con escena empieza cuando el panel ya subió (`stayOf` en `useStoryTimeline.ts`; la sección suma ese espacio con `padding-bottom` en `chapters.css`). La escena actúa con la pantalla libre y las listas sincronizadas se leen enteras, sin atenuar.
 - Pasada de arte (detalle): `src/three/scenes/PlantDetails.tsx` (bridas y soportes en las cañerías, aros y faldones en los tanques, rejillas y manija en los gabinetes) y juntas entre servidores en los racks (`ITFloor.tsx`). Cinco `InstancedMesh`, en metal o tinta; verificado en los tres estudios. Bundle medido otra vez: carga inicial 239 KB y chunk 3D 319 KB gzip (`docs/DECISIONES.md`).
 - Accesibilidad: `scripts/a11y.cjs` (axe-core 4.14 sobre el build, cinco vistas, más el orden de Tab). Encontró el azul de estado como texto chico en Sala (3,9:1): se agregaron `--c-flow-text` y `--c-warn-text` (ver `docs/ESTILO.md`). Los enlaces del índice tienen nombre explícito (antes se leía "0103:14 AM" o "IT IT:"). Ahora: sin violaciones.
 - Escena 03 (`src/three/scenes/Protocolos.tsx`): la trama Modbus de la figura baja por el cable como una tarjeta en texto plano (los bytes salen de `story.ts`), entra al gabinete, la luz del PLC destella y la válvula gira (`valveTurn` en `signals.ts`; el volante ahora tiene rayos para que se vea girar). El 04 vuelve a `dim: 1`.
@@ -51,15 +52,15 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 ## Próximo paso
 
-**Celular durante las escenas.** Hoy, en los capítulos con escena, el panel de texto ocupa casi toda la pantalla del celular al principio de la estadía y la escena se ve recién cuando el panel sube. La skill pide el panel abajo y el objeto 3D encuadrado arriba (`portrait` de cada cámara).
+**Lo que queda depende de Franco o de la compu de la defensa** (ver "Bloqueado por Franco" y la fase 5 de `docs/ROADMAP.md`). Mientras tanto, mejoras posibles sin decidir nada por él:
 
-1. Revisar `.chapter[data-escena]` en `src/styles/chapters.css` para pantallas de menos de 761 px: panel compacto abajo (con la lista sincronizada a la vista) y la escena arriba, o el panel arriba y más bajo.
-2. Ajustar las cámaras `portrait` de cada capítulo para que el sujeto quede en la mitad visible.
-3. Capturas de celular de cada capítulo con escena (0, 0,35, 0,65 y 1) antes y después.
+1. Encuadres `portrait`: en el celular el sujeto queda en el medio y abajo sobra piso; se pueden subir un poco (`camara.portrait` de cada capítulo en `story.ts`).
+2. Una pasada de textos alternativos: cada capítulo describe su escena en `escena` (`story.ts`); revisar que coincidan con lo que hoy muestra el 3D después de todos los cambios.
+3. Ensayo cronometrado del modo presentación con `scripts/video.cjs` (la duración del video es una buena estimación del recorrido).
 
 ## Cola (en orden)
 
-1. Celular durante las escenas (panel y encuadre).
+1. Encuadres `portrait` y revisión de los textos `escena` contra lo que muestra el 3D.
 2. Probar con un lector de pantalla real y ensayar la presentación con tiempos (5 a 9 minutos).
 3. Atmósfera propia del estudio que elija Franco.
 4. En la compu de la defensa: correr `scripts/offline.cjs` con el wifi apagado y grabar el video con `scripts/video.cjs`.

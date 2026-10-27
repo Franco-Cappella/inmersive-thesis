@@ -29,6 +29,7 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - Los capítulos 04, 06 y 08 no llevan escena: se leen sobre el velo (`dim: 1`).
 - [x] Animaciones de figuras HTML: contador en las cifras de costo, brecha IT/OT que se cierra, barras SANS que crecen.
 - [x] Reloj del 01: los pasos se encienden con la escena 3D.
+- [x] Celular: en los capítulos con escena, primero el texto y después la escena actúa con la pantalla libre (antes el panel la tapaba mientras actuaba).
 - [x] Trama Modbus (03): los campos aparecen en orden.
 
 ## Fase 4 · Estudios de dirección — parcial

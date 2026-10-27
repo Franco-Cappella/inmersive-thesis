@@ -22,7 +22,10 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
       const section = ref.current;
       if (!section) return;
       const mm = gsap.matchMedia();
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Forma de objeto: el callback corre si alguna condición coincide, por eso se mira `motion` adentro.
+      mm.add({ motion: "(prefers-reduced-motion: no-preference)", narrow: "(max-width: 760px)" }, (ctx) => {
+        const { motion, narrow } = ctx.conditions as Record<string, boolean>;
+        if (!motion) return;
         const title = section.querySelector("h2");
         if (title)
           SplitText.create(title, {
@@ -54,9 +57,10 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           [".fig--casos > li", CASOS_TRAMOS.map(([inicio]) => inicio)],
           [".fig--pilares > li", MATIZ_TRAMOS.map(([inicio]) => inicio)],
         ];
+        // En el celular la escena actúa después del texto (stayOf): ahí la lista se lee entera, sin atenuar.
         for (const [selector, tiempos] of sincronizados) {
           const items = section.querySelectorAll<HTMLElement>(selector);
-          if (reading || !section.hasAttribute("data-escena") || !items.length) continue;
+          if (reading || narrow || !section.hasAttribute("data-escena") || !items.length) continue;
           const tl = gsap.timeline({
             defaults: { ease: "none" },
             scrollTrigger: { trigger: section, start: "top top", end: "bottom bottom", scrub: true },

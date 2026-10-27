@@ -46,4 +46,5 @@ Texto: título de 3 a 8 palabras y una bajada de una o dos oraciones, en prosa. 
 - Los títulos entran con SplitText por línea (0,9 s); los párrafos con un stagger corto.
 - En reduced motion no hay interpolación: cada capítulo salta a su estado final, con fundidos de 200 ms.
 - Nada se mueve en bucle salvo los LEDs de los racks y el paquete de la cañería, que son ambientales y sutiles.
+- En el celular (hasta 760 px de ancho) el panel no queda fijo: primero se lee el texto entero y, cuando el panel ya subió, la escena actúa sola con la pantalla libre (`stayOf` en `src/scroll/useStoryTimeline.ts`). Por eso, en el celular, las listas sincronizadas no se atenúan.
 - En el modo presentación, cada → lleva a la siguiente parada (`src/content/stops.ts`). Las escenas que actúan por tramos (los casos del 07, los pilares del 09) tienen una parada al final de cada tramo, así la persona que expone cuenta un caso por vez. El viaje dura 1,2 s por pantalla recorrida (entre 1,2 y 3,2 s).

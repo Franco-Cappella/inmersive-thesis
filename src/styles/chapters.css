@@ -450,6 +450,15 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   .chapter {
     padding: 4.5rem 1rem 3rem;
   }
+  /* Capítulo con escena: primero el texto y después la escena actúa sola, con la pantalla libre.
+     El director empieza la estadía cuando el panel ya subió (useStoryTimeline, condición "narrow"). */
+  .chapter[data-escena] {
+    min-height: 0;
+    padding-bottom: calc((var(--weight) - 1) * 100svh + 30svh);
+  }
+  main[data-reading="true"] .chapter[data-escena] {
+    padding-bottom: 3rem;
+  }
   .chapter__inner {
     width: 100%;
     padding: 1.1rem;

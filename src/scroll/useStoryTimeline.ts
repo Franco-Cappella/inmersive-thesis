@@ -23,6 +23,16 @@ const sameShot = (a: FlatShot, b: FlatShot) =>
 
 const pick = (fx: SceneFx, keys: (keyof SceneFx)[]) => Object.fromEntries(keys.map((k) => [k, fx[k]]));
 
+// La estadía de un capítulo. En escritorio, mientras la sección está fija con el panel al costado.
+// En el celular (narrow) el panel tapa la escena: la estadía empieza cuando el panel ya subió
+// (su borde de abajo pasa el 70 % de la pantalla) y termina con la sección (ver chapters.css).
+export function stayOf(el: HTMLElement, narrow: boolean): ScrollTrigger.Vars {
+  const panel = el.querySelector<HTMLElement>(".chapter__inner");
+  if (narrow && panel && el.hasAttribute("data-escena"))
+    return { trigger: panel, start: "bottom 70%", endTrigger: el, end: "bottom bottom", scrub: true };
+  return { trigger: el, start: "top top", end: "bottom bottom", scrub: true };
+}
+
 // El director de los capítulos. Por capítulo i:
 //  ENTRADA (la sección sube: "top bottom" → "top top"): la cámara viaja del keyframe i-1 al i
 //          y el velo pasa del dim anterior al propio.
@@ -45,9 +55,10 @@ export function useStoryTimeline(scope: RefObject<HTMLElement | null>) {
           motion: "(prefers-reduced-motion: no-preference)",
           reduce: "(prefers-reduced-motion: reduce)",
           portrait: "(orientation: portrait)",
+          narrow: "(max-width: 760px)",
         },
         (ctx) => {
-          const { reduce, portrait } = ctx.conditions as Record<string, boolean>;
+          const { reduce, portrait, narrow } = ctx.conditions as Record<string, boolean>;
           const cam = (i: number) => camOf(i, portrait);
 
           if (reduce) {
@@ -116,7 +127,7 @@ export function useStoryTimeline(scope: RefObject<HTMLElement | null>) {
                 ...pick(after, on),
                 ease: "none",
                 immediateRender: false,
-                scrollTrigger: { trigger: el, start: "top top", end: "bottom bottom", scrub: true },
+                scrollTrigger: stayOf(el, narrow),
               });
           });
         },
