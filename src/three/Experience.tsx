@@ -22,6 +22,7 @@ import { Escenario } from "./scenes/Escenario";
 import { ITFloor } from "./scenes/ITFloor";
 import { Matiz } from "./scenes/Matiz";
 import { OTFloor } from "./scenes/OTFloor";
+import { PlantDetails } from "./scenes/PlantDetails";
 import { Protocolos } from "./scenes/Protocolos";
 import { Pyramid } from "./scenes/Pyramid";
 
@@ -83,6 +84,7 @@ export default function Experience() {
           <Pyramid palette={palette} />
           <ITFloor palette={palette} />
           <OTFloor palette={palette} />
+          <PlantDetails palette={palette} />
           <Escenario palette={palette} />
           <Convergencia palette={palette} />
           <Protocolos palette={palette} />

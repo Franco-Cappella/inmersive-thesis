@@ -11,14 +11,14 @@ La skill `tesina-itot-web-inmersiva` fija Vite + React como SPA y descarta Next.
 
 Si Franco prefiere Vite, la migración es mecánica: `src/content`, `src/scroll`, `src/three` y `src/ui` no dependen de Next, solo `app/` y `next/dynamic`.
 
-## Presupuesto de JavaScript (medido el 27/10/2026)
+## Presupuesto de JavaScript (medido el 27/10/2026; segunda medición al terminar todas las escenas)
 
 | Parte | gzip | Presupuesto de la skill | Comentario |
 |---|---|---|---|
-| Carga inicial total | 237 KB | ≤ 150 KB | Excedido por el costo fijo de Next |
+| Carga inicial total | 237 KB → 239 KB | ≤ 150 KB | Excedido por el costo fijo de Next |
 | · React DOM + runtime de Next | ~170 KB | — | Viene con el framework; con Vite sería ~60 KB |
 | · Código propio + GSAP + Lenis | ~66 KB | — | Dentro de lo razonable |
-| Chunk 3D (three, R3F, drei, postprocessing) | 312 KB | ≤ 350 KB | Se carga diferido; no entra en la carga inicial |
+| Chunk 3D (three, R3F, drei, postprocessing) | 312 KB → 319 KB | ≤ 350 KB | Se carga diferido; no entra en la carga inicial. Las siete escenas y la pasada de arte sumaron 7 KB |
 
 Para medirlo de nuevo: sumar el gzip de los `<script>` de `out/index.html` y buscar el chunk que contiene `WebGLRenderer` (tiene que quedar fuera de la carga inicial). Si en algún momento la carga inicial importa más que Next, es el argumento más concreto para volver a Vite.
 

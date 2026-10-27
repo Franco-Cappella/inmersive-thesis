@@ -11,6 +11,10 @@
 | `--c-alarm` rojo | Alarma, ataque | Golpes de los controles, recorridos de los casos |
 | grafito / gris | Todo lo demás | Texto, racks, tanques |
 
+### Detalle de la maqueta
+
+El detalle es procedural y sin modelos externos (`src/three/scenes/PlantDetails.tsx` y las juntas de `ITFloor.tsx`): bridas, soportes, aros, faldones, rejillas y juntas. Va siempre en metal más oscuro o en tinta, nunca en un color de estado, y cada grupo es un `InstancedMesh` para no sumar llamadas de dibujo.
+
 ### Color de estado como texto
 
 El azul y el ámbar de estado están elegidos para la maqueta y las barras, no para texto chico. Cuando hacen de texto (el número de capítulo, las etiquetas de la apuesta, los enlaces de referencias, la daga de "sin fuente") se usan `--c-flow-text` y `--c-warn-text`, que mantienen el tono y dan al menos 4,5:1 sobre el panel en los tres estudios. Lo verifica `scripts/a11y.cjs`.

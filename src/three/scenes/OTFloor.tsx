@@ -13,7 +13,7 @@ import { hitBeat, oldsmarExposure, overpressure, plantFlow, plcCompromised, valv
 // Planta OT (abajo): tanques, cañerías con flujo, una válvula y gabinetes PLC.
 export const OT_FLOOR_Y = -8;
 
-const TANKS: { x: number; z: number; r: number; h: number }[] = [
+export const TANKS: { x: number; z: number; r: number; h: number }[] = [
   { x: -7.4, z: -6.6, r: 1.3, h: 4.2 },
   { x: -3.9, z: -9.8, r: 1.0, h: 3.4 },
   { x: 4.6, z: -6.9, r: 1.35, h: 4.0 },
@@ -21,13 +21,16 @@ const TANKS: { x: number; z: number; r: number; h: number }[] = [
 ];
 
 const Y = OT_FLOOR_Y;
-const PIPES: Vec3[][] = [
+// Las cañerías: el colector principal (radio 0,2) y tres ramales (0,14). PlantDetails les pone bridas y soportes.
+export const PIPES: Vec3[][] = [
   [[-12, Y + 0.8, -3.6], [12, Y + 0.8, -3.6]],
   [[-6.1, Y + 1.9, -6.6], [-1.6, Y + 1.9, -6.6], [-1.6, Y + 0.8, -3.6]],
   [[3.25, Y + 2.6, -6.9], [1.4, Y + 2.6, -6.9], [1.4, Y + 0.8, -3.6]],
   [[-3.9, Y + 2.9, -8.8], [-3.9, Y + 3.9, -8.8], [4.6, Y + 3.9, -8.8], [4.6, Y + 3.3, -8.8]],
 ];
-const CABINETS: Vec3[] = [
+export const pipeRadius = (i: number) => (i === 0 ? 0.2 : 0.14);
+export const CABINET = { w: 0.95, h: 1.8, d: 0.6 };
+export const CABINETS: Vec3[] = [
   [2.8, Y + 0.9, -2.6],
   [-5.2, Y + 0.9, -2.8],
 ];
@@ -159,7 +162,7 @@ export function OTFloor({ palette }: { palette: Palette }) {
         <Tank key={i} {...t} palette={palette} />
       ))}
       {PIPES.map((p, i) => (
-        <FlowPipe key={i} points={p} radius={i === 0 ? 0.2 : 0.14} palette={palette} amount={otFlow} speed={0.45 + i * 0.08} />
+        <FlowPipe key={i} points={p} radius={pipeRadius(i)} palette={palette} amount={otFlow} speed={0.45 + i * 0.08} />
       ))}
       <Valve palette={palette} />
       {CABINETS.map((p, i) => (

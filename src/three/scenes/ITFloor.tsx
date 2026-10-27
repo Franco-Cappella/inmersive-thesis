@@ -22,6 +22,11 @@ const LEDS: Vec3[] = RACKS.flatMap(([x, , z]) =>
   Array.from({ length: 6 }, (_, k) => [x - 0.22 + (k % 2) * 0.44, IT_FLOOR_Y + 0.55 + Math.floor(k / 2) * 0.62, z + RACK.d / 2 + 0.02] as Vec3),
 );
 
+// Juntas entre servidores en el frente de cada rack, entre las filas de LEDs (pasada de arte).
+const SEAMS: Vec3[] = RACKS.flatMap(([x, , z]) =>
+  [0.24, 0.86, 1.48, 2.08].map((y) => [x, IT_FLOOR_Y + y, z + RACK.d / 2 + 0.006] as Vec3),
+);
+
 const TRAY_Y = IT_FLOOR_Y + RACK.h + 0.45;
 const ROUTES: Vec3[][] = [
   [[-11, TRAY_Y, -3.4], [11, TRAY_Y, -3.4]],
@@ -34,6 +39,8 @@ const itVisibility = () => 1 - 0.8 * smooth(rig.hero.descent, 0.3, 0.9);
 function Racks({ palette }: { palette: Palette }) {
   const racks = useRef<InstancedMesh>(null);
   const leds = useRef<InstancedMesh>(null);
+  const seams = useRef<InstancedMesh>(null);
+  const seamColor = useMemo(() => new Color(palette.metal).multiplyScalar(0.55), [palette]);
   const rackGeometry = useMemo(() => new BoxGeometry(RACK.w * 0.92, RACK.h, RACK.d), []);
   useEffect(() => () => rackGeometry.dispose(), [rackGeometry]);
   const on = useMemo(() => glow(palette.flow, 2.6), [palette]);
@@ -53,8 +60,14 @@ function Racks({ palette }: { palette: Palette }) {
       leds.current?.setMatrixAt(i, d.matrix);
       leds.current?.setColorAt(i, off);
     });
+    SEAMS.forEach((p, i) => {
+      d.position.set(...p);
+      d.updateMatrix();
+      seams.current?.setMatrixAt(i, d.matrix);
+    });
     if (racks.current) racks.current.instanceMatrix.needsUpdate = true;
     if (leds.current) leds.current.instanceMatrix.needsUpdate = true;
+    if (seams.current) seams.current.instanceMatrix.needsUpdate = true;
   }, [off]);
 
   useFrame((state) => {
@@ -74,6 +87,10 @@ function Racks({ palette }: { palette: Palette }) {
     <>
       <instancedMesh ref={racks} args={[rackGeometry, undefined, RACKS.length]}>
         <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
+      </instancedMesh>
+      <instancedMesh ref={seams} args={[undefined, undefined, SEAMS.length]}>
+        <boxGeometry args={[RACK.w * 0.84, 0.035, 0.01]} />
+        <meshStandardMaterial color={seamColor} roughness={palette.rough} metalness={palette.metalness} />
       </instancedMesh>
       <instancedMesh ref={leds} args={[undefined, undefined, LEDS.length]}>
         <boxGeometry args={[0.16, 0.05, 0.02]} />

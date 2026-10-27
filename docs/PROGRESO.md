@@ -37,6 +37,7 @@ Este archivo es el traspaso entre sesiones. Se actualiza al cerrar cada tanda de
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
 - El 08 (datos) vuelve a tapar el 3D con `dim: 1`.
 - Escena 09 (`src/three/scenes/Matiz.tsx`): un pilar por tramo de `fx.zones` (`MATIZ_TRAMOS`), con la lista de pilares encendiéndose al mismo ritmo. La DMZ se cierra sobre el air gap, aparecen las zonas y una compuerta por enlace legítimo; los recorridos de los casos se retraen hasta la DMZ (señal `segmentation` en `signals.ts`) y la planta vuelve a azul. Después, un sensor pasivo en un puerto espejo y un gemelo digital que valida el parche. Verificada en los tres estudios, celular, reduced motion y scroll de vuelta al 07.
+- Pasada de arte (detalle): `src/three/scenes/PlantDetails.tsx` (bridas y soportes en las cañerías, aros y faldones en los tanques, rejillas y manija en los gabinetes) y juntas entre servidores en los racks (`ITFloor.tsx`). Cinco `InstancedMesh`, en metal o tinta; verificado en los tres estudios. Bundle medido otra vez: carga inicial 239 KB y chunk 3D 319 KB gzip (`docs/DECISIONES.md`).
 - Accesibilidad: `scripts/a11y.cjs` (axe-core 4.14 sobre el build, cinco vistas, más el orden de Tab). Encontró el azul de estado como texto chico en Sala (3,9:1): se agregaron `--c-flow-text` y `--c-warn-text` (ver `docs/ESTILO.md`). Los enlaces del índice tienen nombre explícito (antes se leía "0103:14 AM" o "IT IT:"). Ahora: sin violaciones.
 - Escena 03 (`src/three/scenes/Protocolos.tsx`): la trama Modbus de la figura baja por el cable como una tarjeta en texto plano (los bytes salen de `story.ts`), entra al gabinete, la luz del PLC destella y la válvula gira (`valveTurn` en `signals.ts`; el volante ahora tiene rayos para que se vea girar). El 04 vuelve a `dim: 1`.
 - Escena 05 (`src/three/scenes/Conflicto.tsx`): un golpe por tramo de `fx.hits` (`CONFLICTO_TRAMOS`), con la lista del texto y una parada de presentación por golpe. Parche (barra de actualización, HMI apagada, parada de emergencia), escaneo (ráfaga y controlador bloqueado en rojo) y MFA (reloj de token y válvula en alarma). Las reacciones de la planta salen de señales nuevas en `signals.ts` (`scadaReboot`, `esdTrip`, `scanLock`, `overpressure`) que también leen `Escenario.tsx` y `OTFloor.tsx`. El 06 vuelve a `dim: 1` y el 07 resetea `hits`.
@@ -50,16 +51,17 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 ## Próximo paso
 
-**Pasada de arte del 3D (igual para los tres estudios hasta que Franco elija uno).**
+**Celular durante las escenas.** Hoy, en los capítulos con escena, el panel de texto ocupa casi toda la pantalla del celular al principio de la estadía y la escena se ve recién cuando el panel sube. La skill pide el panel abajo y el objeto 3D encuadrado arriba (`portrait` de cada cámara).
 
-1. Detalle procedural, sin modelos externos: frentes de rack con ranuras de servidores (instanciadas), bridas y soportes en las cañerías, aros en los tanques, puerta y rejillas en los gabinetes.
-2. Respetar la regla de color: todo lo nuevo en metal o tinta; nada de color decorativo. En Plano, que lo nuevo tenga aristas como el resto.
-3. Verificar el costo: `PerformanceMonitor` no tiene que bajar de tier en la compu de la defensa. Medir draw calls antes y después (`renderer.info`).
+1. Revisar `.chapter[data-escena]` en `src/styles/chapters.css` para pantallas de menos de 761 px: panel compacto abajo (con la lista sincronizada a la vista) y la escena arriba, o el panel arriba y más bajo.
+2. Ajustar las cámaras `portrait` de cada capítulo para que el sujeto quede en la mitad visible.
+3. Capturas de celular de cada capítulo con escena (0, 0,35, 0,65 y 1) antes y después.
 
 ## Cola (en orden)
 
-1. Pasada de arte del hero y de los estudios: detalle de racks, cañerías y gabinetes (bridas, soportes, frentes), igual para los tres estudios hasta que Franco elija uno.
+1. Celular durante las escenas (panel y encuadre).
 2. Probar con un lector de pantalla real y ensayar la presentación con tiempos (5 a 9 minutos).
+3. Atmósfera propia del estudio que elija Franco.
 4. En la compu de la defensa: correr `scripts/offline.cjs` con el wifi apagado y grabar el video con `scripts/video.cjs`.
 
 ## Bloqueado por Franco
