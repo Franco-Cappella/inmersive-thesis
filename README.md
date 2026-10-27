@@ -85,10 +85,13 @@ Con el build servido (`npx serve out -l 4321`) y Playwright instalado (`npm i -D
 src/
   app/        layout y página única
   content/    todo el texto: hero.ts, story.ts (capítulos), references.ts, stops.ts, ui.ts
-  scroll/     rig.ts (estado compartido), useHeroTimeline.ts (director del scroll), smoothScroll.ts (Lenis)
+  scroll/     rig.ts (estado compartido), useHeroTimeline.ts y useStoryTimeline.ts (los directores del scroll),
+              timing.ts (tiempos compartidos entre escena y texto), smoothScroll.ts (Lenis)
   state/      store.ts (estado de la interfaz)
-  three/      Experience.tsx (Canvas) y escenas: Pyramid, ITFloor, OTFloor
-  ui/         Site, Hero, Chapter, Figuras, References, Masthead, ProgressNav
+  three/      Experience.tsx (Canvas), signals.ts (señales derivadas del scroll) y escenas:
+              Pyramid, ITFloor, OTFloor, PlantDetails, Escenario (01), Convergencia (02), Protocolos (03),
+              Conflicto (05), Casos (07) y Matiz (09); el 10 usa la pirámide y la planta
+  ui/         Site, Hero, Chapter, Figuras, References, Masthead, ProgressNav, Stage
   styles/     tokens.css (colores por estudio), base.css, hero.css, chapters.css
 docs/         guion, dirección de arte, decisiones, roadmap y pendientes de la tesina
 ```
@@ -103,7 +106,11 @@ Para editar textos, tocá solo `src/content/`. Ningún componente tiene texto pr
 
 ## Estado y documentación
 
+El hero y los diez capítulos están completos: los siete que tienen escena 3D (01, 02, 03, 05, 07, 09 y 10) la tienen construida, y el 04, el 06 y el 08 se leen sobre el campo liso. Lo que falta depende de decisiones de Franco (estudio de arte, Next o Vite, pendientes de la tesina) o de la compu de la defensa (ver `docs/ROADMAP.md`, fase 5).
+
+- `docs/PROGRESO.md`: por dónde va el trabajo y cuál es el próximo paso (el traspaso entre sesiones).
 - `docs/ROADMAP.md`: qué está hecho y qué falta.
 - `docs/GUION.md`: cada capítulo con su figura y su escena 3D.
 - `docs/PENDIENTES-TESINA.md`: problemas de rigor a resolver en la tesina antes de presentar.
-- `docs/DECISIONES.md`: por qué Next.js en export estático y versiones fijadas.
+- `docs/DECISIONES.md`: por qué Next.js en export estático, versiones fijadas, presupuesto de JavaScript, niebla según el encuadre e imagen para compartir.
+- `docs/ESTILO.md`: dirección de arte, los tres estudios y los colores de estado como texto.
