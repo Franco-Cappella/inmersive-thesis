@@ -32,7 +32,8 @@ export const heroShots: Record<"it" | "mid" | "ot" | "out", { landscape: Shot; p
   },
   ot: {
     landscape: { position: [1.2, -3.6, 15], target: [-1.6, -5.0, 0] },
-    portrait: { position: [0, -3.2, 17], target: [0, -7.4, 0] },
+    // En vertical la ficha ocupa la mitad de abajo: la pirámide invertida va entera entre los botones y la ficha.
+    portrait: { position: [0, -3.0, 21], target: [0, -8.7, 0] },
   },
   out: {
     landscape: { position: [0.6, -1.6, 19], target: [-1.2, -6.4, -3] },
