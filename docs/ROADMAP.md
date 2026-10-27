@@ -23,7 +23,7 @@ Estado al cierre de esta fase. El detalle de por dónde va el trabajo está en `
 - [ ] Escenas 3D de los demás capítulos (03, 05, 07, 09, 10 según `docs/GUION.md`). Hoy usan `dim: 1`.
 - [x] Animaciones de figuras HTML: contador en las cifras de costo, brecha IT/OT que se cierra, barras SANS que crecen.
 - [x] Reloj del 01: los pasos se encienden con la escena 3D.
-- [ ] Animación de la trama Modbus campo por campo (03).
+- [x] Trama Modbus (03): los campos aparecen en orden.
 
 ## Fase 4 · Estudios de dirección — parcial
 - [x] Los 3 estudios (Sala de control, Plano P&ID, Planta de noche) están en los tokens y la paleta del 3D, verificados con capturas.

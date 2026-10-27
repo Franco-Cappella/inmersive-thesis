@@ -80,6 +80,17 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
             scrollTrigger: { trigger: el, start: "top 85%", toggleActions: "play none none reverse" },
           });
         });
+        // Trama Modbus (03): los campos aparecen en orden, como llegan por la red.
+        const campos = section.querySelectorAll(".fig-trama__bytes li");
+        if (campos.length)
+          gsap.from(campos, {
+            autoAlpha: 0,
+            y: 12,
+            duration: 0.5,
+            ease: "power3.out",
+            stagger: 0.09,
+            scrollTrigger: { trigger: campos[0], start: "top 85%", toggleActions: "play none none reverse" },
+          });
         // Brecha: los bloques IT y OT de "después" se juntan al entrar.
         section.querySelectorAll(".fig-brecha__bloques:not(.fig-brecha__bloques--separados)").forEach((el) =>
           gsap.from(el, {
