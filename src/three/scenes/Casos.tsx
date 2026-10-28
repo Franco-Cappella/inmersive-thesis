@@ -2,9 +2,10 @@
 
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
-import { BoxGeometry, Group, InstancedMesh, MeshBasicMaterial, Object3D, TubeGeometry } from "three";
+import { BoxGeometry, CylinderGeometry, Group, InstancedMesh, MeshBasicMaterial, Object3D, SphereGeometry, TubeGeometry } from "three";
 import { type Vec3 } from "@/scroll/rig";
 import { glow, range, smooth } from "../helpers";
+import { fusionar } from "../merge";
 import { PacketFlow } from "../PacketFlow";
 import type { Palette } from "../palette";
 import { pipePath } from "../paths";
@@ -34,10 +35,28 @@ const TRACES: { beat: number; color: "warn" | "alarm"; points: Vec3[] }[] = [
 // Colonial: la fila de racks del frente (la que se ve desde la planta) queda en rojo.
 const INFECTED = RACKS.filter(([, , z]) => z === RACK_ROWS[0]);
 
+// Marca del bloqueo sobre la DMZ: una esfera sobre un disco, en una sola pieza (una llamada de dibujo).
+function impactGeometry() {
+  const piezas = [
+    { geometry: new SphereGeometry(0.17, 20, 12), position: [0, 0, 0] as Vec3 },
+    { geometry: new CylinderGeometry(0.34, 0.34, 0.04, 24), position: [0, -0.02, 0] as Vec3 },
+  ];
+  const fusion = fusionar(piezas);
+  piezas.forEach((p) => p.geometry.dispose());
+  return fusion;
+}
+
 function Trace({ beat, points, hex, warn }: { beat: number; points: Vec3[]; hex: string; warn: boolean }) {
   const curve = useMemo(() => pipePath(points, 0.4), [points]);
   const geometry = useMemo(() => new TubeGeometry(curve, 160, 0.07, 8, false), [curve]);
-  useEffect(() => () => geometry.dispose(), [geometry]);
+  const mark = useMemo(() => impactGeometry(), []);
+  useEffect(
+    () => () => {
+      geometry.dispose();
+      mark.dispose();
+    },
+    [geometry, mark],
+  );
   const group = useRef<Group>(null);
   const impact = useRef<Group>(null);
   const total = geometry.index?.count ?? 0;
@@ -49,6 +68,10 @@ function Trace({ beat, points, hex, warn }: { beat: number; points: Vec3[]; hex:
     const i = Math.max(0, pts.findIndex((p) => p.y <= DMZ_TOP));
     return { fraction: i / 200, position: pts[i] };
   }, [curve]);
+  const routes = useMemo(
+    () => [{ curve, count: 8, speed: 0.09, visibility: () => smooth(caseBeat(beat), 0.6, 0.8) * (1 - smooth(segmentation(), 0, 0.25)) }],
+    [curve, beat],
+  );
 
   useFrame(() => {
     const block = segmentation();
@@ -72,23 +95,11 @@ function Trace({ beat, points, hex, warn }: { beat: number; points: Vec3[]; hex:
       </group>
       {/* Marca del bloqueo sobre la DMZ: hasta acá llega el ataque */}
       <group ref={impact} position={gate.position} visible={false}>
-        <mesh>
-          <sphereGeometry args={[0.17, 20, 12]} />
-          <meshBasicMaterial color={color} toneMapped={false} />
-        </mesh>
-        <mesh position={[0, -0.02, 0]}>
-          <cylinderGeometry args={[0.34, 0.34, 0.04, 24]} />
+        <mesh geometry={mark}>
           <meshBasicMaterial color={color} toneMapped={false} />
         </mesh>
       </group>
-      <PacketFlow
-        curve={curve}
-        count={8}
-        speed={0.09}
-        size={0.13}
-        color={color}
-        visibility={() => smooth(caseBeat(beat), 0.6, 0.8) * (1 - smooth(segmentation(), 0, 0.25))}
-      />
+      <PacketFlow routes={routes} size={0.13} color={color} />
     </>
   );
 }

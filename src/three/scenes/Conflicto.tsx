@@ -58,12 +58,14 @@ function UpdateBar({ palette }: { palette: Palette }) {
 }
 
 // Golpe 2: la ráfaga del escáner baja por el cable del 01 hasta el controlador.
+const burst = () => bell(range(hitBeat(1), 0.05, 0.72));
+
 function Burst({ palette }: { palette: Palette }) {
   const curve = useMemo(() => pipePath(ROUTE, 0.45), []);
   const points = useMemo(() => curve.getSpacedPoints(80), [curve]);
   const cable = useRef<Group>(null);
   const color = useMemo(() => glow(palette.warn, 1.8), [palette]);
-  const burst = () => bell(range(hitBeat(1), 0.05, 0.72));
+  const routes = useMemo(() => [{ curve, count: 28, speed: 0.3, visibility: burst }], [curve]);
   useFrame(() => {
     if (cable.current) cable.current.visible = burst() > 0.05;
   });
@@ -72,7 +74,7 @@ function Burst({ palette }: { palette: Palette }) {
       <group ref={cable} visible={false}>
         <Line points={points} color={palette.warn} lineWidth={1.2} dashed dashSize={0.18} gapSize={0.12} />
       </group>
-      <PacketFlow curve={curve} count={28} speed={0.3} size={0.085} color={color} visibility={burst} />
+      <PacketFlow routes={routes} size={0.085} color={color} />
     </>
   );
 }

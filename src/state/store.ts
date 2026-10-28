@@ -63,9 +63,17 @@ export const useUI = create<UI>((set, get) => ({
     const q = new URLSearchParams(location.search);
     const estudio = q.get("estudio");
     // ?calidad=baja (sin posprocesado y a resolución 1×) o ?calidad=estatica (sin 3D): para una compu lenta.
+    // ?calidad=alta fija el tier alto (para medir el peor caso con scripts/presupuesto.cjs).
     const calidad = q.get("calidad");
     const webgl = hasWebGL2();
-    const fijo: Tier | null = calidad === "estatica" || (calidad === "baja" && !webgl) ? "static" : calidad === "baja" ? "low" : null;
+    const fijo: Tier | null =
+      calidad === "estatica" || (calidad && !webgl)
+        ? "static"
+        : calidad === "baja"
+          ? "low"
+          : calidad === "alta"
+            ? "high"
+            : null;
     set({
       booted: true,
       tier: fijo ?? (webgl ? "high" : "static"),

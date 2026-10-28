@@ -51,6 +51,8 @@ Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente,
 
 - **Hecho: el ensayo muestra los cuadros por segundo y la calidad del 3D.** Al lado del cronómetro de `?presentacion&ensayo`: los fps medidos con `requestAnimationFrame` (el Canvas dibuja ahí, así que son los cuadros que se ven) y la calidad que está usando el sitio (alta, baja o sin 3D). Por debajo de 30 fps se marcan en ámbar: en la compu de la defensa es la señal para ensayar y presentar con `?calidad=baja` (`docs/DEFENSA.md`). La capa DOM sigue sin importar three.
 
+- **Hecho: presupuestos del 3D medidos y cumplidos.** Nuevo `scripts/presupuesto.cjs`: cuenta llamadas de dibujo y triángulos por frame en las 27 paradas (con `?calidad=alta` o `baja`, nuevo parámetro que fija el tier). En el tier bajo, el 09 y el 10 pasaban el tope de 80 llamadas (hasta 105). Se fusionaron e instanciaron piezas quietas sin cambiar el aspecto (detalle en `docs/DECISIONES.md`): ahora el máximo es 91 en el tier alto (tope 150) y 74 en el bajo (tope 80), con 45 k triángulos (topes 500 k y 200 k). Las capturas de las 27 paradas antes y después solo difieren en lo que se mueve.
+
 ### Sesión 3 (27/10/2026, loop autónomo)
 - Escena 07 (`src/three/scenes/Casos.tsx`): un caso por tramo de `fx.attack` (`CASOS_TRAMOS` en `src/scroll/timing.ts`), con la lista del texto encendiéndose al mismo ritmo. Colonial: racks en rojo, enlaces cortados y planta detenida por decisión, sin que el rojo baje. Oldsmar en ámbar (exposición, caso en discusión). Stuxnet e Industroyer: rojo hasta un PLC, que pasa a alarma.
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).

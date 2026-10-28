@@ -1,12 +1,13 @@
 "use client";
 
-import { Edges, Grid, Text } from "@react-three/drei";
+import { Grid, Line, Text } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
-import { Color, Group, MeshBasicMaterial, MeshStandardMaterial } from "three";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { BoxGeometry, Color, CylinderGeometry, Group, InstancedMesh, MeshStandardMaterial, Object3D, SphereGeometry } from "three";
 import { rig, type Vec3 } from "@/scroll/rig";
 import { FlowPipe } from "../FlowPipe";
 import { FONT_URL, glow, smooth } from "../helpers";
+import { contornos, fusionar } from "../merge";
 import type { Palette } from "../palette";
 import { hitBeat, oldsmarExposure, overpressure, plantFlow, plcCompromised, valveTurn } from "../signals";
 
@@ -40,39 +41,80 @@ export const PLC_POS = CABINETS[1];
 // El proceso corre cuando llegamos a la planta y se corta si la planta se detiene (ver signals.ts).
 const otFlow = plantFlow;
 
-function Tank({ x, z, r, h, palette }: { x: number; z: number; r: number; h: number; palette: Palette }) {
+// Los cuatro tanques en una sola geometría (cuerpo y domo) y sus contornos en un solo trazo: son piezas
+// quietas que comparten material. El contorno, como antes, es solo el del cuerpo.
+function Tanks({ palette }: { palette: Palette }) {
+  const { body, outline } = useMemo(() => {
+    const cuerpos = TANKS.map(({ x, z, r, h }) => ({ geometry: new CylinderGeometry(r, r, h, 40), position: [x, OT_FLOOR_Y + h / 2, z] as Vec3 }));
+    const domos = TANKS.map(({ x, z, r, h }) => ({
+      geometry: new SphereGeometry(r, 40, 12, 0, Math.PI * 2, 0, Math.PI / 2),
+      position: [x, OT_FLOOR_Y + h, z] as Vec3,
+    }));
+    const fusion = { body: fusionar([...cuerpos, ...domos]), outline: contornos(cuerpos, 30) };
+    [...cuerpos, ...domos].forEach((p) => p.geometry.dispose());
+    return fusion;
+  }, []);
+  useEffect(() => () => body.dispose(), [body]);
   return (
-    <group position={[x, OT_FLOOR_Y, z]}>
-      <mesh position={[0, h / 2, 0]}>
-        <cylinderGeometry args={[r, r, h, 40]} />
-        <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
-        <Edges threshold={30} color={palette.edge[0]} lineWidth={1} transparent opacity={palette.edge[1] * 0.6} />
-      </mesh>
-      <mesh position={[0, h, 0]}>
-        <sphereGeometry args={[r, 40, 12, 0, Math.PI * 2, 0, Math.PI / 2]} />
+    <>
+      <mesh geometry={body}>
         <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
       </mesh>
-    </group>
+      <Line segments points={outline} color={palette.edge[0]} lineWidth={1} transparent opacity={palette.edge[1] * 0.6} />
+    </>
   );
 }
 
-// Luz de estado del gabinete: azul en marcha; roja si el controlador está comprometido (capítulo 07).
-function StatusLight({ position, palette, cabinet }: { position: Vec3; palette: Palette; cabinet: number }) {
-  const material = useRef<MeshBasicMaterial>(null);
-  const alarm = useMemo(() => glow(palette.alarm, 3), [palette]);
+// Gabinetes PLC: cuerpos y contornos fusionados como los tanques. La luz de estado de cada uno va instanciada,
+// con su propio color: azul en marcha; roja si el controlador está comprometido (capítulo 07).
+const STATUS_LIGHT: Vec3 = [0.2, 0.55, 0.31];
+
+function Cabinets({ palette }: { palette: Palette }) {
+  const { body, outline } = useMemo(() => {
+    const piezas = CABINETS.map((position) => ({ geometry: new BoxGeometry(CABINET.w, CABINET.h, CABINET.d), position }));
+    const fusion = { body: fusionar(piezas), outline: contornos(piezas, 20) };
+    piezas.forEach((p) => p.geometry.dispose());
+    return fusion;
+  }, []);
+  useEffect(() => () => body.dispose(), [body]);
+  const lights = useRef<InstancedMesh>(null);
+  const c = useMemo(() => ({ alarm: glow(palette.alarm, 3), light: new Color() }), [palette]);
+  useLayoutEffect(() => {
+    const m = lights.current;
+    if (!m) return;
+    const d = new Object3D();
+    CABINETS.forEach(([x, y, z], i) => {
+      d.position.set(x + STATUS_LIGHT[0], y + STATUS_LIGHT[1], z + STATUS_LIGHT[2]);
+      d.updateMatrix();
+      m.setMatrixAt(i, d.matrix);
+      m.setColorAt(i, c.light.set(palette.flow));
+    });
+    m.instanceMatrix.needsUpdate = true;
+  }, [c, palette]);
   useFrame((state) => {
-    if (!material.current) return;
+    const m = lights.current;
+    if (!m?.instanceColor) return;
     const pulse = 0.75 + 0.25 * Math.sin(state.clock.elapsedTime * 2.4);
-    material.current.color
-      .set(palette.flow)
-      .multiplyScalar(1 + 2.2 * otFlow() * pulse)
-      .lerp(alarm, plcCompromised(cabinet));
+    for (let i = 0; i < CABINETS.length; i++) {
+      c.light
+        .set(palette.flow)
+        .multiplyScalar(1 + 2.2 * otFlow() * pulse)
+        .lerp(c.alarm, plcCompromised(i));
+      m.setColorAt(i, c.light);
+    }
+    m.instanceColor.needsUpdate = true;
   });
   return (
-    <mesh position={position}>
-      <boxGeometry args={[0.22, 0.08, 0.02]} />
-      <meshBasicMaterial ref={material} toneMapped={false} />
-    </mesh>
+    <>
+      <mesh geometry={body}>
+        <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
+      </mesh>
+      <Line segments points={outline} color={palette.edge[0]} lineWidth={1} transparent opacity={palette.edge[1] * 0.7} />
+      <instancedMesh ref={lights} args={[undefined, undefined, CABINETS.length]}>
+        <boxGeometry args={[0.22, 0.08, 0.02]} />
+        <meshBasicMaterial toneMapped={false} />
+      </instancedMesh>
+    </>
   );
 }
 
@@ -80,7 +122,20 @@ function StatusLight({ position, palette, cabinet }: { position: Vec3; palette: 
 // pasa a ámbar (advertencia) y después a rojo (alarma). El color es estado.
 export const VALVE_POS: Vec3 = [-3.2, OT_FLOOR_Y + 0.8, -3.6];
 
+function handwheelSpokes() {
+  const piezas = [
+    { geometry: new CylinderGeometry(0.035, 0.035, 0.2, 8), position: [0.32, 0.92, 0] as Vec3 },
+    { geometry: new BoxGeometry(0.62, 0.035, 0.035), position: [0, 0.82, 0] as Vec3 },
+    { geometry: new BoxGeometry(0.035, 0.035, 0.62), position: [0, 0.82, 0] as Vec3 },
+  ];
+  const fusion = fusionar(piezas);
+  piezas.forEach((p) => p.geometry.dispose());
+  return fusion;
+}
+
 function Valve({ palette }: { palette: Palette }) {
+  const spokes = useMemo(() => handwheelSpokes(), []);
+  useEffect(() => () => spokes.dispose(), [spokes]);
   const body = useRef<MeshStandardMaterial>(null);
   const wheel = useRef<MeshStandardMaterial>(null);
   const handle = useRef<Group>(null);
@@ -124,17 +179,8 @@ function Valve({ palette }: { palette: Palette }) {
           <torusGeometry args={[0.32, 0.045, 8, 28]} />
           <meshStandardMaterial ref={wheel} color={palette.ink} roughness={0.6} />
         </mesh>
-        {/* rayos y manija del volante: sin ellos no se ve que gira */}
-        <mesh position={[0.32, 0.92, 0]}>
-          <cylinderGeometry args={[0.035, 0.035, 0.2, 8]} />
-          <meshStandardMaterial color={palette.ink} roughness={0.6} />
-        </mesh>
-        <mesh position={[0, 0.82, 0]}>
-          <boxGeometry args={[0.62, 0.035, 0.035]} />
-          <meshStandardMaterial color={palette.ink} roughness={0.6} />
-        </mesh>
-        <mesh position={[0, 0.82, 0]}>
-          <boxGeometry args={[0.035, 0.035, 0.62]} />
+        {/* rayos y manija del volante (una sola pieza): sin ellos no se ve que gira */}
+        <mesh geometry={spokes}>
           <meshStandardMaterial color={palette.ink} roughness={0.6} />
         </mesh>
       </group>
@@ -158,23 +204,12 @@ export function OTFloor({ palette }: { palette: Palette }) {
         fadeStrength={1.4}
         infiniteGrid
       />
-      {TANKS.map((t, i) => (
-        <Tank key={i} {...t} palette={palette} />
-      ))}
+      <Tanks palette={palette} />
       {PIPES.map((p, i) => (
         <FlowPipe key={i} points={p} radius={pipeRadius(i)} palette={palette} amount={otFlow} speed={0.45 + i * 0.08} />
       ))}
       <Valve palette={palette} />
-      {CABINETS.map((p, i) => (
-        <group key={i} position={p}>
-          <mesh>
-            <boxGeometry args={[0.95, 1.8, 0.6]} />
-            <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
-            <Edges threshold={20} color={palette.edge[0]} lineWidth={1} transparent opacity={palette.edge[1] * 0.7} />
-          </mesh>
-          <StatusLight position={[0.2, 0.55, 0.31]} palette={palette} cabinet={i} />
-        </group>
-      ))}
+      <Cabinets palette={palette} />
       {palette.sodium && (
         <>
           <pointLight position={[-5.5, OT_FLOOR_Y + 5.2, -3.5]} color={palette.sodium} intensity={34} distance={18} decay={2} />

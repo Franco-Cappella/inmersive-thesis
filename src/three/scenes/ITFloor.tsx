@@ -36,6 +36,11 @@ const ROUTES: Vec3[][] = [
 
 const itVisibility = () => 1 - 0.8 * smooth(rig.hero.descent, 0.3, 0.9);
 
+// Las bandejas como pares de puntos: las tres en un solo trazo (una llamada de dibujo).
+const TRAYS: Vec3[] = ROUTES.flatMap((r) => r.slice(1).flatMap((b, k) => [r[k], b]));
+// Los paquetes de las tres bandejas, también en una sola llamada.
+const PACKETS = ROUTES.map((r, i) => ({ curve: pipePath(r, 0.3), count: 14, speed: 0.035 + i * 0.01, visibility: itVisibility }));
+
 function Racks({ palette }: { palette: Palette }) {
   const racks = useRef<InstancedMesh>(null);
   const leds = useRef<InstancedMesh>(null);
@@ -101,7 +106,6 @@ function Racks({ palette }: { palette: Palette }) {
 }
 
 export function ITFloor({ palette }: { palette: Palette }) {
-  const curves = useMemo(() => ROUTES.map((r) => pipePath(r, 0.3)), []);
   const packet = useMemo(() => glow(palette.flow, 2.8), [palette]);
   return (
     <group>
@@ -119,12 +123,8 @@ export function ITFloor({ palette }: { palette: Palette }) {
         infiniteGrid
       />
       <Racks palette={palette} />
-      {ROUTES.map((r, i) => (
-        <Line key={i} points={r} color={palette.ink} lineWidth={1} transparent opacity={0.25} />
-      ))}
-      {curves.map((c, i) => (
-        <PacketFlow key={i} curve={c} count={14} speed={0.035 + i * 0.01} color={packet} visibility={itVisibility} />
-      ))}
+      <Line segments points={TRAYS} color={palette.ink} lineWidth={1} transparent opacity={0.25} />
+      <PacketFlow routes={PACKETS} color={packet} />
       <Text
         font={FONT_URL}
         fontSize={9}

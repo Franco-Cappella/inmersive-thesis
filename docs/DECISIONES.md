@@ -11,16 +11,36 @@ La skill `tesina-itot-web-inmersiva` fija Vite + React como SPA y descarta Next.
 
 Si Franco prefiere Vite, la migración es mecánica: `src/content`, `src/scroll`, `src/three` y `src/ui` no dependen de Next, solo `app/` y `next/dynamic`.
 
-## Presupuesto de JavaScript (medido el 27/10/2026; segunda medición al terminar todas las escenas)
+## Presupuesto de JavaScript (medido el 27/10/2026; segunda medición al terminar todas las escenas; tercera el 28/10/2026)
 
 | Parte | gzip | Presupuesto de la skill | Comentario |
 |---|---|---|---|
-| Carga inicial total | 237 KB → 239 KB | ≤ 150 KB | Excedido por el costo fijo de Next |
+| Carga inicial total | 237 KB → 239 KB → 250 KB | ≤ 150 KB | Excedido por el costo fijo de Next |
 | · React DOM + runtime de Next | ~170 KB | — | Viene con el framework; con Vite sería ~60 KB |
-| · Código propio + GSAP + Lenis | ~66 KB | — | Dentro de lo razonable |
-| Chunk 3D (three, R3F, drei, postprocessing) | 312 KB → 319 KB | ≤ 350 KB | Se carga diferido; no entra en la carga inicial. Las siete escenas y la pasada de arte sumaron 7 KB |
+| · Código propio + GSAP + Lenis | ~66 KB → ~80 KB | — | Dentro de lo razonable |
+| Chunk 3D (three, R3F, drei, postprocessing) | 312 KB → 319 KB → 328,5 KB | ≤ 350 KB | Se carga diferido; no entra en la carga inicial. Las siete escenas y la pasada de arte sumaron 7 KB; la fusión de piezas (`BufferGeometryUtils`), menos de 1 KB |
 
 Para medirlo de nuevo: sumar el gzip de los `<script>` de `out/index.html` y buscar el chunk que contiene `WebGLRenderer` (tiene que quedar fuera de la carga inicial). Si en algún momento la carga inicial importa más que Next, es el argumento más concreto para volver a Vite.
+
+## Presupuesto del 3D: llamadas de dibujo y triángulos (medido el 28/10/2026)
+
+La skill fija topes por frame para la compu de la defensa (sección 8). `scripts/presupuesto.cjs` los cuenta en cada una de las 27 paradas de la presentación, envolviendo las llamadas de WebGL desde afuera (incluye las pasadas del posprocesado):
+
+| Tier | Antes | Después | Tope de la skill |
+|---|---|---|---|
+| Alto (`?calidad=alta`) | 122 llamadas | 91 llamadas · 45 k triángulos | ≤ 150 · ≤ 500 k |
+| Bajo (`?calidad=baja`) | 105 llamadas: el 09 y el 10 se pasaban | 74 llamadas · 45 k triángulos | ≤ 80 · ≤ 200 k |
+
+El pico está en el final del 10 (la torre entera a la vista, con la pirámide). Para bajarlo se fusionaron piezas quietas que comparten material y se instanciaron las que se repiten, sin cambiar el aspecto (`src/three/merge.ts`):
+
+- Tanques: cuerpo, domo y contorno de los cuatro en dos llamadas (eran 12).
+- Gabinetes PLC: cuerpos y contornos fusionados y las luces de estado instanciadas, cada una con su color (eran 6, son 3).
+- Volante de la válvula: manija y rayos en una pieza (eran 3).
+- Capítulo 09: cuerpos y luces de las tres compuertas instanciados (el contorno sigue por compuerta, porque cada una crece por su cuenta) y los cuatro campos del sensor en una sola malla.
+- Paquetes: `PacketFlow` acepta varias rutas en una sola malla instanciada (las tres bandejas de la oficina y los tres enlaces del 02). Las bandejas, además, en un solo trazo.
+- Marca del bloqueo de cada caso (esfera y disco) en una pieza.
+
+Las capturas de las 27 paradas antes y después difieren solo en lo que se mueve (paquetes, flujo de las cañerías, LEDs). Los cuadros por segundo no se pueden medir acá (el 3D se dibuja por software): se ven en la compu de la defensa con `?presentacion&ensayo`.
 
 ## Stack (versiones fijadas)
 

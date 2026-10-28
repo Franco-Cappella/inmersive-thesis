@@ -2,8 +2,20 @@
 
 import { Edges, Line } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useEffect, useMemo, useRef } from "react";
-import { BoxGeometry, Color, EdgesGeometry, Group, LineBasicMaterial, LineCurve3, Mesh, MeshBasicMaterial, Vector3 } from "three";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import {
+  BoxGeometry,
+  Color,
+  EdgesGeometry,
+  Group,
+  InstancedMesh,
+  LineBasicMaterial,
+  LineCurve3,
+  Mesh,
+  MeshBasicMaterial,
+  Object3D,
+  Vector3,
+} from "three";
 import { rig, type Vec3 } from "@/scroll/rig";
 import { easeOutBack, glow, range, smooth } from "../helpers";
 import { PacketFlow } from "../PacketFlow";
@@ -44,6 +56,7 @@ const GATES: Vec3[] = LINKS.map(([[x, , z]]) => [x, GAP_Y, z]);
 const [tapX, , tapZ] = LINKS[2][0];
 const TAP: Vec3 = [tapX, DMZ_BOTTOM - 0.85, tapZ];
 const SENSOR: Vec3 = [tapX - 1.5, TAP[1], tapZ + 0.85];
+const SENSOR_BARS = 4;
 
 // Gemelo digital del controlador de la derecha. El parche baja de la DMZ al gemelo, no a la planta.
 const CABINET = { w: 0.95, h: 1.8, d: 0.6 };
@@ -90,41 +103,100 @@ function ZoneBox({ zone, palette }: { zone: Zone; palette: Palette }) {
   );
 }
 
-// Compuerta del conducto: el enlace la atraviesa y su luz queda en azul (el tráfico legítimo pasa).
-function Gate({ position, palette, delay }: { position: Vec3; palette: Palette; delay: number }) {
-  const group = useRef<Group>(null);
+// Compuertas de los conductos: cada enlace atraviesa la suya y su luz queda en azul (el tráfico legítimo pasa).
+// Los cuerpos y las luces de las tres van instanciados (una llamada de dibujo cada uno); el contorno queda por
+// compuerta, porque cada una crece por su cuenta.
+const GATE_SIZE: Vec3 = [0.72, DMZ_H + 0.24, 0.72];
+const GATE_LED: Vec3 = [0, 0, 0.365];
+const gateGrowth = (i: number) => range(pillarBeat(0), 0.14 + i * 0.03, 0.32 + i * 0.03);
+
+function Gates({ palette }: { palette: Palette }) {
+  const bodies = useRef<InstancedMesh>(null);
+  const leds = useRef<InstancedMesh>(null);
+  const outlines = useRef<(Group | null)[]>([]);
+  const geometry = useMemo(() => new BoxGeometry(...GATE_SIZE), []);
+  useEffect(() => () => geometry.dispose(), [geometry]);
   const led = useMemo(() => glow(palette.flow, 2.4), [palette]);
+  const dummy = useMemo(() => new Object3D(), []);
+
   useFrame(() => {
-    const t = range(pillarBeat(0), 0.14 + delay, 0.32 + delay);
-    if (!group.current) return;
-    group.current.visible = t > 0;
-    group.current.scale.setScalar(Math.max(0.001, easeOutBack(t)));
+    const b = bodies.current;
+    const l = leds.current;
+    if (!b || !l) return;
+    const shown = gateGrowth(0) > 0;
+    b.visible = shown;
+    l.visible = shown;
+    GATES.forEach((p, i) => {
+      const t = gateGrowth(i);
+      const s = Math.max(0.001, easeOutBack(t));
+      dummy.position.set(...p);
+      dummy.scale.setScalar(s);
+      dummy.updateMatrix();
+      b.setMatrixAt(i, dummy.matrix);
+      dummy.position.set(p[0] + GATE_LED[0] * s, p[1] + GATE_LED[1] * s, p[2] + GATE_LED[2] * s);
+      dummy.updateMatrix();
+      l.setMatrixAt(i, dummy.matrix);
+      const o = outlines.current[i];
+      if (o) {
+        o.visible = t > 0;
+        o.scale.setScalar(s);
+      }
+    });
+    if (shown) {
+      b.instanceMatrix.needsUpdate = true;
+      l.instanceMatrix.needsUpdate = true;
+    }
   });
+
   return (
-    <group ref={group} position={position} visible={false}>
-      <mesh>
-        <boxGeometry args={[0.72, DMZ_H + 0.24, 0.72]} />
+    <>
+      <instancedMesh ref={bodies} args={[geometry, undefined, GATES.length]} visible={false} frustumCulled={false}>
         <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
-        <Edges threshold={20} color={palette.edge[0]} lineWidth={1} transparent opacity={palette.edge[1] * 0.7} />
-      </mesh>
-      <mesh position={[0, 0, 0.365]}>
+      </instancedMesh>
+      <instancedMesh ref={leds} args={[undefined, undefined, GATES.length]} visible={false} frustumCulled={false}>
         <planeGeometry args={[0.46, 0.09]} />
         <meshBasicMaterial color={led} toneMapped={false} />
-      </mesh>
-    </group>
+      </instancedMesh>
+      {GATES.map((p, i) => (
+        <group
+          key={i}
+          ref={(g) => {
+            outlines.current[i] = g;
+          }}
+          position={p}
+          visible={false}
+        >
+          <Edges geometry={geometry} threshold={20} color={palette.edge[0]} lineWidth={1} transparent opacity={palette.edge[1] * 0.7} />
+        </group>
+      ))}
+    </>
   );
 }
 
 function Sensor({ palette }: { palette: Palette }) {
   const body = useRef<Group>(null);
   const tap = useRef<Group>(null);
-  const bars = useRef<(MeshBasicMaterial | null)[]>([]);
+  const bars = useRef<InstancedMesh>(null);
   const curve = useMemo(() => new LineCurve3(new Vector3(...TAP), new Vector3(...SENSOR)), []);
+  const routes = useMemo(() => [{ curve, count: 3, speed: 0.5, visibility: () => smooth(pillarBeat(1), 0.25, 0.4) }], [curve]);
   const reach: Vec3 = [SENSOR[0] - TAP[0], SENSOR[1] - TAP[1], SENSOR[2] - TAP[2]];
   const c = useMemo(
-    () => ({ on: glow(palette.flow, 2.6), off: new Color(palette.ink).multiplyScalar(0.4), copy: glow(palette.flow, 1.6) }),
+    () => ({ on: glow(palette.flow, 2.6), off: new Color(palette.ink).multiplyScalar(0.4), copy: glow(palette.flow, 1.6), bar: new Color() }),
     [palette],
   );
+  // Los cuatro campos del sensor, instanciados: una llamada de dibujo, un color por campo.
+  useLayoutEffect(() => {
+    const m = bars.current;
+    if (!m) return;
+    const d = new Object3D();
+    for (let i = 0; i < SENSOR_BARS; i++) {
+      d.position.set((-0.3 + i * 0.2) * 1.25, 0, 0.38);
+      d.updateMatrix();
+      m.setMatrixAt(i, d.matrix);
+      m.setColorAt(i, c.off);
+    }
+    m.instanceMatrix.needsUpdate = true;
+  }, [c]);
 
   useFrame((state) => {
     const b = pillarBeat(1);
@@ -140,12 +212,15 @@ function Sensor({ palette }: { palette: Palette }) {
       tap.current.scale.setScalar(Math.max(0.001, t));
     }
     // El sensor interpreta lo que recibe: sus campos se encienden de a uno.
-    bars.current.forEach((m, i) => {
-      if (!m) return;
-      const lit = smooth(b, 0.4 + i * 0.12, 0.48 + i * 0.12);
-      const flicker = rig.snap ? 1 : 0.8 + 0.2 * Math.sin(state.clock.elapsedTime * (5 + i * 1.7));
-      m.color.copy(c.off).lerp(c.on, lit * flicker);
-    });
+    const m = bars.current;
+    if (m?.instanceColor) {
+      for (let i = 0; i < SENSOR_BARS; i++) {
+        const lit = smooth(b, 0.4 + i * 0.12, 0.48 + i * 0.12);
+        const flicker = rig.snap ? 1 : 0.8 + 0.2 * Math.sin(state.clock.elapsedTime * (5 + i * 1.7));
+        m.setColorAt(i, c.bar.copy(c.off).lerp(c.on, lit * flicker));
+      }
+      m.instanceColor.needsUpdate = true;
+    }
   });
 
   return (
@@ -158,25 +233,17 @@ function Sensor({ palette }: { palette: Palette }) {
         <Line points={[[0, 0, 0], reach]} color={palette.flow} lineWidth={1.5} dashed dashSize={0.12} gapSize={0.08} />
       </group>
       {/* Copias del tráfico: solo viajan hacia el sensor, que no le envía nada a la red */}
-      <PacketFlow curve={curve} count={3} speed={0.5} size={0.07} color={c.copy} visibility={() => smooth(pillarBeat(1), 0.25, 0.4)} />
+      <PacketFlow routes={routes} size={0.07} color={c.copy} />
       <group ref={body} position={SENSOR} visible={false}>
         <mesh scale={1.25}>
           <boxGeometry args={[0.95, 0.36, 0.6]} />
           <meshStandardMaterial color={palette.metal} roughness={palette.rough} metalness={palette.metalness} />
           <Edges threshold={20} color={palette.edge[0]} lineWidth={1} transparent opacity={palette.edge[1] * 0.8} />
         </mesh>
-        {[0, 1, 2, 3].map((i) => (
-          <mesh key={i} position={[(-0.3 + i * 0.2) * 1.25, 0, 0.38]}>
-            <planeGeometry args={[0.17, 0.09]} />
-            <meshBasicMaterial
-              ref={(m) => {
-                bars.current[i] = m;
-              }}
-              color={c.off}
-              toneMapped={false}
-            />
-          </mesh>
-        ))}
+        <instancedMesh ref={bars} args={[undefined, undefined, SENSOR_BARS]}>
+          <planeGeometry args={[0.17, 0.09]} />
+          <meshBasicMaterial toneMapped={false} />
+        </instancedMesh>
       </group>
     </>
   );
@@ -275,9 +342,7 @@ export function Matiz({ palette }: { palette: Palette }) {
       {ZONES.map((z, i) => (
         <ZoneBox key={i} zone={z} palette={palette} />
       ))}
-      {GATES.map((p, i) => (
-        <Gate key={i} position={p} palette={palette} delay={i * 0.03} />
-      ))}
+      <Gates palette={palette} />
       <Sensor palette={palette} />
       <Twin palette={palette} />
     </group>

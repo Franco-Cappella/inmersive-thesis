@@ -59,6 +59,7 @@ npx serve out
 | `?presentacion&ensayo` | Ensayo: un cronómetro abajo a la izquierda (arranca con la primera flecha), la parada actual, los cuadros por segundo y la calidad del 3D. El reloj se pone ámbar desde los 8 minutos y rojo pasados los 9; los fps se marcan en ámbar por debajo de 30 (en esa compu conviene `?calidad=baja`) |
 | `?calidad=baja` | Para una compu lenta: sin efectos de posprocesado y a resolución 1×. El sitio ya baja solo si mide pocos cuadros por segundo; esto lo fija desde el principio |
 | `?calidad=estatica` | Sin 3D: la pirámide del hero en SVG y los capítulos sobre el campo liso |
+| `?calidad=alta` | Fija la calidad alta (el sitio no la baja aunque caigan los fps). Sirve para medir el peor caso con `scripts/presupuesto.cjs`, no para presentar |
 
 Si el sistema tiene activado "reducir movimiento", el sitio salta entre estados en vez de animar.
 
@@ -78,6 +79,7 @@ Con el build servido (`npx serve out -l 4321`) y Playwright instalado (`npm i -D
 |---|---|
 | `node scripts/offline.cjs http://localhost:4321` | Confirma que el sitio no pide nada a internet y que, con la red cortada después de cargar, el recorrido completo en modo presentación sigue andando. Sale con error si encuentra un pedido externo o un error de consola |
 | `node scripts/a11y.cjs http://localhost:4321` | Revisión de accesibilidad con axe-core (WCAG 2.2 AA) en escritorio, celular, modo lectura y los tres estudios, más el orden de foco con Tab. Sale con error si encuentra violaciones |
+| `node scripts/presupuesto.cjs http://localhost:4321 baja` | Cuenta las llamadas de dibujo y los triángulos por frame en cada parada de la presentación, en calidad `alta` o `baja`, contra el presupuesto de la skill (150 y 500 k en alta; 80 y 200 k en baja). Sale con error si alguna parada se pasa |
 | `node scripts/pdf.cjs http://localhost:4321 tesina-sitio.pdf` | PDF A4 del modo lectura, para el jurado (unas 11 hojas). Imprimir desde el navegador también funciona |
 | `node scripts/video.cjs http://localhost:4321 video 4` | Graba el recorrido en modo presentación (1920×1080, 4 s por parada) en `video/recorrido.webm`, como respaldo por si falla la compu. Conviene grabarlo en la compu de la defensa: en una sin placa de video el 3D sale entrecortado. Con `GPU=1` usa la placa. Para pasarlo a mp4: `ffmpeg -i video/recorrido.webm -c:v libx264 -crf 20 video/recorrido.mp4` |
 

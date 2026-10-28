@@ -12,6 +12,7 @@ Estado al cierre de la sesión 3: el sitio está en la fase 8 de 8 del flujo de 
 - [x] Ficha IT/OT con cartel de paletas (split-flap); cada fila de prioridades rueda su contenido (ya no se cruzan los nombres).
 - [x] Respaldo SVG sin WebGL y para reduced motion; tabla de la tesina como contenido real.
 - [x] **Pasada de arte (detalle):** juntas entre servidores en los racks, bridas y soportes en las cañerías, aros y faldones en los tanques, rejillas y manija en los gabinetes (`src/three/scenes/PlantDetails.tsx`). Todo instanciado y en metal o tinta: cinco llamadas de dibujo más.
+- [x] Presupuestos del 3D de la sección 8 de la skill, medidos parada por parada (`scripts/presupuesto.cjs`): 91 llamadas de dibujo como máximo en el tier alto y 74 en el bajo (topes 150 y 80), 45 k triángulos.
 - [ ] Atmósfera propia de cada estudio (luz, niebla, materiales), cuando Franco elija uno.
 - [ ] Revisar en una compu real de la defensa (GPU integrada): el tier bajo tiene que sostener 30 fps. Si no llega, abrir con `?calidad=baja` (fija el tier bajo desde el principio) o `?calidad=estatica` (sin 3D).
 

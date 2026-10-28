@@ -3,7 +3,7 @@
 import { Line } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
-import { Color, Group, MeshBasicMaterial, TubeGeometry } from "three";
+import { Color, CurvePath, Group, MeshBasicMaterial, TubeGeometry, Vector3 } from "three";
 import { rig, type Vec3 } from "@/scroll/rig";
 import { glow, range, smooth } from "../helpers";
 import { PacketFlow } from "../PacketFlow";
@@ -39,15 +39,16 @@ export const LINKS: Vec3[][] = [
   [[-1.2, IT_FLOOR_Y + 1.4, -3.95], [-1.2, -5.2, -3.95], [-3.2, -5.2, -3.6], [-3.2, -6.35, -3.6]],
 ];
 
-function Link({ points, palette, delay }: { points: Vec3[]; palette: Palette; delay: number }) {
-  const curve = useMemo(() => pipePath(points, 0.4), [points]);
+const LINK_CURVES = LINKS.map((points) => pipePath(points, 0.4));
+const LINK_DELAY = 0.05; // cada enlace baja un poco después que el anterior
+
+function Link({ curve, palette, delay }: { curve: CurvePath<Vector3>; palette: Palette; delay: number }) {
   const geometry = useMemo(() => new TubeGeometry(curve, 160, 0.045, 6, false), [curve]);
   useEffect(() => () => geometry.dispose(), [geometry]);
   const mesh = useRef<Group>(null);
   const total = geometry.index?.count ?? 0;
   const color = useMemo(() => glow(palette.flow, 1.8), [palette]);
   const cutColor = useMemo(() => new Color(palette.ink).multiplyScalar(0.6), [palette]);
-  const packet = useMemo(() => glow(palette.flow, 3), [palette]);
   const material = useRef<MeshBasicMaterial>(null);
 
   useFrame(() => {
@@ -60,20 +61,25 @@ function Link({ points, palette, delay }: { points: Vec3[]; palette: Palette; de
   });
 
   return (
-    <>
-      <group ref={mesh} visible={false}>
-        <mesh geometry={geometry}>
-          <meshBasicMaterial ref={material} color={color} toneMapped={false} />
-        </mesh>
-      </group>
-      <PacketFlow curve={curve} count={10} speed={0.06} size={0.11} color={packet} visibility={() => smooth(rig.fx.bridge, 0.6 + delay, 0.8) * (1 - colonialCut())} />
-    </>
+    <group ref={mesh} visible={false}>
+      <mesh geometry={geometry}>
+        <meshBasicMaterial ref={material} color={color} toneMapped={false} />
+      </mesh>
+    </group>
   );
 }
 
+// Los paquetes de los tres enlaces, en una sola llamada de dibujo. En el 07 (Colonial) dejan de cruzar.
+const LINK_ROUTES = LINK_CURVES.map((curve, i) => ({
+  curve,
+  count: 10,
+  speed: 0.06,
+  visibility: () => smooth(rig.fx.bridge, 0.6 + i * LINK_DELAY, 0.8) * (1 - colonialCut()),
+}));
+
 export function Convergencia({ palette }: { palette: Palette }) {
   const border = useRef<Group>(null);
-  const c = useMemo(() => ({ ink: new Color(palette.ink), warn: glow(palette.warn, 1.4) }), [palette]);
+  const c = useMemo(() => ({ ink: new Color(palette.ink), warn: glow(palette.warn, 1.4), packet: glow(palette.flow, 3) }), [palette]);
 
   useFrame(() => {
     const g = border.current;
@@ -94,9 +100,10 @@ export function Convergencia({ palette }: { palette: Palette }) {
       <group ref={border} visible={false}>
         <Line points={GAP} color={palette.ink} lineWidth={2} dashed dashSize={0.5} gapSize={0.3} transparent opacity={0} />
       </group>
-      {LINKS.map((points, i) => (
-        <Link key={i} points={points} palette={palette} delay={i * 0.05} />
+      {LINK_CURVES.map((curve, i) => (
+        <Link key={i} curve={curve} palette={palette} delay={i * LINK_DELAY} />
       ))}
+      <PacketFlow routes={LINK_ROUTES} size={0.11} color={c.packet} />
     </group>
   );
 }
