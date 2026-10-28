@@ -53,6 +53,8 @@ Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente,
 
 - **Hecho: presupuestos del 3D medidos y cumplidos.** Nuevo `scripts/presupuesto.cjs`: cuenta llamadas de dibujo y triángulos por frame en las 27 paradas (con `?calidad=alta` o `baja`, nuevo parámetro que fija el tier). En el tier bajo, el 09 y el 10 pasaban el tope de 80 llamadas (hasta 105). Se fusionaron e instanciaron piezas quietas sin cambiar el aspecto (detalle en `docs/DECISIONES.md`): ahora el máximo es 91 en el tier alto (tope 150) y 74 en el bajo (tope 80), con 45 k triángulos (topes 500 k y 200 k). Las capturas de las 27 paradas antes y después solo difieren en lo que se mueve.
 
+- **Hecho: pósters de las escenas en el modo lectura y en el PDF.** La skill pide que el modo lectura muestre pósters con su descripción (sección 10); hasta ahora el jurado, que lee el sitio en papel o en lectura, no veía ninguna escena. Nuevo `scripts/posters.cjs`: captura cada escena en su estado final, sin el panel ni el encabezado, en los tres estudios (`public/posters/<estudio>/<capítulo>.jpg`, 21 imágenes, 1,1 MB en total). Donde un cuadro no alcanza van varios en fila: el 03 en díptico (la trama llega al PLC → la válvula giró) y el 05 en tríptico (un cuadro por golpe). En lectura, cada capítulo con escena muestra su póster con la descripción de la escena como epígrafe (la misma que antes solo leía el lector de pantalla; la imagen lleva alt vacío para no repetirla). Verificado: los 7 pósters cargan en los tres estudios, consola limpia, axe sin violaciones y el PDF pasa de 11 a 16 hojas con cada póster después de su texto.
+
 ### Sesión 3 (27/10/2026, loop autónomo)
 - Escena 07 (`src/three/scenes/Casos.tsx`): un caso por tramo de `fx.attack` (`CASOS_TRAMOS` en `src/scroll/timing.ts`), con la lista del texto encendiéndose al mismo ritmo. Colonial: racks en rojo, enlaces cortados y planta detenida por decisión, sin que el rojo baje. Oldsmar en ámbar (exposición, caso en discusión). Stuxnet e Industroyer: rojo hasta un PLC, que pasa a alarma.
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
@@ -89,7 +91,7 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 No queda nada que se pueda hacer sin Franco. En orden:
 
 1. **Franco decide** (ver "Bloqueado por Franco"): el estudio de arte (`docs/estudios.jpg`), Next.js o Vite, los pendientes de la tesina y los datos de portada.
-2. **Con el estudio elegido:** dejarlo como default (`src/state/store.ts` y el `data-estudio` de `layout.tsx`) y darle su atmósfera propia (luz, niebla y materiales en `src/three/palette.ts`). Volver a generar `docs/estudios.jpg` y la imagen para compartir.
+2. **Con el estudio elegido:** dejarlo como default (`src/state/store.ts` y el `data-estudio` de `layout.tsx`) y darle su atmósfera propia (luz, niebla y materiales en `src/three/palette.ts`). Volver a generar `docs/estudios.jpg`, la imagen para compartir y los pósters (`scripts/posters.cjs`); los de los otros dos estudios se pueden borrar si se sacan los botones de estudio.
 3. **En la compu de la defensa**, siguiendo `docs/DEFENSA.md`: servir `out/` sin internet, correr `scripts/offline.cjs` con el wifi apagado, ensayar con `?presentacion&ensayo` (5 a 9 minutos) y grabar el video con `scripts/video.cjs`.
 4. **Probar con un lector de pantalla real** (NVDA o VoiceOver) al menos un capítulo con escena.
 

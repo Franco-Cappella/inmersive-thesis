@@ -41,6 +41,7 @@ Estado al cierre de la sesión 3: el sitio está en la fase 8 de 8 del flujo de 
 - [x] Capturas del recorrido completo en celular y desktop, scroll hacia atrás incluido (`scripts/capturas.cjs`, `scripts/modos.cjs`).
 - [x] Modo presentación: ← → recorren IT, OT y los capítulos en orden. En el 05, el 07 y el 09 hay una parada por golpe, por caso y por pilar (el texto y la escena avanzan juntos), y el viaje dura según lo que recorre (de 1,2 a 3,2 s). Con `?ensayo`, cronómetro y número de parada.
 - [x] PDF del modo lectura para el jurado (`scripts/pdf.cjs`) e impresión desde el navegador corregida.
+- [x] Pósters de las escenas (sección 10 de la skill): en el modo lectura y en el PDF cada capítulo con escena muestra una imagen fija con su descripción como epígrafe; el 03 en díptico y el 05 en tríptico (`scripts/posters.cjs`, los tres estudios).
 - [x] Pantallas bajas de proyector (1280×720, 1024×768, 1366×768): el panel de los capítulos con escena sube tramo a tramo para que cada ítem que se enciende se vea entero.
 - [x] El ensayo (`?presentacion&ensayo`) muestra los fps y la calidad del 3D: por debajo de 30 fps se marcan en ámbar y conviene `?calidad=baja`.
 - [ ] Modo presentación ensayado con el proyector y con tiempos (5 a 9 minutos). `docs/DEFENSA.md` tiene las 27 paradas con un reparto sugerido de unos 7 min 50 s.

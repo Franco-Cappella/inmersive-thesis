@@ -25,10 +25,15 @@ const SINCRONIZADOS: [string, number[]][] = [
   [".fig--pilares > li", MATIZ_TRAMOS.map(([inicio]) => inicio)],
 ];
 const MARGEN = 24; // aire entre el panel y el borde de abajo de la pantalla
+// Pósters de las escenas (scripts/posters.cjs): 1024×640, salvo el díptico del 03 y el tríptico del 05,
+// más bajos. Si el script cambia las medidas, cambian acá (así la página no salta mientras cargan).
+const POSTER = { ancho: 1024, alto: 640 };
+const POSTER_ALTO: Record<string, number> = { protocolos: 547, conflicto: 362 };
 
 export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
   const ref = useRef<HTMLElement>(null);
   const reading = useUI((s) => s.reading);
+  const estudio = useUI((s) => s.estudio);
 
   useGSAP(
     () => {
@@ -231,12 +236,29 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
         <div data-reveal>
           <FiguraView figura={ch.figura} />
         </div>
-        {/* El Canvas es decorativo (aria-hidden): la escena se describe en texto para quien no la ve */}
-        {ch.weight && (
-          <p className="sr-only">
-            {ui.escena} {ch.escena}
-          </p>
-        )}
+        {/* El Canvas es decorativo (aria-hidden): la escena se describe en texto para quien no la ve.
+            En el modo lectura (sin 3D: lo que lee e imprime el jurado) la escena se ve como póster, con la
+            misma descripción como epígrafe; la imagen no repite el texto (alt vacío). */}
+        {ch.weight &&
+          (reading ? (
+            <figure className="chapter__poster" data-reveal>
+              {/* eslint-disable-next-line @next/next/no-img-element -- export estático: no hay optimizador de imágenes */}
+              <img
+                src={`/posters/${estudio}/${ch.id}.jpg`}
+                alt=""
+                width={POSTER.ancho}
+                height={POSTER_ALTO[ch.id] ?? POSTER.alto}
+                decoding="async"
+              />
+              <figcaption>
+                <strong>{ui.escena}</strong> {ch.escena}
+              </figcaption>
+            </figure>
+          ) : (
+            <p className="sr-only">
+              {ui.escena} {ch.escena}
+            </p>
+          ))}
         <div data-reveal>
           <SourceRefs keys={ch.fuentes} pending={ch.pendientes} />
         </div>

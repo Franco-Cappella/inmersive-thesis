@@ -84,6 +84,31 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   color: var(--c-ink-soft);
 }
 
+/* Póster de la escena (modo lectura e impresión): la escena 3D en su estado final, con su descripción
+   como epígrafe. Las imágenes salen de scripts/posters.cjs. */
+.chapter__poster {
+  margin: 0;
+  display: grid;
+  gap: 0.6rem;
+}
+.chapter__poster img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--c-line);
+  border-radius: var(--radius);
+}
+.chapter__poster figcaption {
+  max-width: var(--measure);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  color: var(--c-ink-soft);
+}
+.chapter__poster figcaption strong {
+  font-family: var(--f-display);
+  color: var(--c-ink);
+}
+
 /* Reloj del escenario */
 .fig--reloj {
   display: grid;
@@ -542,6 +567,7 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   /* Cortes de página: no partir tablas, cifras ni ítems de lista, y no dejar un título solo al pie */
   table,
   .cifra,
+  .chapter__poster,
   .fig-reloj__pasos li,
   .fig--golpes > li,
   .fig--casos > li,
@@ -592,5 +618,11 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
     width: auto !important;
     height: auto !important;
     clip: auto !important;
+  }
+  /* El póster no se come la hoja: alto acotado, sin estirarlo */
+  .chapter__poster img {
+    width: auto;
+    max-width: 100%;
+    max-height: 8.5cm;
   }
 }
