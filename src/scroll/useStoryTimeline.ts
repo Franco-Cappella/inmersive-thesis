@@ -4,7 +4,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { RefObject } from "react";
 import { chapters, FX_INICIAL, fxOf, type SceneFx } from "@/content/story";
 import { useUI } from "@/state/store";
-import { APILADO } from "./layout";
+import { APILADO, PANEL_SUBIDO } from "./layout";
 import { flat, heroShots, rig, type FlatShot } from "./rig";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -31,7 +31,7 @@ const pick = (fx: SceneFx, keys: (keyof SceneFx)[]) => Object.fromEntries(keys.m
 export function stayOf(el: HTMLElement, narrow: boolean): ScrollTrigger.Vars {
   const panel = el.querySelector<HTMLElement>(".chapter__inner");
   if (narrow && panel && el.hasAttribute("data-escena"))
-    return { trigger: panel, start: "bottom 70%", endTrigger: el, end: "bottom bottom", scrub: true };
+    return { trigger: panel, start: `bottom ${PANEL_SUBIDO * 100}%`, endTrigger: el, end: "bottom bottom", scrub: true };
   return { trigger: el, start: "top top", end: "bottom bottom", scrub: true };
 }
 

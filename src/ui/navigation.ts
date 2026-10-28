@@ -1,15 +1,23 @@
 import { stops, type Stop } from "@/content/stops";
+import { APILADO, PANEL_SUBIDO } from "@/scroll/layout";
 import { scrollToY } from "@/scroll/smoothScroll";
 
-// Posición de scroll de una parada. Las del hero (IT / OT) caen en un punto del timeline,
-// no en el borde de la sección: top + at × (alto − viewport). En modo lectura no hay timeline.
+// Posición de scroll de una parada. Las del hero (IT / OT) y las del final de cada tramo de una
+// escena caen en un punto de la estadía: inicio + at × (fin − inicio). En modo lectura no hay estadía.
 function stopY(stop: Stop) {
   const el = document.getElementById(stop.seccion);
   if (!el) return null;
   const top = el.getBoundingClientRect().top + window.scrollY;
   const reading = document.querySelector("main")?.dataset.reading === "true";
   if (stop.at === undefined || reading) return Math.round(top);
-  return Math.round(top + stop.at * (el.offsetHeight - window.innerHeight));
+  const fin = top + el.offsetHeight - window.innerHeight; // el borde de abajo de la sección llega al de la pantalla
+  // Apilado (celular o pantalla vertical): la estadía empieza cuando el panel ya subió, igual que en el director (stayOf).
+  const panel = el.querySelector<HTMLElement>(".chapter__inner");
+  if (panel && el.hasAttribute("data-escena") && matchMedia(APILADO).matches) {
+    const inicio = panel.getBoundingClientRect().bottom + window.scrollY - PANEL_SUBIDO * window.innerHeight;
+    return Math.round(inicio + stop.at * (fin - inicio));
+  }
+  return Math.round(top + stop.at * (fin - top));
 }
 
 // Mientras Lenis está llevando el scroll a una parada, la referencia es ese destino
