@@ -4,7 +4,7 @@ import type { SourceKey } from "./references";
 export const site = {
   titulo: "La tríada invertida",
   autor: "Franco",
-  nombre: ["Franco", "Capela"], // el nombre completo, grande en el pie
+  nombre: ["Franco", "Cappella"], // el nombre completo, grande en el pie
 
   anio: 2026,
   descripcion:

@@ -489,14 +489,14 @@
   line-height: 0.88;
 }
 .refs__nombre span {
-  font-size: min(9rem, calc(var(--nombre-fit, 30) * 1cqi));
+  font-size: min(9rem, calc(var(--nombre-fit, 22) * 1cqi));
   white-space: nowrap;
 }
 :root[data-estudio="plano"] .refs__nombre {
-  --nombre-fit: 19;
+  --nombre-fit: 14;
 }
 :root[data-estudio="noche"] .refs__nombre {
-  --nombre-fit: 36;
+  --nombre-fit: 27;
 }
 .refs__inner {
   max-width: 52rem;
@@ -577,7 +577,9 @@
   }
   .refs__nombre span {
     display: inline;
-    font-size: clamp(2.6rem, 14vw, 4rem);
+    font-size: clamp(2.4rem, 12vw, 3.6rem);
+  }
+  .refs__nombre span:not(:last-child) {
     margin-right: 0.3em;
   }
   .chapter {
