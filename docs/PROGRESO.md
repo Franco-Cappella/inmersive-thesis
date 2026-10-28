@@ -8,9 +8,9 @@ Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente,
 
 - **Hero:** la pirámide C·I·A se arma al cargar, gira 180° y baja de IT a OT con el scroll. La ficha IT/OT cambia con paletas y la lista de prioridades rueda fila por fila. Respaldo SVG, reduced motion y modo lectura.
 - **Capítulos 01–10:** HTML con el contenido condensado, figuras y fuentes. **Todos los capítulos con escena prevista la tienen** (01, 02, 03, 05, 07, 09 y 10); el 04, el 06 y el 08 se leen sobre el velo (`dim: 1`), como dice el guion. Las listas del 01, 05, 07 y 09 se encienden al ritmo de su escena.
-- **Modos:** lectura (`L`), presentación (`P`, 27 paradas, `?ensayo` con cronómetro), reduced motion, sin WebGL, calidad fija por URL (`?calidad=baja` y `?calidad=estatica`) e impresión (PDF con `scripts/pdf.cjs`).
-- **Pantallas:** escritorio y tableta horizontal con el panel fijo al costado de la escena; celular y cualquier pantalla vertical con el texto primero y la escena después, con la pantalla libre.
-- **Verificación:** `capturas.cjs`, `modos.cjs`, `offline.cjs`, `a11y.cjs` y `npm run lint`. Última corrida (cierre de la sesión 3): consola limpia, 0 pedidos externos, el recorrido completo sin red y axe-core sin violaciones.
+- **Modos:** lectura (`L`, con los pósters de las escenas), presentación (`P`, 27 paradas, `?ensayo` con cronómetro, fps y calidad), reduced motion, sin WebGL, calidad fija por URL (`?calidad=baja`, `?calidad=estatica` y `?calidad=alta` para medir) e impresión (PDF con `scripts/pdf.cjs`). Con zoom muy alto (menos de 320 px de alto) pasa solo a lectura.
+- **Pantallas:** escritorio y tableta horizontal con el panel fijo al costado de la escena (si el panel no entra, sube tramo a tramo); celular y cualquier pantalla vertical con el texto primero y la escena después, con la pantalla libre.
+- **Verificación:** `capturas.cjs`, `modos.cjs`, `offline.cjs`, `a11y.cjs` (axe más texto fuera del árbol), `reflow.cjs` (zoom, espaciado de texto, colores forzados), `presupuesto.cjs` (llamadas de dibujo y triángulos) y `npm run lint`. Última corrida (sesión 4): consola limpia, 0 pedidos externos, el recorrido completo sin red, axe sin violaciones en 5 vistas, los 7 casos de reflow bien y el 3D dentro del presupuesto en los dos tiers (91 y 74 llamadas como máximo).
 
 ## Bitácora
 
@@ -105,7 +105,8 @@ No queda nada que se pueda hacer sin Franco. En orden:
 1. **Franco decide** (ver "Bloqueado por Franco"): el estudio de arte (`docs/estudios.jpg`), Next.js o Vite, los pendientes de la tesina y los datos de portada.
 2. **Con el estudio elegido:** dejarlo como default (`src/state/store.ts` y el `data-estudio` de `layout.tsx`) y darle su atmósfera propia (luz, niebla y materiales en `src/three/palette.ts`). Volver a generar `docs/estudios.jpg`, la imagen para compartir y los pósters (`scripts/posters.cjs`); los de los otros dos estudios se pueden borrar si se sacan los botones de estudio.
 3. **En la compu de la defensa**, siguiendo `docs/DEFENSA.md`: servir `out/` sin internet, correr `scripts/offline.cjs` con el wifi apagado, ensayar con `?presentacion&ensayo` (5 a 9 minutos) y grabar el video con `scripts/video.cjs`.
-4. **Probar con un lector de pantalla real** (NVDA o VoiceOver) al menos un capítulo con escena.
+4. **Probar con un lector de pantalla real** (NVDA o VoiceOver) al menos un capítulo con escena. El árbol de accesibilidad ya se revisó con Playwright (todo el texto está en cualquier punto del scroll); falta escucharlo.
+5. **Una segunda mirada** (sección 13 de la skill): que alguien que no armó la página la recorra con la checklist de la sección 10 (otra persona u otro día).
 
 ## Bloqueado por Franco
 
