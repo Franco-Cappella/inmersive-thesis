@@ -102,7 +102,7 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 ## Próximo paso
 
-No queda nada que se pueda hacer sin Franco. En orden:
+No queda nada que se pueda hacer sin Franco. La lista completa para revisar, ordenada por quién la tiene que hacer, está en **`docs/QUE-FALTA.md`**. En resumen:
 
 1. **Franco decide** (ver "Bloqueado por Franco"): el estudio de arte (`docs/estudios.jpg`), Next.js o Vite, los pendientes de la tesina y los datos de portada.
 2. **Con el estudio elegido:** dejarlo como default (`src/state/store.ts` y el `data-estudio` de `layout.tsx`) y darle su atmósfera propia (luz, niebla y materiales en `src/three/palette.ts`). Volver a generar `docs/estudios.jpg`, la imagen para compartir y los pósters (`scripts/posters.cjs`); los de los otros dos estudios se pueden borrar si se sacan los botones de estudio.

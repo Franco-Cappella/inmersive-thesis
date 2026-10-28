@@ -114,6 +114,7 @@ Para editar textos, tocá solo `src/content/`. Ningún componente tiene texto pr
 
 El hero y los diez capítulos están completos: los siete que tienen escena 3D (01, 02, 03, 05, 07, 09 y 10) la tienen construida, y el 04, el 06 y el 08 se leen sobre el campo liso. Lo que falta depende de decisiones de Franco (estudio de arte, Next o Vite, pendientes de la tesina) o de la compu de la defensa (ver `docs/ROADMAP.md`, fase 5).
 
+- `docs/QUE-FALTA.md`: **lo que falta, en una sola lista para revisar** (decisiones de Franco, arreglos de la tesina, pruebas en la compu de la defensa y con personas).
 - `docs/DEFENSA.md`: lista para el día de la defensa (servir el sitio sin internet, las 27 paradas con tiempos sugeridos y los respaldos).
 - `docs/PROGRESO.md`: por dónde va el trabajo y cuál es el próximo paso (el traspaso entre sesiones).
 - `docs/ROADMAP.md`: qué está hecho y qué falta.
