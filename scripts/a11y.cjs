@@ -51,7 +51,7 @@ const ocultos = (page) =>
       [...fuera].slice(0, 8).forEach((t) => console.log(`  "${t}"`));
     }
     await page.evaluate(() => window.scrollTo(0, 0));
-    await page.waitForTimeout(1500);
+    await page.waitForTimeout(3000); // que terminen de revertirse las entradas (si no, axe mide texto a medio fundido)
     await page.addScriptTag({ path: AXE });
     const r = await page.evaluate(async () => {
       const res = await axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"] } });

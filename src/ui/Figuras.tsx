@@ -29,22 +29,29 @@ export function FiguraView({ figura }: { figura: Figura }) {
     case "brecha":
       return (
         <div className="fig fig--brecha">
-          <div className="fig-brecha__fila">
-            <span className="fig-brecha__rotulo">{ui.antes}</span>
+          {/* Una fila por momento, cada una su párrafo: el lector de pantalla lee "Antes: …" y "Después: …" */}
+          <p className="fig-brecha__fila">
+            <span className="fig-brecha__rotulo">
+              {ui.antes}
+              <span className="sr-only">:</span>
+            </span>
             <span className="fig-brecha__bloques fig-brecha__bloques--separados" aria-hidden="true">
               <span>{hero.mundos.it.sigla}</span>
               <span>{hero.mundos.ot.sigla}</span>
             </span>
             <span className="fig-brecha__texto">{figura.antes}</span>
-          </div>
-          <div className="fig-brecha__fila">
-            <span className="fig-brecha__rotulo">{ui.despues}</span>
+          </p>
+          <p className="fig-brecha__fila">
+            <span className="fig-brecha__rotulo">
+              {ui.despues}
+              <span className="sr-only">:</span>
+            </span>
             <span className="fig-brecha__bloques" aria-hidden="true">
               <span>{hero.mundos.it.sigla}</span>
               <span>{hero.mundos.ot.sigla}</span>
             </span>
             <span className="fig-brecha__texto">{figura.despues}</span>
-          </div>
+          </p>
           <p className="fig-brecha__consecuencia">{figura.consecuencia}</p>
         </div>
       );

@@ -69,8 +69,8 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           stagger: 0.08,
           scrollTrigger: { trigger: section, start: "top 62%", toggleActions: "play none none reverse" },
         });
-        // Apilado (celular o pantalla vertical) la escena actúa después del texto (stayOf): ahí la lista
-        // se lee entera, sin atenuar.
+        // Cada ítem se enciende (--encendido, ver chapters.css) cuando actúa su parte de la escena. Apilado
+        // (celular o pantalla vertical) la escena actúa después del texto (stayOf): ahí la lista va encendida.
         for (const [selector, tiempos] of SINCRONIZADOS) {
           const items = section.querySelectorAll<HTMLElement>(selector);
           if (reading || narrow || !section.hasAttribute("data-escena") || !items.length) continue;
@@ -79,7 +79,7 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
             scrollTrigger: { trigger: section, start: "top top", end: "bottom bottom", scrub: true },
           });
           items.forEach((li, i) =>
-            tl.fromTo(li, { opacity: 0.3 }, { opacity: 1, duration: 0.05 }, tiempos[i] ?? i / items.length),
+            tl.fromTo(li, { "--encendido": 0 }, { "--encendido": 1, duration: 0.05 }, tiempos[i] ?? i / items.length),
           );
           tl.set({}, {}, 1); // el timeline dura exactamente la estadía
         }

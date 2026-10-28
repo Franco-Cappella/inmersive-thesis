@@ -137,13 +137,23 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   padding-bottom: 0.45rem;
   border-bottom: 1px solid var(--c-line);
 }
-/* Las listas al ritmo de la escena atenúan el ítem que todavía no actuó (opacidad en línea, Chapter.tsx).
-   Si algo adentro recibe el foco, el ítem se enciende: el foco siempre se ve entero. */
+/* Listas al ritmo de la escena: Chapter.tsx anima --encendido de 0 a 1 en cada ítem cuando actúa su parte.
+   El que todavía no actuó va en tinta suave y con el acento apagado; al actuar, tinta plena y su color.
+   Sin animación (lectura, reduced motion, apilado) todo queda encendido. El texto nunca baja del contraste
+   mínimo: la tinta suave lo cumple en los tres estudios (antes se atenuaba con opacidad y no llegaba).
+   Si algo adentro recibe el foco, el ítem se enciende. */
+.fig-reloj__pasos li,
+.fig--golpes > li,
+.fig--casos > li,
+.fig--pilares > li {
+  --encendido: 1;
+  color: color-mix(in oklab, var(--c-ink) calc(var(--encendido) * 100%), var(--c-ink-soft));
+}
 .fig-reloj__pasos li:focus-within,
 .fig--golpes > li:focus-within,
 .fig--casos > li:focus-within,
 .fig--pilares > li:focus-within {
-  opacity: 1 !important;
+  --encendido: 1 !important;
 }
 .fig-reloj__pasos time {
   font-family: var(--f-display);
@@ -320,7 +330,7 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   font-family: var(--f-display);
   font-weight: 800;
   font-size: var(--step-0);
-  color: var(--c-alarm);
+  color: color-mix(in oklab, var(--c-alarm) calc(var(--encendido) * 100%), var(--c-ink-soft));
 }
 
 /* Cifras */
@@ -365,12 +375,15 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   font-size: var(--step-1);
   margin-bottom: 0.4rem;
 }
-.fig--casos li:first-child,
-.fig--pilares li:first-child {
-  border-left-color: var(--c-alarm);
+/* Casos: el que ya actuó lleva la barra en tinta suave (neutra, no es un estado), el primero en rojo */
+.fig--casos li {
+  border-left-color: color-mix(in oklab, var(--c-ink-soft) calc(var(--encendido) * 100%), var(--c-line));
+}
+.fig--casos li:first-child {
+  border-left-color: color-mix(in oklab, var(--c-alarm) calc(var(--encendido) * 100%), var(--c-line));
 }
 .fig--pilares li {
-  border-left-color: var(--c-flow);
+  border-left-color: color-mix(in oklab, var(--c-flow) calc(var(--encendido) * 100%), var(--c-line));
 }
 
 /* Barras (encuesta SANS) */
@@ -568,6 +581,7 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   .fig--golpes > li,
   .fig--casos > li,
   .fig--pilares > li {
+    --encendido: 1 !important;
     opacity: 1 !important;
     visibility: visible !important;
     transform: none !important;
