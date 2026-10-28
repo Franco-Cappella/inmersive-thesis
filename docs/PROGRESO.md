@@ -49,6 +49,8 @@ Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente,
 
 - **Hecho: cambiar de modo a mitad de página ya no desfasa las escenas.** El modo presentación agranda el texto un 13 %: los capítulos sin escena (04, 06, 08) crecen y todo lo que viene después baja entre 108 y 299 px, pero los ScrollTrigger seguían con las posiciones viejas, así que en el 07, el 09 y el 10 la escena arrancaba antes que su texto. Ahora `Site.tsx` recalcula los ScrollTrigger cada vez que cambia el modo presentación o el estudio. Medido apretando `P` arriba: antes, con el borde del 07 a 102 px debajo del centro, el índice ya marcaba 07; ahora marca 06, como corresponde.
 
+- **Hecho: el ensayo muestra los cuadros por segundo y la calidad del 3D.** Al lado del cronómetro de `?presentacion&ensayo`: los fps medidos con `requestAnimationFrame` (el Canvas dibuja ahí, así que son los cuadros que se ven) y la calidad que está usando el sitio (alta, baja o sin 3D). Por debajo de 30 fps se marcan en ámbar: en la compu de la defensa es la señal para ensayar y presentar con `?calidad=baja` (`docs/DEFENSA.md`). La capa DOM sigue sin importar three.
+
 ### Sesión 3 (27/10/2026, loop autónomo)
 - Escena 07 (`src/three/scenes/Casos.tsx`): un caso por tramo de `fx.attack` (`CASOS_TRAMOS` en `src/scroll/timing.ts`), con la lista del texto encendiéndose al mismo ritmo. Colonial: racks en rojo, enlaces cortados y planta detenida por decisión, sin que el rojo baje. Oldsmar en ámbar (exposición, caso en discusión). Stuxnet e Industroyer: rojo hasta un PLC, que pasa a alarma.
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).

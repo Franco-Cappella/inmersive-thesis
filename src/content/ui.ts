@@ -11,6 +11,8 @@ export const ui = {
   hipotetico: "Escenario hipotético",
   escena: "Qué muestra la ilustración:",
   ensayo: "Ensayo",
+  // Calidad del 3D en el ensayo: el tier que está usando el sitio (ver src/state/store.ts).
+  calidad: { high: "calidad alta", low: "calidad baja", static: "sin 3D" },
   noEncontrada: {
     titulo: "Esta página no existe",
     texto: "El sitio es una sola página: el recorrido completo empieza en el inicio.",

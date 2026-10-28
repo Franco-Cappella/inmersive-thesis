@@ -56,7 +56,7 @@ npx serve out
 | `L` o `?lectura` | Modo lectura: sin 3D, todo el texto en flujo normal. Sirve para el jurado y para imprimir |
 | `P` o `?presentacion` | Modo presentación: `→` y `←` (o un control remoto) saltan entre paradas |
 | `?estudio=plano` / `?estudio=noche` | Cambia la dirección de arte. También desde los botones del encabezado |
-| `?presentacion&ensayo` | Ensayo: un cronómetro abajo a la izquierda (arranca con la primera flecha) y la parada actual. Ámbar desde los 8 minutos, rojo pasados los 9 |
+| `?presentacion&ensayo` | Ensayo: un cronómetro abajo a la izquierda (arranca con la primera flecha), la parada actual, los cuadros por segundo y la calidad del 3D. El reloj se pone ámbar desde los 8 minutos y rojo pasados los 9; los fps se marcan en ámbar por debajo de 30 (en esa compu conviene `?calidad=baja`) |
 | `?calidad=baja` | Para una compu lenta: sin efectos de posprocesado y a resolución 1×. El sitio ya baja solo si mide pocos cuadros por segundo; esto lo fija desde el principio |
 | `?calidad=estatica` | Sin 3D: la pirámide del hero en SVG y los capítulos sobre el campo liso |
 
