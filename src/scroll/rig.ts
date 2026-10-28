@@ -24,7 +24,8 @@ export const PYRAMID_Y = { it: 2.6, ot: -4.9 };
 export const heroShots: Record<"it" | "mid" | "ot" | "out", { landscape: Shot; portrait: Shot }> = {
   it: {
     landscape: { position: [2.4, 7.2, 13.5], target: [-1.6, 2.2, 0] },
-    portrait: { position: [0, 4.4, 17], target: [0, 0.1, 0] },
+    // En vertical la ficha arranca al 40 % del alto en el teléfono más exigente: la pirámide va entera arriba.
+    portrait: { position: [0, 5.4, 23], target: [0, -2.0, 0] },
   },
   mid: {
     landscape: { position: [7.5, -0.4, 10], target: [-1.8, -1.4, 0] },

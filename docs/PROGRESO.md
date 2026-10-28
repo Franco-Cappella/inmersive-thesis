@@ -43,6 +43,8 @@ Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente,
 
 - Hero, el giro: a mitad de camino la base de la capa A quedaba de frente a la cámara y se veía un cuadrado ámbar plano que llenaba el cuadro. Ahora la pirámide gira hacia adelante (`Pyramid.tsx`): a mitad del giro la punta apunta a la cámara y las tres capas se ven como bloques con sus letras (C, I y A legibles) que rotan entre sí; al final, la A arriba en azul, igual que antes.
 
+- Hero en el celular, del lado IT: la capa A quedaba tapada por la ficha. Medí dónde arranca la ficha en varios teléfonos (el caso más exigente es 390×844, al 40 % del alto) y la cámara vertical de IT (`heroShots.it.portrait`) se alejó: la pirámide queda entre el 11 % y el 34 % del alto, entera sobre la ficha.
+
 ### Sesión 3 (27/10/2026, loop autónomo)
 - Escena 07 (`src/three/scenes/Casos.tsx`): un caso por tramo de `fx.attack` (`CASOS_TRAMOS` en `src/scroll/timing.ts`), con la lista del texto encendiéndose al mismo ritmo. Colonial: racks en rojo, enlaces cortados y planta detenida por decisión, sin que el rojo baje. Oldsmar en ámbar (exposición, caso en discusión). Stuxnet e Industroyer: rojo hasta un PLC, que pasa a alarma.
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
