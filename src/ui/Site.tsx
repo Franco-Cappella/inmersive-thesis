@@ -35,6 +35,9 @@ export function Site() {
     const html = document.documentElement;
     html.dataset.estudio = estudio;
     html.dataset.presenting = String(presenting);
+    // La presentación agranda el texto (y cada estudio tiene su tipografía): cambia el alto de los capítulos
+    // sin escena y, con él, dónde empieza cada tramo del scroll. Sin esto, los ScrollTrigger quedan corridos.
+    ScrollTrigger.refresh();
   }, [estudio, presenting]);
 
   // Las fuentes cambian el alto de los textos: recalcular los ScrollTrigger una vez cargadas.
