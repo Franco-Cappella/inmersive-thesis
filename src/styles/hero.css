@@ -130,11 +130,6 @@
   color: var(--c-ink-soft);
   margin-bottom: 0.35rem;
 }
-.prio__dagger {
-  margin-left: 0.15em;
-  color: var(--c-warn-text);
-  font-weight: 800;
-}
 /* Tres filas fijas (1, 2, 3): lo que rueda es quién ocupa cada puesto, como en el cartel */
 .prio__tabla {
   --row: 2.6rem;

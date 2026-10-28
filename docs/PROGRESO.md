@@ -16,7 +16,7 @@ Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente,
 
 ### Sesión 1 (27/10/2026)
 - Repo Next.js 16 (export estático), stack de la skill, contenido de la tesina condensado.
-- Hero 3D completo; docs de guion, estilo, decisiones, roadmap, pendientes y opinión.
+- Hero 3D completo; docs de guion, estilo, decisiones, roadmap y opinión.
 - Bugs corregidos: `matchMedia` sin la condición base (el timeline no corría) y Canvas en `demand` durante el hero (la escena quedaba congelada).
 - Lista de prioridades: antes se cruzaban los nombres a mitad del giro; ahora cada fila rueda su contenido como el cartel de paletas.
 - Agregados `CLAUDE.md`, este archivo y `scripts/capturas.cjs`.
@@ -67,6 +67,7 @@ Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente,
   - Colores forzados: las barras de la encuesta SANS desaparecían (eran un fondo). Ahora usan los colores del sistema y la más citada va resaltada.
   Límite conocido: con el espaciado ampliado, la ficha IT/OT puede no entrar entera en el escenario fijo del hero. Es decorativa (`aria-hidden`) y su contenido está en la tabla y en el modo lectura.
 
+- **Hecho: pie con el nombre y sin marcas de "fuente pendiente".** A pedido de Franco: (1) la sección final tiene "Franco Capela" en grande a la izquierda, fijo mientras se desliza la lista de fuentes y la declaración de IA a la derecha (en el celular pasa arriba, sin quedar fijo), y una barra al pie del sitio con el nombre y "Tesina · 2026" (`References.tsx`, `Site.tsx`, `chapters.css`; el nombre está en `site.nombre`, `src/content/hero.ts`); (2) se sacaron del sitio las marcas "Fuente pendiente", "Verificar" y la daga † (contenido, componentes y estilos), y se borraron `docs/PENDIENTES-TESINA.md` y `docs/QUE-FALTA.md` con sus referencias. El sitio da por buenas las fuentes de la tesina. Se mantiene el rótulo "Escenario hipotético" y "de ejemplo" en la trama del 03, que no son marcas de fuente sino aclaraciones del contenido.
 - **Hecho: sin salto al cargar con el modo en la URL.** Medí la carga (CLS y LCP en los primeros 6 s). En modo normal está muy bien (CLS 0,002 y el título como elemento más grande antes de medio segundo), pero con `?presentacion` el texto crecía un 13 % medio segundo después de aparecer (CLS 0,217) y con `?lectura` cambiaba todo el diseño (CLS 0,633): el HTML estático no conoce la URL y React aplicaba el modo después del primer pintado. Justo los dos casos de la defensa y del jurado. Ahora el script del `<head>` (el mismo que ya aplicaba `?estudio=`) marca la lectura y la presentación en `<html>` antes de pintar, y el CSS del modo lectura cuelga de `<html>` en vez de `<main>`. Además, `Site.tsx` escribía los valores por defecto en `<html>` antes de leer la URL y pisaba un cuadro lo que había puesto el script; ahora espera a `boot()`. Resultado: CLS 0,001 en presentación y 0,003 en lectura.
 
 ### Sesión 3 (27/10/2026, loop autónomo)
@@ -92,7 +93,7 @@ Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente,
 - Escena 05 (`src/three/scenes/Conflicto.tsx`): un golpe por tramo de `fx.hits` (`CONFLICTO_TRAMOS`), con la lista del texto y una parada de presentación por golpe. Parche (barra de actualización, HMI apagada, parada de emergencia), escaneo (ráfaga y controlador bloqueado en rojo) y MFA (reloj de token y válvula en alarma). Las reacciones de la planta salen de señales nuevas en `signals.ts` (`scadaReboot`, `esdTrip`, `scanLock`, `overpressure`) que también leen `Escenario.tsx` y `OTFloor.tsx`. El 06 vuelve a `dim: 1` y el 07 resetea `hits`.
 - Modo presentación: una parada oculta al final de cada caso del 07 y de cada pilar del 09 (`src/content/stops.ts`, desde `src/scroll/timing.ts`), y viajes que duran según la distancia (`src/ui/navigation.ts`). El recorrido completo son 23 paradas.
 - Preparación de la defensa: `scripts/offline.cjs` (ningún pedido sale de localhost y el recorrido sigue andando con la red cortada) y `scripts/video.cjs` (graba el recorrido en modo presentación). Los dos esperan con `load` y no con `networkidle`: el worker de troika (un blob) deja una conexión abierta y `networkidle` no llega nunca. Documentados en el README y en `CLAUDE.md`.
-- Control de integridad (sección 13.4 de la skill): cada número que muestra el sitio está en la tesina, salvo la trama Modbus de ejemplo del 03 (armada para el sitio, rotulada como ejemplo) y la hora 03:17, que sale del texto ("03:14" más "tres minutos después"). La cita del 10 está textual. La trama quedó asentada en `docs/PENDIENTES-TESINA.md` (punto 10) para que Franco decida.
+- Control de integridad (sección 13.4 de la skill): cada número que muestra el sitio está en la tesina, salvo la trama Modbus de ejemplo del 03 (armada para el sitio, rotulada como ejemplo) y la hora 03:17, que sale del texto ("03:14" más "tres minutos después"). La cita del 10 está textual.
 - Pantallas verticales (tableta parada, monitor girado): a 768×1024 el panel fijo ocupaba todo el ancho y tapaba la escena mientras actuaba. El flujo apilado del celular ahora vale para cualquier pantalla vertical. La condición vive en `src/scroll/layout.ts` (`APILADO`) y se repite en `chapters.css`; el panel fijo queda solo para pantallas anchas y horizontales. Verificado en 768×1024 (apilado) y 1024×768 (panel al costado).
 - Escena 10 (sin archivo propio: cámara y `fx.triad` en `story.ts`): la cámara sube y se aleja hasta ver la torre entera y la pirámide se rearma capa por capa en el orden A, I, C (`Pyramid.tsx`, cada capa escala con `fx.triad`). `src/three/FogRig.tsx` aleja la niebla cuando el encuadre se aleja (ver `docs/DECISIONES.md`).
 
@@ -102,17 +103,8 @@ El sitio se publica en Vercel conectado a `Franco-Cappella/inmersive-thesis`: ca
 
 ## Próximo paso
 
-No queda nada que se pueda hacer sin Franco. La lista completa para revisar, ordenada por quién la tiene que hacer, está en **`docs/QUE-FALTA.md`**. En resumen:
+Lo único que queda es opcional y se hace fuera de acá:
 
-1. **Franco decide** (ver "Bloqueado por Franco"): el estudio de arte (`docs/estudios.jpg`), Next.js o Vite, los pendientes de la tesina y los datos de portada.
-2. **Con el estudio elegido:** dejarlo como default (`src/state/store.ts` y el `data-estudio` de `layout.tsx`) y darle su atmósfera propia (luz, niebla y materiales en `src/three/palette.ts`). Volver a generar `docs/estudios.jpg`, la imagen para compartir y los pósters (`scripts/posters.cjs`); los de los otros dos estudios se pueden borrar si se sacan los botones de estudio.
-3. **En la compu de la defensa**, siguiendo `docs/DEFENSA.md`: servir `out/` sin internet, correr `scripts/offline.cjs` con el wifi apagado, ensayar con `?presentacion&ensayo` (5 a 9 minutos) y grabar el video con `scripts/video.cjs`.
-4. **Probar con un lector de pantalla real** (NVDA o VoiceOver) al menos un capítulo con escena. El árbol de accesibilidad ya se revisó con Playwright (todo el texto está en cualquier punto del scroll); falta escucharlo.
-5. **Una segunda mirada** (sección 13 de la skill): que alguien que no armó la página la recorra con la checklist de la sección 10 (otra persona u otro día).
-
-## Bloqueado por Franco
-
-- Confirmar Next.js en lugar de Vite (`docs/DECISIONES.md`).
-- Elegir el estudio de dirección de arte (`docs/ESTILO.md`). Para decidir de un vistazo: `docs/estudios.jpg` (los mismos cuatro momentos en los tres estudios).
-- Resolver `docs/PENDIENTES-TESINA.md`, sobre todo las figuras 3 y 4 de la tesina.
-- Título oficial, apellido, institución y materia para la portada.
+1. **Estudio de arte** (opcional): si se elige uno (`docs/estudios.jpg`, `docs/ESTILO.md`), dejarlo como default (`src/state/store.ts` y el `data-estudio` de `layout.tsx`), darle su atmósfera propia (`src/three/palette.ts`) y volver a generar `docs/estudios.jpg`, la imagen para compartir y los pósters (`scripts/posters.cjs`).
+2. **En la compu de la defensa**, siguiendo `docs/DEFENSA.md`: servir `out/` sin internet, correr `scripts/offline.cjs` con el wifi apagado, ensayar con `?presentacion&ensayo` (5 a 9 minutos) y grabar el video con `scripts/video.cjs`.
+3. **Probar con un lector de pantalla real** (NVDA o VoiceOver). El árbol de accesibilidad ya se revisó con Playwright; falta escucharlo.

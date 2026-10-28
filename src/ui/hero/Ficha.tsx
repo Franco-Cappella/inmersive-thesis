@@ -27,7 +27,7 @@ export function Ficha() {
 
       <div className="prio">
         <p className="prio__titulo">
-          Prioridades<span className="prio__dagger">†</span>
+          Prioridades
         </p>
         <ol className="prio__tabla">
           {[1, 2, 3].map((n) => {
@@ -60,7 +60,6 @@ export function Ficha() {
           <div key={f.rotulo} className="ficha__fila">
             <dt>
               {f.rotulo}
-              {f.pendiente && <span className="prio__dagger">†</span>}
               {f.fuentes?.map((k) => (
                 <sup key={k}>[{refNumber[k]}]</sup>
               ))}
@@ -73,8 +72,6 @@ export function Ficha() {
         ))}
       </dl>
       <p className="ficha__pie">
-        <span className="prio__dagger">†</span> {hero.pendienteTriada}{" "}
-        {hero.ficha.flatMap((f) => (f.pendiente ? [f.pendiente] : [])).join(" ")}
         {hero.ficha.flatMap((f) =>
           (f.fuentes ?? []).map((k) => (
             <span key={k}>

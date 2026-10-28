@@ -1,10 +1,11 @@
 import type { SourceKey } from "./references";
 
-// Datos generales del sitio. TODO(dato): apellido, institución, materia y título
-// oficial de la tesina (el archivo de la tesina no trae portada).
+// Datos generales del sitio.
 export const site = {
   titulo: "La tríada invertida",
   autor: "Franco",
+  nombre: ["Franco", "Capela"], // el nombre completo, grande en el pie
+
   anio: 2026,
   descripcion:
     "Recorrido inmersivo de la tesina sobre por qué las estrategias de ciberseguridad IT fracasan al aplicarse sin adaptación en los entornos OT de plantas industriales.",
@@ -17,7 +18,6 @@ export type FilaFicha = {
   it: string;
   ot: string;
   fuentes?: SourceKey[];
-  pendiente?: string; // TODO(fuente): se muestra en el sitio hasta que se resuelva
 };
 
 // Hero: la tabla "El dilema ontológico: la tríada invertida" (Sección 1), condensada.
@@ -35,16 +35,10 @@ export const hero = {
     { id: "i", letra: "I", nombre: "Integridad", it: 2, ot: 2 },
     { id: "a", letra: "A", nombre: "Disponibilidad", it: 3, ot: 1 },
   ],
-  pendienteTriada: "La tabla CIA/AIC de la tesina no cita fuente.",
   ficha: [
     { rotulo: "Protege", it: "Datos y privacidad", ot: "El proceso físico, 24 h × 365 días" },
     { rotulo: "Equipos", it: "Windows · Linux", ot: "PLC · RTU · RTOS" },
-    {
-      rotulo: "Vida útil",
-      it: "3 a 5 años",
-      ot: "15 a 30 años",
-      pendiente: "La tesina no cita fuente para los ciclos de vida.",
-    },
+    { rotulo: "Vida útil", it: "3 a 5 años", ot: "15 a 30 años" },
     {
       rotulo: "Parches",
       it: "Continuos",

@@ -126,8 +126,7 @@ main {
   backdrop-filter: blur(6px);
 }
 
-.tag,
-.pending {
+.tag {
   display: inline-flex;
   align-items: center;
   gap: 0.35em;
@@ -141,18 +140,6 @@ main {
 }
 .tag {
   border: 1px solid var(--c-ink);
-}
-/* Pendiente de fuente: se ve a propósito hasta que se resuelva */
-.pending {
-  border: 1px dashed var(--c-warn);
-  color: var(--c-ink);
-}
-.pending::before {
-  content: "";
-  width: 0.5em;
-  height: 0.5em;
-  border-radius: 50%;
-  background: var(--c-warn);
 }
 
 .sources {

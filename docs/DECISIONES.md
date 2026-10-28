@@ -1,6 +1,6 @@
 # Decisiones técnicas
 
-## Next.js en lugar de Vite (desvío de la skill, pendiente de confirmar con Franco)
+## Next.js en lugar de Vite (desvío de la skill, a pedido de Franco)
 
 La skill `tesina-itot-web-inmersiva` fija Vite + React como SPA y descarta Next.js. El pedido de Franco fue explícito: arrancar el repositorio con **Next.js**. Se hizo así, con estas condiciones para mantener lo que la skill protege:
 

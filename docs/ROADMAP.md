@@ -56,7 +56,3 @@ Estado al cierre de la sesión 3: el sitio está en la fase 8 de 8 del flujo de 
 - [x] Zoom del 200 al 400 %, reflow a 320 px, espaciado de texto y colores forzados (WCAG 1.4.4, 1.4.10 y 1.4.12). Con menos de 320 px de alto el sitio pasa solo al modo lectura.
 - [x] Carga sin saltos también con `?presentacion` o `?lectura` en la URL (CLS de 0,217 y 0,633 a 0,001 y 0,003).
 - [ ] Probar con un lector de pantalla real (NVDA o VoiceOver) antes de la defensa.
-
-## Bloqueado por Franco
-- Resolver los pendientes de rigor de `docs/PENDIENTES-TESINA.md` antes de presentar el sitio.
-- Confirmar Next.js en lugar de Vite (`docs/DECISIONES.md`).

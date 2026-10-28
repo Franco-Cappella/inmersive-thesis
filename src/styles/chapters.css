@@ -469,11 +469,59 @@
   background: var(--c-panel-solid);
   border-top: 1px solid var(--c-line);
 }
+/* Pie de la tesina: el nombre grande a la izquierda, que queda fijo mientras se desliza la lista de fuentes
+   y la declaración de IA a la derecha */
+.refs {
+  display: grid;
+  grid-template-columns: minmax(0, 0.36fr) minmax(0, 0.64fr);
+  column-gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: start;
+}
+.refs__nombre {
+  container-type: inline-size;
+  position: sticky;
+  top: clamp(4.5rem, 10svh, 6.5rem);
+  display: grid;
+  font-family: var(--f-display);
+  font-stretch: var(--display-stretch);
+  font-weight: var(--display-weight);
+  text-transform: var(--display-case);
+  line-height: 0.88;
+}
+.refs__nombre span {
+  font-size: min(9rem, calc(var(--nombre-fit, 30) * 1cqi));
+  white-space: nowrap;
+}
+:root[data-estudio="plano"] .refs__nombre {
+  --nombre-fit: 19;
+}
+:root[data-estudio="noche"] .refs__nombre {
+  --nombre-fit: 36;
+}
 .refs__inner {
   max-width: 52rem;
-  margin-left: auto;
   display: grid;
   gap: 1.2rem;
+}
+.sitio-pie {
+  position: relative; /* por encima del escenario fijo, como <main> */
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding: 1.1rem var(--gutter);
+  background: var(--c-panel-solid);
+  border-top: 1px solid var(--c-line);
+  font-family: var(--f-display);
+  font-size: var(--step--1);
+  color: var(--c-ink-soft);
+}
+.sitio-pie__nombre {
+  font-size: var(--step-1);
+  font-weight: 800;
+  color: var(--c-ink);
 }
 .refs h2 {
   font-size: var(--step-3);
@@ -518,6 +566,20 @@
 /* ---------- Celular: los paneles ocupan casi todo el ancho ---------- */
 
 @media (max-width: 760px) {
+  /* En el celular el nombre pasa arriba de la lista, en una línea y sin quedar fijo */
+  .refs {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1.5rem;
+  }
+  .refs__nombre {
+    position: static;
+    display: block;
+  }
+  .refs__nombre span {
+    display: inline;
+    font-size: clamp(2.6rem, 14vw, 4rem);
+    margin-right: 0.3em;
+  }
   .chapter {
     padding: 4.5rem 1rem 3rem;
   }
@@ -550,6 +612,13 @@
 
 /* Impresión y modo lectura: el 3D no existe y los paneles pasan a ser de página */
 @media print {
+  .refs {
+    display: block;
+  }
+  .refs__nombre {
+    position: static;
+    margin-bottom: 1rem;
+  }
   .stage,
   .masthead,
   .progress,

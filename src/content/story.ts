@@ -3,7 +3,7 @@ import type { SourceKey } from "./references";
 
 // Capítulos que siguen al hero. Cada uno condensa una parte de la tesina en
 // una idea, una figura y una o dos oraciones. Los datos y las citas tienen que
-// coincidir con TESINA_FINAL.md; lo que no tiene fuente va en `pendientes`.
+// coincidir con TESINA_FINAL.md.
 // `escena` describe lo que muestra el mundo 3D (docs/GUION.md). En los capítulos con escena
 // construida se lee como descripción en texto de la ilustración (oculta a la vista, para lectores
 // de pantalla): tiene que coincidir con lo que hoy hace el 3D.
@@ -64,7 +64,6 @@ export type Chapter = {
   bajada: string; // una o dos oraciones, sin viñetas
   figura: Figura;
   fuentes: SourceKey[];
-  pendientes?: string[];
   escena: string;
   // Solo los capítulos con escena 3D construida:
   weight?: number; // alto de la sección en viewports: cuánto scroll dura la escena
@@ -111,7 +110,6 @@ export const chapters: Chapter[] = [
       consecuencia: "Dos culturas, una sola red",
     },
     fuentes: ["nist-blog-legacy"],
-    pendientes: ["La convergencia se afirma sin fuente propia: el enlace de NIST es la fuente de la figura de esa sección."],
     weight: 2,
     camara: {
       landscape: { position: [-1, -0.6, 17], target: [7.5, -2.6, -4] },
@@ -146,7 +144,6 @@ export const chapters: Chapter[] = [
       ],
     },
     fuentes: [],
-    pendientes: ["La tesina no cita fuente para estas tres características."],
     escena:
       "Primer plano de un gabinete PLC. Una trama Modbus baja por el cable con sus bytes a la vista, en texto plano; el PLC la acepta sin preguntar quién la manda y la válvula gira.",
     weight: 2,
@@ -198,7 +195,6 @@ export const chapters: Chapter[] = [
       ],
     },
     fuentes: [],
-    pendientes: ["La Sección 2 no cita fuentes para estos tres mecanismos."],
     escena:
       "Tres golpes sobre la misma planta, uno por vez, y en cada uno la planta se detiene: una actualización reinicia el SCADA y la pantalla de la HMI se apaga hasta que salta la parada de emergencia; una ráfaga de paquetes de un escáner baja hasta el controlador, que queda bloqueado en rojo; y un reloj de token corre junto a la válvula mientras la presión sube, hasta que llega tarde.",
     weight: 2.4,

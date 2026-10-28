@@ -5,7 +5,6 @@ import { SourceRefs } from "../Sources";
 // para lectores de pantalla (la ficha animada es decorativa); en modo lectura se ve.
 export function HeroTable() {
   const fuentes = hero.ficha.flatMap((f) => f.fuentes ?? []);
-  const pendientes = [hero.pendienteTriada, ...hero.ficha.flatMap((f) => (f.pendiente ? [f.pendiente] : []))];
   return (
     <div className="hero__tabla">
       <p className="sr-only">{heroFigura}</p>
@@ -28,7 +27,7 @@ export function HeroTable() {
           ))}
         </tbody>
       </table>
-      <SourceRefs keys={fuentes} pending={pendientes} />
+      <SourceRefs keys={fuentes} />
     </div>
   );
 }

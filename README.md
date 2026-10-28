@@ -99,7 +99,7 @@ src/
               Conflicto (05), Casos (07) y Matiz (09); el 10 usa la pirámide y la planta
   ui/         Site, Hero, Chapter, Figuras, References, Masthead, ProgressNav, Stage
   styles/     tokens.css (colores por estudio), base.css, hero.css, chapters.css
-docs/         guion, dirección de arte, decisiones, roadmap y pendientes de la tesina
+docs/         guion, dirección de arte, decisiones y roadmap
 ```
 
 Para editar textos, tocá solo `src/content/`. Ningún componente tiene texto propio.
@@ -112,13 +112,11 @@ Para editar textos, tocá solo `src/content/`. Ningún componente tiene texto pr
 
 ## Estado y documentación
 
-El hero y los diez capítulos están completos: los siete que tienen escena 3D (01, 02, 03, 05, 07, 09 y 10) la tienen construida, y el 04, el 06 y el 08 se leen sobre el campo liso. Lo que falta depende de decisiones de Franco (estudio de arte, Next o Vite, pendientes de la tesina) o de la compu de la defensa (ver `docs/ROADMAP.md`, fase 5).
+El hero y los diez capítulos están completos: los siete que tienen escena 3D (01, 02, 03, 05, 07, 09 y 10) la tienen construida, y el 04, el 06 y el 08 se leen sobre el campo liso. Lo que queda es opcional (elegir un estudio de arte) o se hace en la compu de la defensa (ver `docs/DEFENSA.md` y `docs/ROADMAP.md`, fase 5).
 
-- `docs/QUE-FALTA.md`: **lo que falta, en una sola lista para revisar** (decisiones de Franco, arreglos de la tesina, pruebas en la compu de la defensa y con personas).
 - `docs/DEFENSA.md`: lista para el día de la defensa (servir el sitio sin internet, las 27 paradas con tiempos sugeridos y los respaldos).
 - `docs/PROGRESO.md`: por dónde va el trabajo y cuál es el próximo paso (el traspaso entre sesiones).
 - `docs/ROADMAP.md`: qué está hecho y qué falta.
 - `docs/GUION.md`: cada capítulo con su figura y su escena 3D.
-- `docs/PENDIENTES-TESINA.md`: problemas de rigor a resolver en la tesina antes de presentar.
 - `docs/DECISIONES.md`: por qué Next.js en export estático, versiones fijadas, presupuesto de JavaScript, niebla según el encuadre e imagen para compartir.
 - `docs/ESTILO.md`: dirección de arte, los tres estudios y los colores de estado como texto.

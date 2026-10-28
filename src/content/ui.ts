@@ -6,10 +6,9 @@ export const ui = {
   estudio: "Estudio de dirección de arte",
   indice: "Capítulos",
   fuentes: "Fuentes",
-  pendiente: "Fuente pendiente",
-  verificar: "Verificar",
   hipotetico: "Escenario hipotético",
   escena: "Qué muestra la ilustración:",
+  tesina: "Tesina",
   ensayo: "Ensayo",
   // Calidad del 3D en el ensayo: el tier que está usando el sitio (ver src/state/store.ts).
   calidad: { high: "calidad alta", low: "calidad baja", static: "sin 3D" },
@@ -24,8 +23,7 @@ export const ui = {
   refutaria: "La refutaría",
   sostendria: "La sostendría",
   referencias: "Referencias",
-  referenciasNota:
-    "Fuentes citadas en la tesina. Las marcadas con «Verificar» tienen algún dato (título, autor o fecha) que falta confirmar contra el original.",
+  referenciasNota: "Fuentes citadas en la tesina.",
   declaracion: "Declaración de transparencia sobre el uso de IA",
   pie: "Sitio de acompañamiento de la tesina. Funciona sin conexión y tiene un modo lectura (tecla L) sin 3D.",
 };

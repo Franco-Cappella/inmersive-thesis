@@ -62,7 +62,3 @@ Los tiempos son una propuesta para repartir unos 7 a 8 minutos; se ajustan en el
 2. `?calidad=estatica`: sin 3D; el hero en SVG y los capítulos sobre el campo liso.
 3. `?lectura`: todo el texto en flujo normal, sin 3D. Sirve también para el jurado.
 4. El video grabado con `scripts/video.cjs`.
-
-## Antes de presentar el sitio
-
-Los pendientes de rigor de `docs/PENDIENTES-TESINA.md` (sobre todo las figuras 3 y 4) se resuelven en la tesina antes de mostrar el sitio: el sitio solo condensa lo que dice la tesina.

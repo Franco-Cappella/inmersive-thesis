@@ -4,6 +4,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useEffect, useRef } from "react";
+import { site } from "@/content/hero";
 import { chapters } from "@/content/story";
 import { ui } from "@/content/ui";
 import { initSmoothScroll } from "@/scroll/smoothScroll";
@@ -143,6 +144,12 @@ export function Site() {
         ))}
         <References />
       </main>
+      <footer className="sitio-pie">
+        <span className="sitio-pie__nombre">{site.nombre.join(" ")}</span>
+        <span>
+          {ui.tesina} · {site.anio}
+        </span>
+      </footer>
     </>
   );
 }

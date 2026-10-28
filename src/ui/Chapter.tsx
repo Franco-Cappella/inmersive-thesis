@@ -284,7 +284,7 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
             </p>
           ))}
         <div data-reveal>
-          <SourceRefs keys={ch.fuentes} pending={ch.pendientes} />
+          <SourceRefs keys={ch.fuentes} />
         </div>
       </div>
     </section>
