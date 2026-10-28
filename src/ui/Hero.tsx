@@ -29,8 +29,17 @@ export function Hero() {
           type: "lines,words",
           mask: "lines",
           autoSplit: true,
+          // Terminada la entrada, el título vuelve a ser texto corrido: la máscara de cada línea recortaba la
+          // palabra más larga si el usuario agranda el espaciado del texto (WCAG 1.4.12).
           onSplit: (self) =>
-            gsap.from(self.words, { yPercent: 115, duration: 1, ease: "power4.out", stagger: 0.06, delay: 0.15 }),
+            gsap.from(self.words, {
+              yPercent: 115,
+              duration: 1,
+              ease: "power4.out",
+              stagger: 0.06,
+              delay: 0.15,
+              onComplete: () => requestAnimationFrame(() => self.revert()),
+            }),
         });
         gsap.from(".hero__byline, .hero__question", {
           opacity: 0, // no autoAlpha: el título y la pregunta siguen en el árbol de accesibilidad
@@ -71,6 +80,12 @@ export function Hero() {
             {site.titulo}
           </h1>
           <p className="hero__question">{hero.pregunta}</p>
+          <div className="hero__cue" aria-hidden="true">
+            <span className="hero__cue-inner">
+              <span className="hero__cue-line" />
+              {hero.guia}
+            </span>
+          </div>
         </div>
 
         <Ficha />
@@ -80,13 +95,6 @@ export function Hero() {
         </div>
 
         <p className="hero__cierre">{hero.cierre}</p>
-
-        <div className="hero__cue" aria-hidden="true">
-          <span className="hero__cue-inner">
-            <span className="hero__cue-line" />
-            {hero.guia}
-          </span>
-        </div>
 
         <HeroTable />
       </div>

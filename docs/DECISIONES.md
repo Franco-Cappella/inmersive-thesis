@@ -42,6 +42,10 @@ El pico está en el final del 10 (la torre entera a la vista, con la pirámide).
 
 Las capturas de las 27 paradas antes y después difieren solo en lo que se mueve (paquetes, flujo de las cañerías, LEDs). Los cuadros por segundo no se pueden medir acá (el 3D se dibuja por software): se ven en la compu de la defensa con `?presentacion&ensayo`.
 
+## Zoom muy alto: modo lectura automático (28/10/2026)
+
+Con el zoom del 400 % que exige WCAG 1.4.10 (320 px de ancho; en una pantalla común, menos de 320 px de alto), el escenario fijo del hero y los paneles al costado de la escena no entran: el texto quedaba cortado sin forma de leerlo. En vez de un tercer diseño para ese caso, el sitio pasa solo al modo lectura, que ya fluye entero (con los pósters de las escenas), y vuelve al modo normal cuando la pantalla crece si la lectura la había puesto él. No toca la URL. El umbral (320 px de alto) deja afuera a los celulares apaisados (360 px o más), que siguen con el 3D. Si Franco prefiere otro umbral, está en `src/ui/Site.tsx`.
+
 ## Stack (versiones fijadas)
 
 | Paquete | Versión | Motivo |

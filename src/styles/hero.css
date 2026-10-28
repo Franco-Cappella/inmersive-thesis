@@ -12,6 +12,9 @@
   overflow: hidden;
   display: grid;
   grid-template-columns: minmax(0, 0.44fr) minmax(0, 0.56fr);
+  /* La fila mide lo que hay de pantalla: si no, la ficha (más alta, aunque esté oculta) la estiraba y el
+     título y la pregunta, centrados en una fila más alta que la pantalla, quedaban cortados abajo (zoom 200 %) */
+  grid-template-rows: minmax(0, 1fr);
   padding: 5.5rem var(--gutter) 3rem;
 }
 
@@ -381,10 +384,10 @@
   opacity: 0; /* solo opacidad: el texto sigue en el árbol de accesibilidad aunque no se vea */
 }
 
+/* La guía va en el flujo, debajo de la pregunta: así nunca se superpone al texto (con zoom o con más
+   espaciado de texto, WCAG 1.4.12) */
 .hero__cue {
-  position: absolute;
-  left: var(--gutter);
-  bottom: 1.6rem;
+  margin-top: 2.2rem;
   font-family: var(--f-display);
   font-size: var(--step--1);
   font-weight: 600;
@@ -495,7 +498,9 @@
     display: none;
   }
 }
-@media (max-height: 760px) and (max-width: 760px) {
+/* Pantalla baja (celular, o escritorio con zoom): la ficha deja solo las prioridades; el resto está en la
+   tabla, que leen los lectores de pantalla y el modo lectura */
+@media (max-height: 760px) and (max-width: 760px), (max-height: 640px) and (orientation: landscape) {
   .ficha__filas,
   .ficha__pie {
     display: none;
@@ -628,5 +633,17 @@ main[data-reading="true"] .hero__tabla td {
 main[data-reading="true"] .hero__tabla th {
   font-family: var(--f-display);
   font-weight: 700;
-  white-space: nowrap;
+}
+/* Pantalla muy angosta (320 px: zoom del 400 %): las palabras largas ("Confidencialidad:") se cortan para que
+   la tabla entre sin mover la página de costado (WCAG 1.4.10) */
+@media (max-width: 400px) {
+  main[data-reading="true"] .hero__tabla th,
+  main[data-reading="true"] .hero__tabla td {
+    padding-right: 0.5rem;
+  }
+  /* Solo las celdas: los encabezados ("Prioridad", "Dimensión") van enteros */
+  main[data-reading="true"] .hero__tabla td {
+    hyphens: auto;
+    overflow-wrap: anywhere;
+  }
 }

@@ -26,6 +26,7 @@ node scripts/capturas.cjs http://localhost:4321 /ruta/de/salida   # capturas + c
 node scripts/modos.cjs http://localhost:4321 /ruta/de/salida      # estudios, lectura, presentación, reduced motion, sin WebGL
 node scripts/offline.cjs http://localhost:4321 /ruta/de/salida    # sin pedidos externos y recorrido completo con la red cortada
 node scripts/a11y.cjs http://localhost:4321                        # axe-core (WCAG 2.2 AA) en 5 vistas y orden de Tab
+node scripts/reflow.cjs http://localhost:4321                      # zoom 200/400 %, espaciado de texto y colores forzados
 node scripts/presupuesto.cjs http://localhost:4321 baja            # draw calls y triángulos por parada (alta: ≤150; baja: ≤80)
 node scripts/posters.cjs http://localhost:4321                     # pósters de las escenas (modo lectura y PDF) si cambia una escena o una paleta
 node scripts/video.cjs http://localhost:4321 /ruta/de/salida 4    # graba el recorrido de la presentación (.webm)

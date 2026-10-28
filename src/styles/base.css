@@ -265,6 +265,13 @@ button {
 .masthead > * {
   pointer-events: auto;
 }
+/* Pantalla baja (zoom alto, celular apaisado): la cabecera se va con el scroll en vez de tapar un tercio de la
+   pantalla. Los atajos L y P siguen andando. */
+@media (max-height: 480px) {
+  .masthead {
+    position: absolute;
+  }
+}
 .masthead__brand {
   font-family: var(--f-display);
   font-stretch: var(--display-stretch);

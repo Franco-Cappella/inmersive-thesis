@@ -53,6 +53,7 @@ Estado al cierre de la sesión 3: el sitio está en la fase 8 de 8 del flujo de 
 - [x] Checklist de la sección 10 de la skill: un solo `h1`, títulos sin saltos, figuras descritas en texto y áreas de toque de 44×44 en pantallas táctiles.
 - [x] Árbol de accesibilidad revisado en cinco puntos del scroll: todo el texto está siempre (antes, lo que no se había revelado quedaba afuera, incluso el `h1` a mitad del hero), y con Tab se llega a todas las fuentes, que se ven al recibir el foco. `scripts/a11y.cjs` lo controla.
 - [x] Las listas sincronizadas marcan el ítem que actúa sin bajar el contraste del texto (tinta suave en vez de opacidad).
+- [x] Zoom del 200 al 400 %, reflow a 320 px, espaciado de texto y colores forzados (WCAG 1.4.4, 1.4.10 y 1.4.12). Con menos de 320 px de alto el sitio pasa solo al modo lectura.
 - [ ] Probar con un lector de pantalla real (NVDA o VoiceOver) antes de la defensa.
 
 ## Bloqueado por Franco

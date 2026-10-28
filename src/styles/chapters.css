@@ -431,6 +431,17 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
 .fig--barras tr.is-top .barra {
   background: var(--c-alarm);
 }
+/* Colores forzados (alto contraste de Windows): el fondo se reemplaza por el del sistema y la barra
+   desaparecía. Va en los colores del sistema: el texto para todas y el resaltado para la más citada. */
+@media (forced-colors: active) {
+  .barra {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+  .fig--barras tr.is-top .barra {
+    background: Highlight;
+  }
+}
 .barra__valor {
   min-width: 3.4rem;
   font-family: var(--f-display);
@@ -542,7 +553,8 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   .stage,
   .masthead,
   .progress,
-  .skip {
+  .skip,
+  .hero__cue {
     display: none !important;
   }
   .chapter,

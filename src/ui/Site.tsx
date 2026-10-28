@@ -27,6 +27,27 @@ export function Site() {
   const estudio = useUI((s) => s.estudio);
 
   useEffect(() => useUI.getState().boot(), []);
+
+  // Con zoom muy alto (menos de 320 px de alto: el 400 % de una pantalla común) el escenario fijo no entra en
+  // la pantalla y el texto quedaría cortado. Ahí el sitio pasa solo al modo lectura, que fluye entero, y vuelve
+  // cuando la pantalla crece si la lectura la había puesto él (WCAG 1.4.10, reflow).
+  useEffect(() => {
+    const bajo = matchMedia("(max-height: 320px)");
+    let automatica = false;
+    const revisar = () => {
+      const s = useUI.getState();
+      if (bajo.matches && !s.reading) {
+        automatica = true;
+        s.setReading(true);
+      } else if (!bajo.matches && automatica) {
+        automatica = false;
+        if (s.reading) s.setReading(false);
+      }
+    };
+    revisar();
+    bajo.addEventListener("change", revisar);
+    return () => bajo.removeEventListener("change", revisar);
+  }, []);
   useStoryTimeline(main);
   useEffect(() => initSmoothScroll(), []);
 

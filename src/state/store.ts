@@ -44,6 +44,7 @@ type UI = {
   setEstudio: (e: Estudio) => void;
   setStageReady: (v: boolean) => void;
   toggleReading: () => void;
+  setReading: (v: boolean) => void; // sin tocar la URL: lo usa el paso automático a lectura con zoom muy alto
   togglePresenting: () => void;
 };
 
@@ -97,6 +98,7 @@ export const useUI = create<UI>((set, get) => ({
     syncQuery("lectura", reading ? "" : null);
     set({ reading });
   },
+  setReading: (reading) => set({ reading }),
   togglePresenting: () => {
     const presenting = !get().presenting;
     syncQuery("presentacion", presenting ? "" : null);
