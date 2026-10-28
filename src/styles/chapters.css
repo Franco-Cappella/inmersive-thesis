@@ -137,6 +137,14 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
   padding-bottom: 0.45rem;
   border-bottom: 1px solid var(--c-line);
 }
+/* Las listas al ritmo de la escena atenúan el ítem que todavía no actuó (opacidad en línea, Chapter.tsx).
+   Si algo adentro recibe el foco, el ítem se enciende: el foco siempre se ve entero. */
+.fig-reloj__pasos li:focus-within,
+.fig--golpes > li:focus-within,
+.fig--casos > li:focus-within,
+.fig--pilares > li:focus-within {
+  opacity: 1 !important;
+}
 .fig-reloj__pasos time {
   font-family: var(--f-display);
   font-weight: 700;

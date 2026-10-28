@@ -102,10 +102,13 @@ export function useHeroTimeline(scope: RefObject<HTMLElement | null>) {
 
         // HTML: el primer tween de cada pieza fija su estado inicial; los siguientes son .to().
         // La marca del encabezado repite el h1: aparece recién cuando el título se va.
+        // El texto real (título, pregunta y cierre) se apaga solo con opacidad, para que siga en el árbol de
+        // accesibilidad en cualquier punto del scroll; autoAlpha (visibility: hidden) queda para lo decorativo
+        // o repetido: la guía, la marca y la ficha (aria-hidden; su contenido está en la tabla).
         const brand = document.querySelector(".masthead__brand");
         if (brand) tl.fromTo(brand, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.05 }, 0.09);
         tl.fromTo(".hero__cue", { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.03 }, 0)
-          .fromTo(".hero__intro", { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -70, duration: 0.09 }, 0.05)
+          .fromTo(".hero__intro", { opacity: 1, y: 0 }, { opacity: 0, y: -70, duration: 0.09 }, 0.05)
           .fromTo(
             ".ficha",
             { autoAlpha: 0, y: 48, clipPath: "inset(0% 0% 100% 0%)" },
@@ -117,7 +120,7 @@ export function useHeroTimeline(scope: RefObject<HTMLElement | null>) {
           .to(".swap .v-it", { yPercent: -100, autoAlpha: 0, duration: 0.06, stagger: 0.015 }, 0.46)
           .fromTo(".swap .v-ot", { yPercent: 100, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.06, stagger: 0.015 }, 0.48)
           .to(".ficha", { autoAlpha: 0, y: -48, duration: 0.07 }, 0.84)
-          .fromTo(".hero__cierre", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: 0.07 }, 0.86);
+          .fromTo(".hero__cierre", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.07 }, 0.86);
         },
       );
     },

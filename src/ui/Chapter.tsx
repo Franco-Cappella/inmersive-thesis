@@ -59,8 +59,10 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
                 scrollTrigger: { trigger: section, start: "top 70%", toggleActions: "play none none reverse" },
               }),
           });
+        // Solo opacidad (no autoAlpha): con visibility: hidden el bloque sale del árbol de accesibilidad y del
+        // orden de Tab hasta que se llega a él, y un lector de pantalla no lo encuentra leyendo desde arriba.
         gsap.from(section.querySelectorAll("[data-reveal]"), {
-          autoAlpha: 0,
+          opacity: 0,
           y: 24,
           duration: 0.8,
           ease: "power3.out",
@@ -110,7 +112,7 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
         const campos = section.querySelectorAll(".fig-trama__bytes li");
         if (campos.length)
           gsap.from(campos, {
-            autoAlpha: 0,
+            opacity: 0,
             y: 12,
             duration: 0.5,
             ease: "power3.out",
@@ -187,15 +189,33 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           }
           return curva[curva.length - 1][1];
         };
+        // Navegando con Tab, lo que tiene el foco siempre a la vista: durante la estadía el borde de arriba del
+        // panel queda en `arriba - sube`, así que el desplazamiento se acota para que el elemento entre entero.
+        let foco: HTMLElement | null = null;
+        const conFoco = (s: number) => {
+          if (!foco) return s;
+          const caja = panel.getBoundingClientRect();
+          const el = foco.getBoundingClientRect();
+          const [desde, hasta] = [el.top - caja.top, el.bottom - caja.top]; // dentro del panel
+          return Math.min(desde, Math.max(s, hasta + medidas.arriba + MARGEN - innerHeight));
+        };
         // El sticky suelta el panel solo cuando su borde de abajo llega al final de la sección. Se calcula dónde
         // estaría sin desplazamiento (con las medidas, no leyendo la pantalla: así da bien también antes y
         // después de la estadía) y se lo lleva a donde tiene que estar.
+        let progreso = 0;
         const aplicar = (p: number) => {
+          progreso = p;
           const { arriba, alto, seccion, pie } = medidas;
           const recorrido = p * (seccion - innerHeight);
           const natural = Math.min(arriba, seccion - recorrido - pie - alto);
-          gsap.set(panel, { y: arriba - sube(p) - natural });
+          gsap.set(panel, { y: arriba - conFoco(sube(p)) - natural });
         };
+        const enfocar = (e: FocusEvent) => {
+          foco = e.type === "focusin" ? (e.target as HTMLElement) : null;
+          aplicar(progreso);
+        };
+        panel.addEventListener("focusin", enfocar);
+        panel.addEventListener("focusout", enfocar);
         ScrollTrigger.create({
           trigger: section,
           start: "top top",
@@ -207,7 +227,11 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           },
           onUpdate: (self) => aplicar(self.progress),
         });
-        return () => gsap.set(panel, { clearProps: "transform" });
+        return () => {
+          panel.removeEventListener("focusin", enfocar);
+          panel.removeEventListener("focusout", enfocar);
+          gsap.set(panel, { clearProps: "transform" });
+        };
       });
     },
     { scope: ref, dependencies: [reading], revertOnUpdate: true },

@@ -1,8 +1,11 @@
 // Revisión de accesibilidad con axe-core sobre el build servido (WCAG 2.2 A y AA).
 // Revisa la página entera en escritorio, en celular, en modo lectura y en los otros dos estudios, y recorre con Tab los
 // primeros elementos enfocables para confirmar que el foco se ve y sigue un orden lógico.
+// También confirma que, en cualquier punto del scroll, ningún texto del contenido queda con visibility: hidden
+// (salvo dentro de aria-hidden): eso lo saca del árbol de accesibilidad y del orden de Tab, y un lector de
+// pantalla que lee desde arriba no lo encuentra. Las animaciones de entrada del texto van solo con opacidad.
 // Uso: node scripts/a11y.cjs [url]   (requiere Playwright y el build servido: npx serve out -l 4321)
-// Sale con código 1 si axe encuentra violaciones.
+// Sale con código 1 si axe encuentra violaciones o si algún texto del contenido queda fuera del árbol.
 const { chromium } = require("playwright");
 
 const url = process.argv[2] || "http://localhost:4321";
@@ -16,6 +19,16 @@ const vistas = [
   { nombre: "estudio noche", viewport: { width: 1440, height: 900 }, query: "?estudio=noche" },
 ];
 
+// Textos del contenido fuera del árbol de accesibilidad: con visibility: hidden y sin un aria-hidden que los marque
+// como decorativos a propósito.
+const ocultos = (page) =>
+  page.evaluate(() =>
+    [...document.querySelectorAll("main *")]
+      .filter((el) => !el.closest('[aria-hidden="true"]') && getComputedStyle(el).visibility === "hidden")
+      .filter((el) => [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()))
+      .map((el) => el.textContent.trim().replace(/\s+/g, " ").slice(0, 60)),
+  );
+
 (async () => {
   const browser = await chromium.launch({ args: GL });
   let total = 0;
@@ -24,10 +37,18 @@ const vistas = [
     await page.goto(url + v.query, { waitUntil: "load" });
     await page.waitForTimeout(3500);
     // Recorrer la página para que se apliquen las animaciones de entrada (si no, axe mide texto a medio aparecer).
+    // En cada punto del recorrido, el texto del contenido tiene que seguir en el árbol de accesibilidad.
+    const fuera = new Set(await ocultos(page));
     const alto = await page.evaluate(() => document.documentElement.scrollHeight);
     for (let y = 0; y < alto; y += 700) {
       await page.evaluate((y) => window.scrollTo(0, y), y);
       await page.waitForTimeout(80);
+      (await ocultos(page)).forEach((t) => fuera.add(t));
+    }
+    if (fuera.size) {
+      total += fuera.size;
+      console.log(`${v.nombre}: ${fuera.size} textos con visibility: hidden en algún punto del scroll`);
+      [...fuera].slice(0, 8).forEach((t) => console.log(`  "${t}"`));
     }
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(1500);

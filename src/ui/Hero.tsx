@@ -33,7 +33,7 @@ export function Hero() {
             gsap.from(self.words, { yPercent: 115, duration: 1, ease: "power4.out", stagger: 0.06, delay: 0.15 }),
         });
         gsap.from(".hero__byline, .hero__question", {
-          autoAlpha: 0,
+          opacity: 0, // no autoAlpha: el título y la pregunta siguen en el árbol de accesibilidad
           y: 18,
           duration: 0.8,
           ease: "power3.out",

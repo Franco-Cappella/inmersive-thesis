@@ -378,8 +378,7 @@
   text-transform: var(--display-case);
   font-size: var(--step-4);
   line-height: 0.92;
-  visibility: hidden;
-  opacity: 0;
+  opacity: 0; /* solo opacidad: el texto sigue en el árbol de accesibilidad aunque no se vea */
 }
 
 .hero__cue {
@@ -523,8 +522,12 @@
       opacity 200ms var(--ease-out),
       visibility 200ms;
   }
+  /* El título y la pregunta se apagan solo con opacidad (siguen en el árbol de accesibilidad);
+     la ficha es decorativa (aria-hidden) y puede salir del todo */
   .hero[data-fase="ficha"] .hero__intro,
-  .hero[data-fase="cierre"] .hero__intro,
+  .hero[data-fase="cierre"] .hero__intro {
+    opacity: 0;
+  }
   .hero[data-fase="cierre"] .ficha {
     opacity: 0;
     visibility: hidden;
