@@ -176,6 +176,17 @@ main {
   display: inline-grid;
   place-items: center;
 }
+/* Pantallas táctiles: áreas de toque de al menos 44×44 px (sección 10 de la skill). Con mouse no cambia nada. */
+@media (pointer: coarse) {
+  .sources__ref {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  /* (li a: le gana a la regla base de .progress a, que está más abajo en el archivo) */
+  .progress li a {
+    height: 44px;
+  }
+}
 
 /* ---------- Botones (interfaz: sin animación larga, sin ease-in) ---------- */
 

@@ -36,6 +36,9 @@ Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente,
 - Modo lectura: los capítulos con escena vuelven a su altura natural y sin panel fijo.
 - Capítulo 03: los campos de la trama Modbus aparecen en orden, como llegan por la red.
 
+### Sesión 4 (28/10/2026, loop autónomo)
+- Checklist de accesibilidad de la sección 10 de la skill, revisada en el build: un solo `h1`, títulos sin saltos de nivel, la pirámide del hero con descripción en texto y la tabla de la tesina, y el color nunca solo (la alarma también se nombra en el texto). Lo que fallaba eran las áreas de toque: los enlaces de fuentes medían 25×28 y el índice 44×30. En pantallas táctiles (`pointer: coarse`) ahora miden 44×44; con mouse no cambia nada (`base.css`). Los enlaces dentro de las referencias son texto corrido, que la norma exceptúa.
+
 ### Sesión 3 (27/10/2026, loop autónomo)
 - Escena 07 (`src/three/scenes/Casos.tsx`): un caso por tramo de `fx.attack` (`CASOS_TRAMOS` en `src/scroll/timing.ts`), con la lista del texto encendiéndose al mismo ritmo. Colonial: racks en rojo, enlaces cortados y planta detenida por decisión, sin que el rojo baje. Oldsmar en ámbar (exposición, caso en discusión). Stuxnet e Industroyer: rojo hasta un PLC, que pasa a alarma.
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).

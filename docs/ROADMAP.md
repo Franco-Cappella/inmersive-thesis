@@ -46,6 +46,7 @@ Estado al cierre de la sesión 3: el sitio está en la fase 8 de 8 del flujo de 
 - [x] Script del video de respaldo (`scripts/video.cjs`): graba el recorrido en modo presentación a 1920×1080.
 - [ ] Grabar el video en la compu de la defensa (acá el 3D se dibuja por software y sale entrecortado).
 - [x] Revisión de accesibilidad automatizada (`scripts/a11y.cjs`, axe-core, WCAG 2.2 AA): sin violaciones en escritorio, celular, modo lectura y los tres estudios. Orden de Tab lógico y foco visible.
+- [x] Checklist de la sección 10 de la skill: un solo `h1`, títulos sin saltos, figuras descritas en texto y áreas de toque de 44×44 en pantallas táctiles.
 - [ ] Probar con un lector de pantalla real (NVDA o VoiceOver) antes de la defensa.
 
 ## Bloqueado por Franco
