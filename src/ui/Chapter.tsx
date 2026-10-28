@@ -7,13 +7,24 @@ import { SplitText } from "gsap/SplitText";
 import { useRef, type CSSProperties } from "react";
 import type { Chapter as ChapterData } from "@/content/story";
 import { ui } from "@/content/ui";
-import { APILADO } from "@/scroll/layout";
+import { AL_COSTADO, APILADO } from "@/scroll/layout";
 import { CASOS_TRAMOS, CONFLICTO_TRAMOS, ESCENARIO_PASOS, MATIZ_TRAMOS } from "@/scroll/timing";
 import { useUI } from "@/state/store";
 import { FiguraView } from "./Figuras";
 import { SourceRefs } from "./Sources";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
+
+// Texto al ritmo de la escena 3D (mismo scroll): los pasos del reloj del 01, los golpes del 05,
+// los casos del 07 y los pilares del 09 se encienden cuando actúa su parte de la escena.
+// Los tiempos viven en src/scroll/timing.ts.
+const SINCRONIZADOS: [string, number[]][] = [
+  [".fig-reloj__pasos li", ESCENARIO_PASOS],
+  [".fig--golpes > li", CONFLICTO_TRAMOS.map(([inicio]) => inicio)],
+  [".fig--casos > li", CASOS_TRAMOS.map(([inicio]) => inicio)],
+  [".fig--pilares > li", MATIZ_TRAMOS.map(([inicio]) => inicio)],
+];
+const MARGEN = 24; // aire entre el panel y el borde de abajo de la pantalla
 
 export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
   const ref = useRef<HTMLElement>(null);
@@ -51,17 +62,9 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
           stagger: 0.08,
           scrollTrigger: { trigger: section, start: "top 62%", toggleActions: "play none none reverse" },
         });
-        // Texto al ritmo de la escena 3D (mismo scroll): los pasos del reloj del 01, los golpes del 05,
-        // los casos del 07 y los pilares del 09 se encienden cuando actúa su parte de la escena. Los tiempos viven en src/scroll/timing.ts.
-        const sincronizados: [string, number[]][] = [
-          [".fig-reloj__pasos li", ESCENARIO_PASOS],
-          [".fig--golpes > li", CONFLICTO_TRAMOS.map(([inicio]) => inicio)],
-          [".fig--casos > li", CASOS_TRAMOS.map(([inicio]) => inicio)],
-          [".fig--pilares > li", MATIZ_TRAMOS.map(([inicio]) => inicio)],
-        ];
         // Apilado (celular o pantalla vertical) la escena actúa después del texto (stayOf): ahí la lista
         // se lee entera, sin atenuar.
-        for (const [selector, tiempos] of sincronizados) {
+        for (const [selector, tiempos] of SINCRONIZADOS) {
           const items = section.querySelectorAll<HTMLElement>(selector);
           if (reading || narrow || !section.hasAttribute("data-escena") || !items.length) continue;
           const tl = gsap.timeline({
@@ -133,6 +136,73 @@ export function Chapter({ ch, index }: { ch: ChapterData; index: number }) {
             const final = el.nextElementSibling?.textContent;
             if (final) el.textContent = final;
           });
+      });
+      // Panel fijo más alto que la pantalla (un proyector de 720 px, el texto más grande de la presentación):
+      // durante la estadía el panel sube lo que le sobra, y con lista sincronizada lo hace tramo a tramo,
+      // lo justo para que el ítem que se enciende se vea entero. Corre también con reduced motion: es el
+      // mismo scroll, no una animación aparte.
+      mm.add(AL_COSTADO, () => {
+        const panel = section.querySelector<HTMLElement>(".chapter__inner");
+        if (reading || !panel || !section.hasAttribute("data-escena")) return;
+        const lista = SINCRONIZADOS.find(([selector]) => section.querySelector(selector));
+        const items = lista ? [...section.querySelectorAll<HTMLElement>(lista[0])] : [];
+        let curva: [number, number][] = [[0, 0]];
+        let medidas = { arriba: 0, alto: 0, seccion: 0, pie: 0 };
+        const medir = () => {
+          const arriba = parseFloat(getComputedStyle(panel).top) || 0;
+          medidas = {
+            arriba,
+            alto: panel.offsetHeight,
+            seccion: section.offsetHeight,
+            pie: parseFloat(getComputedStyle(section).paddingBottom) || 0,
+          };
+          const sobra = Math.max(0, panel.offsetHeight + arriba + MARGEN - innerHeight);
+          const desdeArriba = panel.getBoundingClientRect().top;
+          // Cuánto subir para ver entero el borde de abajo de cada ítem (sin pasarse de lo que sobra).
+          const hasta = items.map((li) =>
+            Math.min(sobra, Math.max(0, li.getBoundingClientRect().bottom - desdeArriba + arriba + MARGEN - innerHeight)),
+          );
+          curva = [[0, 0]];
+          let antes = 0;
+          hasta.forEach((h, i) => {
+            const t = lista?.[1][i] ?? 0;
+            curva.push([Math.max(0, t - 0.02), antes], [t + 0.06, Math.max(antes, h)]);
+            antes = Math.max(antes, h);
+          });
+          // Con lista, el panel se queda en el último ítem: al terminar la estadía sube solo con la sección y
+          // deja ver su pie de a poco. Sin lista, sube parejo hasta mostrar el pie al final de la estadía.
+          curva.push([1, items.length ? antes : sobra]);
+        };
+        // Interpolación lineal sobre la curva (progreso de la estadía → cuánto sube el panel).
+        const sube = (p: number) => {
+          for (let i = 1; i < curva.length; i++) {
+            const [t0, v0] = curva[i - 1];
+            const [t1, v1] = curva[i];
+            if (p <= t1) return t1 > t0 ? v0 + ((v1 - v0) * Math.max(0, p - t0)) / (t1 - t0) : v1;
+          }
+          return curva[curva.length - 1][1];
+        };
+        // El sticky suelta el panel solo cuando su borde de abajo llega al final de la sección. Se calcula dónde
+        // estaría sin desplazamiento (con las medidas, no leyendo la pantalla: así da bien también antes y
+        // después de la estadía) y se lo lleva a donde tiene que estar.
+        const aplicar = (p: number) => {
+          const { arriba, alto, seccion, pie } = medidas;
+          const recorrido = p * (seccion - innerHeight);
+          const natural = Math.min(arriba, seccion - recorrido - pie - alto);
+          gsap.set(panel, { y: arriba - sube(p) - natural });
+        };
+        ScrollTrigger.create({
+          trigger: section,
+          start: "top top",
+          end: "bottom bottom",
+          onRefresh: (self) => {
+            gsap.set(panel, { y: 0 });
+            medir();
+            aplicar(self.progress);
+          },
+          onUpdate: (self) => aplicar(self.progress),
+        });
+        return () => gsap.set(panel, { clearProps: "transform" });
       });
     },
     { scope: ref, dependencies: [reading], revertOnUpdate: true },

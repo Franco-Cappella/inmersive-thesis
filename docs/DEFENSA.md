@@ -20,6 +20,8 @@ Lista adaptada de la sección 14 de la skill a este proyecto (Next.js en export 
 
 `P` (o `?presentacion`) y después `→` / `←`, o un control remoto que mande esas teclas. Son 27 paradas: las del hero, una por capítulo y, en los capítulos con escena, paradas extra para que la escena actúe (una por golpe en el 05, una por caso en el 07 y una por pilar en el 09). El viaje entre paradas dura entre 1,2 y 3,2 segundos según la distancia.
 
+Si el proyector tiene poca altura (1280×720 o 1024×768), el texto de algunos capítulos no entra entero al costado de la escena: el panel sube solo, tramo a tramo, para que el golpe, el caso o el pilar que se enciende se vea completo. No hace falta hacer nada; conviene verlo una vez en el ensayo.
+
 Los tiempos son una propuesta para repartir unos 7 a 8 minutos; se ajustan en el ensayo.
 
 | # | Parada | Qué se ve | Tiempo sugerido |

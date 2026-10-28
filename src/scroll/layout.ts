@@ -3,6 +3,8 @@
 // escena actúa con la pantalla libre (stayOf en useStoryTimeline). La misma condición está escrita en
 // src/styles/chapters.css: si cambia acá, cambia allá.
 export const APILADO = "(max-width: 760px), (orientation: portrait)";
+// Lo contrario: el panel fijo al costado de la escena (pantalla ancha y horizontal).
+export const AL_COSTADO = "(min-width: 761px) and (orientation: landscape)";
 
 // En el diseño apilado, la estadía de un capítulo con escena empieza cuando el borde de abajo del
 // panel pasa este punto de la pantalla (0,7 = el 70 % desde arriba). Lo usan el director (stayOf)

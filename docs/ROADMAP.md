@@ -40,6 +40,7 @@ Estado al cierre de la sesión 3: el sitio está en la fase 8 de 8 del flujo de 
 - [x] Capturas del recorrido completo en celular y desktop, scroll hacia atrás incluido (`scripts/capturas.cjs`, `scripts/modos.cjs`).
 - [x] Modo presentación: ← → recorren IT, OT y los capítulos en orden. En el 05, el 07 y el 09 hay una parada por golpe, por caso y por pilar (el texto y la escena avanzan juntos), y el viaje dura según lo que recorre (de 1,2 a 3,2 s). Con `?ensayo`, cronómetro y número de parada.
 - [x] PDF del modo lectura para el jurado (`scripts/pdf.cjs`) e impresión desde el navegador corregida.
+- [x] Pantallas bajas de proyector (1280×720, 1024×768, 1366×768): el panel de los capítulos con escena sube tramo a tramo para que cada ítem que se enciende se vea entero.
 - [ ] Modo presentación ensayado con el proyector y con tiempos (5 a 9 minutos). `docs/DEFENSA.md` tiene las 27 paradas con un reparto sugerido de unos 7 min 50 s.
 - [x] Prueba sin conexión automatizada (`scripts/offline.cjs`): 0 pedidos externos y el recorrido completo (27 paradas) con la red cortada, consola limpia.
 - [ ] Probarlo también en la compu de la defensa, con el wifi apagado y el build servido desde `out/`.

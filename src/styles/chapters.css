@@ -521,6 +521,10 @@ main[data-reading="true"] .chapter[data-escena] .chapter__inner {
     min-height: 0 !important;
     padding-bottom: 1.2rem !important;
   }
+  /* Ni el desplazamiento del panel alto durante la estadía (Chapter.tsx) */
+  .chapter__inner {
+    transform: none !important;
+  }
   /* Las animaciones de entrada dejan estilos en línea (opacidad, visibilidad, desplazamiento):
      en papel todo se ve, sin importar dónde quedó el scroll */
   [data-reveal],
