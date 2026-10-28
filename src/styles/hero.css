@@ -560,40 +560,40 @@
 
 /* ---------- Modo lectura: todo estático y a la vista ---------- */
 
-main[data-reading="true"] .hero {
+:root[data-reading="true"] main .hero {
   height: auto;
 }
-main[data-reading="true"] .hero__sticky {
+:root[data-reading="true"] main .hero__sticky {
   position: static;
   height: auto;
   overflow: visible;
   display: block;
   padding: 7rem var(--gutter) 4rem;
 }
-main[data-reading="true"] .hero__sticky::before,
-main[data-reading="true"] .ficha,
-main[data-reading="true"] .hero__cue {
+:root[data-reading="true"] main .hero__sticky::before,
+:root[data-reading="true"] main .ficha,
+:root[data-reading="true"] main .hero__cue {
   display: none;
 }
-main[data-reading="true"] .hero__figure {
+:root[data-reading="true"] main .hero__figure {
   opacity: 1;
   visibility: visible;
   width: min(100%, 760px);
   margin: 3rem 0 1rem;
 }
-main[data-reading="true"] .pyr-card__inner {
+:root[data-reading="true"] main .pyr-card__inner {
   transform: none;
   aspect-ratio: auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: clamp(1rem, 4vw, 3rem);
 }
-main[data-reading="true"] .pyr-card__face {
+:root[data-reading="true"] main .pyr-card__face {
   position: static;
   transform: none;
   backface-visibility: visible;
 }
-main[data-reading="true"] .hero__cierre {
+:root[data-reading="true"] main .hero__cierre {
   position: static;
   opacity: 1;
   visibility: visible;
@@ -601,7 +601,7 @@ main[data-reading="true"] .hero__cierre {
   max-width: none;
   font-size: var(--step-3);
 }
-main[data-reading="true"] .hero__tabla {
+:root[data-reading="true"] main .hero__tabla {
   position: static;
   width: auto;
   height: auto;
@@ -611,38 +611,38 @@ main[data-reading="true"] .hero__tabla {
   max-width: 64rem;
 }
 
-main[data-reading="true"] .hero__tabla table {
+:root[data-reading="true"] main .hero__tabla table {
   width: 100%;
   border-collapse: collapse;
   font-size: var(--step--1);
   line-height: 1.5;
 }
-main[data-reading="true"] .hero__tabla caption {
+:root[data-reading="true"] main .hero__tabla caption {
   text-align: left;
   font-family: var(--f-display);
   font-weight: 700;
   margin-bottom: 0.75rem;
 }
-main[data-reading="true"] .hero__tabla th,
-main[data-reading="true"] .hero__tabla td {
+:root[data-reading="true"] main .hero__tabla th,
+:root[data-reading="true"] main .hero__tabla td {
   padding: 0.7rem 0.9rem 0.7rem 0;
   text-align: left;
   vertical-align: top;
   border-top: 1px solid var(--c-line);
 }
-main[data-reading="true"] .hero__tabla th {
+:root[data-reading="true"] main .hero__tabla th {
   font-family: var(--f-display);
   font-weight: 700;
 }
 /* Pantalla muy angosta (320 px: zoom del 400 %): las palabras largas ("Confidencialidad:") se cortan para que
    la tabla entre sin mover la página de costado (WCAG 1.4.10) */
 @media (max-width: 400px) {
-  main[data-reading="true"] .hero__tabla th,
-  main[data-reading="true"] .hero__tabla td {
+  :root[data-reading="true"] main .hero__tabla th,
+  :root[data-reading="true"] main .hero__tabla td {
     padding-right: 0.5rem;
   }
   /* Solo las celdas: los encabezados ("Prioridad", "Dimensión") van enteros */
-  main[data-reading="true"] .hero__tabla td {
+  :root[data-reading="true"] main .hero__tabla td {
     hyphens: auto;
     overflow-wrap: anywhere;
   }

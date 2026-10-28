@@ -25,6 +25,7 @@ export function Site() {
   const reading = useUI((s) => s.reading);
   const presenting = useUI((s) => s.presenting);
   const estudio = useUI((s) => s.estudio);
+  const booted = useUI((s) => s.booted);
 
   useEffect(() => useUI.getState().boot(), []);
 
@@ -51,15 +52,19 @@ export function Site() {
   useStoryTimeline(main);
   useEffect(() => initSmoothScroll(), []);
 
-  // El estudio y los modos viven en <html> para que los tokens de CSS cambien en toda la página.
+  // El estudio y los modos viven en <html> para que los tokens de CSS cambien en toda la página. Hasta que boot()
+  // lee la URL mandan los que puso el script del <head> (layout.tsx): escribir antes los valores por defecto
+  // los pisaba un cuadro y la página parpadeaba.
   useEffect(() => {
+    if (!booted) return;
     const html = document.documentElement;
     html.dataset.estudio = estudio;
     html.dataset.presenting = String(presenting);
+    html.dataset.reading = String(reading);
     // La presentación agranda el texto (y cada estudio tiene su tipografía): cambia el alto de los capítulos
     // sin escena y, con él, dónde empieza cada tramo del scroll. Sin esto, los ScrollTrigger quedan corridos.
     ScrollTrigger.refresh();
-  }, [estudio, presenting]);
+  }, [booted, estudio, presenting, reading]);
 
   // Las fuentes cambian el alto de los textos: recalcular los ScrollTrigger una vez cargadas.
   useEffect(() => {

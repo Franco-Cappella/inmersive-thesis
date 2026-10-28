@@ -29,14 +29,16 @@ export const viewport: Viewport = {
   themeColor: "#c9ccce",
 };
 
-// Aplica ?estudio= antes del primer pintado para que no parpadee la paleta equivocada.
-const estudioScript = `try{var e=new URLSearchParams(location.search).get("estudio");if(e==="plano"||e==="noche")document.documentElement.dataset.estudio=e}catch(_){}`;
+// Aplica ?estudio=, ?lectura y ?presentacion antes del primer pintado: sin esto la página se pintaba en modo
+// normal y saltaba medio segundo después, cuando React leía la URL (el texto de la presentación es más grande y
+// la lectura cambia todo el diseño). Después, Site.tsx mantiene estos atributos al día.
+const modosScript = `try{var q=new URLSearchParams(location.search),d=document.documentElement.dataset,e=q.get("estudio");if(e==="plano"||e==="noche")d.estudio=e;if(q.has("lectura"))d.reading="true";if(q.has("presentacion"))d.presenting="true"}catch(_){}`;
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" data-estudio="sala" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: estudioScript }} />
+        <script dangerouslySetInnerHTML={{ __html: modosScript }} />
       </head>
       <body>{children}</body>
     </html>
