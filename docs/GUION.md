@@ -6,7 +6,7 @@ Texto: título de 3 a 8 palabras y una bajada de una o dos oraciones, en prosa. 
 
 | # | Capítulo (tesina) | Figura en pantalla | Qué hace el 3D | Estado |
 |---|---|---|---|---|
-| hero | Pregunta y tríada CIA/AIC (Sección 1) | Ficha IT/OT con cartel de paletas y prioridades que se reordenan | Pirámide C·I·A: gira y baja de IT a OT | **Hecho** |
+| hero | Pregunta y tríada CIA/AIC (Sección 1) | Ficha IT/OT con cartel de paletas y prioridades que se reordenan | Pirámide C·I·A: gira hacia adelante (a mitad del giro, las capas en ámbar con sus letras) y baja de IT a OT | **Hecho** |
 | 01 | Escenario hipotético: el parche que apagó la planta | Reloj 03:14 → +3 h. Marcado como *hipotético* | El parche baja de un rack al PLC; HMI en blanco, flujo cortado, válvula ámbar → rojo, baliza ESD | **Hecho** |
 | 02 | Industria 4.0: se rompe el air gap | Antes / después: bloques IT y OT separados y unidos | Borde del air gap entre los dos pisos; bajan enlaces (racks y nube → PLC, tanque, válvula), el borde pasa a ámbar y cruzan paquetes | **Hecho** |
 | 03 | Protocolos que confían en cualquiera | Trama Modbus con sus campos en hexadecimal | Primer plano del gabinete: la trama baja por el cable con sus bytes a la vista, el PLC la acepta sin identificar al emisor y la válvula gira | **Hecho** |

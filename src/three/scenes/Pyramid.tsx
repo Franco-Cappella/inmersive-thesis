@@ -135,7 +135,10 @@ export function Pyramid({ palette }: { palette: Palette }) {
     // Los capítulos usan la planta: la pirámide se guarda y vuelve si un capítulo la pide (cada capa escala sola).
     lift.current.visible = rig.fx.triad > 0.001;
     yaw.current.rotation.y = -0.38 + Math.sin(t * 0.25) * 0.16 + bell(flip) * 0.9;
-    tumble.current.rotation.x = -Math.PI * flip;
+    // Gira hacia adelante: a mitad del giro la punta apunta a la cámara y las tres capas se ven como
+    // cuadrados concéntricos que rotan entre sí. Hacia atrás, la base quedaba de frente como un cuadrado
+    // plano que tapaba el cuadro. El final es el mismo (180° para un lado o para el otro).
+    tumble.current.rotation.x = Math.PI * flip;
   });
   return (
     <group ref={lift} position={[0, PYRAMID_Y.it, 0]}>

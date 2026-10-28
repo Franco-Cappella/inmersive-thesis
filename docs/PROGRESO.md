@@ -41,6 +41,8 @@ Según el flujo de la skill (sección 3), las fases 1 a 7 están hechas: fuente,
 
 - Presentación en el diseño apilado (celular y pantallas verticales): las paradas del final de cada tramo se calculaban sobre todo el alto de la sección, pero ahí la estadía empieza cuando el panel ya subió. Ahora `stopY` (`src/ui/navigation.ts`) usa la misma regla que el director; el punto en que empieza la estadía es `PANEL_SUBIDO` en `src/scroll/layout.ts` (lo comparten los dos). Medido en tableta parada, celular y escritorio: cada parada cae al final de su tramo (05: 0,32 · 0,65 · 1; 07: 0,25 · 0,5 · 0,75 · 1; 09: 0,4 · 0,7 · 1).
 
+- Hero, el giro: a mitad de camino la base de la capa A quedaba de frente a la cámara y se veía un cuadrado ámbar plano que llenaba el cuadro. Ahora la pirámide gira hacia adelante (`Pyramid.tsx`): a mitad del giro la punta apunta a la cámara y las tres capas se ven como bloques con sus letras (C, I y A legibles) que rotan entre sí; al final, la A arriba en azul, igual que antes.
+
 ### Sesión 3 (27/10/2026, loop autónomo)
 - Escena 07 (`src/three/scenes/Casos.tsx`): un caso por tramo de `fx.attack` (`CASOS_TRAMOS` en `src/scroll/timing.ts`), con la lista del texto encendiéndose al mismo ritmo. Colonial: racks en rojo, enlaces cortados y planta detenida por decisión, sin que el rojo baje. Oldsmar en ámbar (exposición, caso en discusión). Stuxnet e Industroyer: rojo hasta un PLC, que pasa a alarma.
 - `src/three/signals.ts`: señales derivadas de `rig.fx` que comparten varias escenas (flujo de la planta, corte de Colonial, válvula expuesta, controladores comprometidos).
