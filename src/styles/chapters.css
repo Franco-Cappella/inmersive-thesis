@@ -577,7 +577,9 @@
   }
   .refs__nombre span {
     display: inline;
-    font-size: clamp(2.4rem, 12vw, 3.6rem);
+    font-size: clamp(2.2rem, 10.5vw, 3.4rem);
+    white-space: normal; /* con el espaciado de texto ampliado, la palabra se parte antes que mover la página */
+    overflow-wrap: anywhere;
   }
   .refs__nombre span:not(:last-child) {
     margin-right: 0.3em;
