@@ -22,7 +22,8 @@ function stopY(stop: Stop) {
 
 // Mientras Lenis está llevando el scroll a una parada, la referencia es ese destino
 // (si no, dos ← → seguidos calcularían desde una posición intermedia).
-let last = { y: 0, until: 0 };
+// `apurado`: el viaje en curso ya es uno rápido (ver stepStop).
+let last = { y: 0, until: 0, apurado: false };
 
 // En la presentación cada → es un viaje que deja ver actuar la escena: las animaciones van atadas al scroll,
 // así que su ritmo es el del viaje. Dura según lo que recorre (2,6 s más 1,6 s por pantalla, hasta 7,5 s) y
@@ -61,16 +62,19 @@ export function cambiarVelocidad(paso: number) {
   }
 }
 
-function go(y: number, paced = false) {
+const RAPIDO = 0.9; // segundos de un viaje apurado (dos toques seguidos)
+
+function go(y: number, modo: "salto" | "viaje" | "rapido" = "salto") {
   const html = document.documentElement;
-  if (!paced) {
-    last = { y, until: performance.now() + 1300 };
+  if (modo === "salto") {
+    last = { y, until: performance.now() + 1300, apurado: false };
     scrollToY(y, 1.2);
     return;
   }
   const screens = Math.abs(y - window.scrollY) / window.innerHeight;
-  const duration = Math.min(VIAJE.max, VIAJE.base + screens * VIAJE.porPantalla) / velocidadActual();
-  last = { y, until: performance.now() + duration * 1000 + 300 };
+  const duration =
+    modo === "rapido" ? RAPIDO : Math.min(VIAJE.max, VIAJE.base + screens * VIAJE.porPantalla) / velocidadActual();
+  last = { y, until: performance.now() + duration * 1000 + 300, apurado: modo === "rapido" };
   // Mientras dura el viaje, <html data-viajando>: los scripts de prueba esperan a que se apague.
   html.dataset.viajando = "true";
   html.dataset.destino = String(y);
@@ -89,13 +93,20 @@ export function goToStop(id: string) {
 
 // Siguiente o anterior según la POSICIÓN, no la sección activa: desde el título del hero
 // la primera → tiene que ir a la ficha IT, aunque la sección activa ya sea "it".
+// Dos toques seguidos (flecha o clic) apuran: si llega un → mientras la escena viaja, el viaje termina rápido en
+// la misma parada (no se saltea nada); otro → durante ese viaje rápido pasa a la siguiente, también rápido.
 export function stepStop(dir: 1 | -1) {
+  const viajando = performance.now() < last.until;
+  if (viajando && dir === 1 && !last.apurado) {
+    go(last.y, "rapido");
+    return;
+  }
   // Cerca del destino anterior (a menos de 60 px) también vale ese destino: si el viaje todavía no terminó de
   // llegar, una → no puede repetir la misma parada.
   const ref = performance.now() < last.until || Math.abs(window.scrollY - last.y) < 60 ? last.y : window.scrollY;
   const ys = stops.map(stopY).filter((y): y is number => y !== null);
   const target = dir === 1 ? ys.find((y) => y > ref + 4) : ys.findLast((y) => y < ref - 4);
-  if (target !== undefined) go(target, true);
+  if (target !== undefined) go(target, viajando && last.apurado ? "rapido" : "viaje");
 }
 
 // Parada en la que está el scroll (1 = la primera) y cuántas hay. La usa el cronómetro del ensayo.
