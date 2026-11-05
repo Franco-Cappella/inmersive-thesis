@@ -24,6 +24,8 @@ function stopY(stop: Stop) {
 // (si no, dos ← → seguidos calcularían desde una posición intermedia).
 // `apurado`: el viaje en curso ya es uno rápido (ver stepStop).
 let last = { y: 0, until: 0, apurado: false };
+// Hay un viaje en curso (de → o clic) que todavía no llegó: un toque ahora apura en vez de avanzar.
+let enViaje = false;
 
 // En la presentación cada → es un viaje que deja ver actuar la escena: las animaciones van atadas al scroll,
 // así que su ritmo es el del viaje. Dura según lo que recorre (2,6 s más 1,6 s por pantalla, hasta 7,5 s) y
@@ -67,6 +69,7 @@ const RAPIDO = 0.9; // segundos de un viaje apurado (dos toques seguidos)
 function go(y: number, modo: "salto" | "viaje" | "rapido" = "salto") {
   const html = document.documentElement;
   if (modo === "salto") {
+    enViaje = false;
     last = { y, until: performance.now() + 1300, apurado: false };
     scrollToY(y, 1.2);
     return;
@@ -77,9 +80,12 @@ function go(y: number, modo: "salto" | "viaje" | "rapido" = "salto") {
   last = { y, until: performance.now() + duration * 1000 + 300, apurado: modo === "rapido" };
   // Mientras dura el viaje, <html data-viajando>: los scripts de prueba esperan a que se apague.
   html.dataset.viajando = "true";
+  enViaje = true;
   html.dataset.destino = String(y);
   const llegar = () => {
-    if (last.y === y) delete html.dataset.viajando;
+    if (last.y !== y) return;
+    enViaje = false;
+    delete html.dataset.viajando;
   };
   scrollToY(y, duration, parejo, llegar);
   window.setTimeout(llegar, duration * 1000 + 300); // por si Lenis salta sin animar (reduced motion)
@@ -96,7 +102,7 @@ export function goToStop(id: string) {
 // Dos toques seguidos (flecha o clic) apuran: si llega un → mientras la escena viaja, el viaje termina rápido en
 // la misma parada (no se saltea nada); otro → durante ese viaje rápido pasa a la siguiente, también rápido.
 export function stepStop(dir: 1 | -1) {
-  const viajando = performance.now() < last.until;
+  const viajando = enViaje;
   if (viajando && dir === 1 && !last.apurado) {
     go(last.y, "rapido");
     return;

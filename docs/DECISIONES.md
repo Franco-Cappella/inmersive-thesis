@@ -28,8 +28,8 @@ La skill fija topes por frame para la compu de la defensa (sección 8). `scripts
 
 | Tier | Antes | Después | Tope de la skill |
 |---|---|---|---|
-| Alto (`?calidad=alta`) | 122 llamadas | 91 llamadas · 45 k triángulos | ≤ 150 · ≤ 500 k |
-| Bajo (`?calidad=baja`) | 105 llamadas: el 09 y el 10 se pasaban | 74 llamadas · 45 k triángulos | ≤ 80 · ≤ 200 k |
+| Alto (`?calidad=alta`) | 122 llamadas | 91 llamadas · 45 k triángulos (97 desde que el 10 muestra las dos pirámides) | ≤ 150 · ≤ 500 k |
+| Bajo (`?calidad=baja`) | 105 llamadas: el 09 y el 10 se pasaban | 74 llamadas · 45 k triángulos (80, justo en el tope, con las dos pirámides del 10) | ≤ 80 · ≤ 200 k |
 
 El pico está en el final del 10 (la torre entera a la vista, con la pirámide). Para bajarlo se fusionaron piezas quietas que comparten material y se instanciaron las que se repiten, sin cambiar el aspecto (`src/three/merge.ts`):
 
