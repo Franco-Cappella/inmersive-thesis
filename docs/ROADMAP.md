@@ -39,7 +39,7 @@ Estado al cierre de la sesión 3: el sitio está en la fase 8 de 8 del flujo de 
 
 ## Fase 5 · Verificación y defensa — parcial
 - [x] Capturas del recorrido completo en celular y desktop, scroll hacia atrás incluido (`scripts/capturas.cjs`, `scripts/modos.cjs`).
-- [x] Modo presentación: ← → (o un control remoto) recorren IT, OT y los capítulos en orden. En el 05, el 07 y el 09 hay una parada por golpe, por caso y por pilar. Cada viaje dura de 3 a 7,5 s con ritmo parejo, para que la escena se entienda; `+` y `−` ajustan la velocidad en vivo. Con `?ensayo`, cronómetro, parada, velocidad y fps.
+- [x] Modo presentación: ← → (o un control remoto) recorren IT, OT y los capítulos en orden. En el 05, el 07 y el 09 hay una parada por golpe, por caso y por pilar. Cada viaje dura unos 2 a 6 s con el valor inicial de 1,25× y ritmo parejo, para que la escena se entienda; `+` y `−` ajustan la velocidad en vivo. Con `?ensayo`, cronómetro, parada, velocidad y fps.
 - [x] PDF del modo lectura para el jurado (`scripts/pdf.cjs`) e impresión desde el navegador corregida.
 - [x] Pósters de las escenas (sección 10 de la skill): en el modo lectura y en el PDF cada capítulo con escena muestra una imagen fija con su descripción como epígrafe; el 03 en díptico y el 05 en tríptico (`scripts/posters.cjs`, los tres estudios).
 - [x] Pantallas bajas de proyector (1280×720, 1024×768, 1366×768): el panel de los capítulos con escena sube tramo a tramo para que cada ítem que se enciende se vea entero.

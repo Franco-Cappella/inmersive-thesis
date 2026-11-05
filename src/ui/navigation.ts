@@ -33,18 +33,20 @@ let enViaje = false;
 // casi todo el recorrido en el primer tercio: la escena se disparaba de golpe.
 // La velocidad se ajusta en vivo con + y − (de 0,5× a 2×) y se recuerda en el navegador.
 const VIAJE = { base: 2.6, porPantalla: 1.6, max: 7.5 };
+// Velocidad al abrir el sitio, si el navegador no guardó otra (1 = la de arriba; 1,25 = apretar + una vez).
+const VELOCIDAD_INICIAL = 1.25;
 const parejo = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
 const CLAVE = "tesina-velocidad";
 
 function leerVelocidad() {
   try {
     const v = parseFloat(localStorage.getItem(CLAVE) ?? "");
-    return v >= 0.5 && v <= 2 ? v : 1;
+    return v >= 0.5 && v <= 2 ? v : VELOCIDAD_INICIAL;
   } catch {
-    return 1;
+    return VELOCIDAD_INICIAL;
   }
 }
-let velocidad = 1;
+let velocidad = VELOCIDAD_INICIAL;
 let leida = false;
 
 export function velocidadActual() {
