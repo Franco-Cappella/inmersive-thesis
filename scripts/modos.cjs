@@ -32,6 +32,13 @@ const state = (page) =>
     };
   });
 
+// Espera a que termine el viaje entre paradas (el sitio marca <html data-viajando> mientras dura).
+const llegar = async (page) => {
+  await page.waitForTimeout(200);
+  await page.waitForFunction(() => !document.documentElement.dataset.viajando, null, { timeout: 20000 }).catch(() => {});
+  await page.waitForTimeout(400);
+};
+
 (async () => {
   const log = (...a) => console.log(...a);
   let browser = await chromium.launch({ args: GL });
@@ -72,12 +79,12 @@ const state = (page) =>
     const seq = [];
     for (let i = 0; i < 4; i++) {
       await page.keyboard.press("ArrowRight");
-      await page.waitForTimeout(2200);
+      await llegar(page);
       const s = await state(page);
       seq.push(`${s.activo}@${s.y}`);
     }
     await page.keyboard.press("ArrowLeft");
-    await page.waitForTimeout(2200);
+    await llegar(page);
     const s = await state(page);
     seq.push(`← ${s.activo}@${s.y}`);
     log("presentación", seq.join(" | "));

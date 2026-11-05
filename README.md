@@ -54,9 +54,9 @@ npx serve out
 |---|---|
 | Scroll | Recorre el hero (IT → giro → OT) y los capítulos |
 | `L` o `?lectura` | Modo lectura: sin 3D, todo el texto en flujo normal y cada escena como imagen fija (póster) con su descripción. Sirve para el jurado y para imprimir |
-| `P` o `?presentacion` | Modo presentación: `→` y `←` (o un control remoto) saltan entre paradas |
+| `P` o `?presentacion` | Modo presentación: `→` y `←` (o un control remoto) viajan entre paradas y la escena se reproduce en el viaje (de 3 a 7,5 s). `+` y `−` ajustan la velocidad |
 | `?estudio=plano` / `?estudio=noche` | Cambia la dirección de arte. También desde los botones del encabezado |
-| `?presentacion&ensayo` | Ensayo: un cronómetro abajo a la izquierda (arranca con la primera flecha), la parada actual, los cuadros por segundo y la calidad del 3D. El reloj se pone ámbar desde los 8 minutos y rojo pasados los 9; los fps se marcan en ámbar por debajo de 30 (en esa compu conviene `?calidad=baja`) |
+| `?presentacion&ensayo` | Ensayo: un cronómetro abajo a la izquierda (arranca con la primera flecha), la parada actual, la velocidad de los viajes, los cuadros por segundo y la calidad del 3D. El reloj se pone ámbar desde los 8 minutos y rojo pasados los 9; los fps se marcan en ámbar por debajo de 30 (en esa compu conviene `?calidad=baja`) |
 | `?calidad=baja` | Para una compu lenta: sin efectos de posprocesado y a resolución 1×. El sitio ya baja solo si mide pocos cuadros por segundo; esto lo fija desde el principio |
 | `?calidad=estatica` | Sin 3D: la pirámide del hero en SVG y los capítulos sobre el campo liso |
 | `?calidad=alta` | Fija la calidad alta (el sitio no la baja aunque caigan los fps). Sirve para medir el peor caso con `scripts/presupuesto.cjs`, no para presentar |

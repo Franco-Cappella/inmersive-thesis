@@ -14,7 +14,7 @@ import { Chapter } from "./Chapter";
 import { Ensayo } from "./Ensayo";
 import { Hero } from "./Hero";
 import { Masthead } from "./Masthead";
-import { stepStop } from "./navigation";
+import { cambiarVelocidad, stepStop } from "./navigation";
 import { ProgressNav } from "./ProgressNav";
 import { References } from "./References";
 import { Stage } from "./Stage";
@@ -88,7 +88,8 @@ export function Site() {
     { scope: main, dependencies: [reading], revertOnUpdate: true },
   );
 
-  // Atajos: L lectura · P presentación · en presentación, ← → (y las teclas de un control remoto) por parada.
+  // Atajos: L lectura · P presentación · en presentación, ← → (y las teclas de un control remoto) por parada
+  // y + − para la velocidad de los viajes.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -103,6 +104,10 @@ export function Site() {
       } else if (s.presenting && ["arrowleft", "arrowup", "pageup"].includes(key)) {
         e.preventDefault();
         stepStop(-1);
+      } else if (s.presenting && ["+", "="].includes(key)) {
+        cambiarVelocidad(0.25); // viajes más rápidos
+      } else if (s.presenting && ["-", "_"].includes(key)) {
+        cambiarVelocidad(-0.25); // viajes más lentos
       }
     };
     window.addEventListener("keydown", onKey);

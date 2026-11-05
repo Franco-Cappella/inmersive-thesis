@@ -15,6 +15,13 @@ fs.mkdirSync(out, { recursive: true });
 const args = process.env.GPU ? ["--enable-gpu", "--ignore-gpu-blocklist"] : ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"];
 const size = { width: 1920, height: 1080 };
 
+// Espera a que termine el viaje entre paradas (el sitio marca <html data-viajando> mientras dura).
+const llegar = async (page) => {
+  await page.waitForTimeout(200);
+  await page.waitForFunction(() => !document.documentElement.dataset.viajando, null, { timeout: 20000 }).catch(() => {});
+  await page.waitForTimeout(400);
+};
+
 (async () => {
   const browser = await chromium.launch({ args });
   const context = await browser.newContext({ viewport: size, recordVideo: { dir: out, size } });
@@ -26,6 +33,7 @@ const size = { width: 1920, height: 1080 };
   for (; paradas < 40; paradas++) {
     const y = await page.evaluate(() => scrollY);
     await page.keyboard.press("ArrowRight");
+    await llegar(page); // el viaje (la escena actuando) y después la pausa en la parada
     await page.waitForTimeout(pausa);
     if ((await page.evaluate(() => scrollY)) === y) break; // llegó a la última parada
   }

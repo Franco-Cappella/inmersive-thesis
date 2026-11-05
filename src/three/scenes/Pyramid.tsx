@@ -57,8 +57,12 @@ function faceLabel(l: Layer, side: 1 | -1) {
   };
 }
 
-function PyramidLayer({ layer, index, palette }: { layer: Layer; index: number; palette: Palette }) {
+// `fija`: la pirámide de IT (C · I · A) que el capítulo 10 pone arriba, en la oficina, al lado de la invertida de
+// abajo, para que se vea el contraste. No gira ni baja: se arma con fx.pair en el orden de prioridad de IT.
+function PyramidLayer({ layer, index, palette, fija }: { layer: Layer; index: number; palette: Palette; fija: boolean }) {
   const mesh = useRef<Mesh>(null);
+  const frente = useRef<Mesh>(null);
+  const dorso = useRef<Mesh>(null);
   const material = useRef<MeshStandardMaterial>(null);
   const edges = useRef<{ material: { color: Color } }>(null);
   const geometry = useMemo(
@@ -81,14 +85,17 @@ function PyramidLayer({ layer, index, palette }: { layer: Layer; index: number; 
     const m = mesh.current;
     const mat = material.current;
     if (!m || !mat) return;
-    const { flip, intro } = rig.hero;
+    const flip = fija ? 0 : rig.hero.flip;
+    const intro = fija ? 1 : rig.hero.intro;
     const spread = bell(flip); // 0 en reposo, 1 a mitad del giro
     const drop = 1 - easeOutBack(range(intro, layer.dropStart, layer.dropStart + 0.5));
     m.position.y = layer.y + layer.offset * (1 + spread * 4.2) + drop * 7;
     m.rotation.y = (1 - index) * spread * 0.55; // la punta y la base giran en sentidos opuestos
     // fx.triad: los capítulos guardan la pirámide y el 10 la rearma capa por capa, en el orden de
     // prioridad de OT (A, I, C). En el hero vale 1 y no cambia nada.
-    const pop = easeOutBack(range(rig.fx.triad, layer.dropStart, layer.dropStart + 0.5));
+    // La fija se arma al revés (C, I, A): su prioridad N° 1 es la punta.
+    const desde = fija ? index * 0.17 : layer.dropStart;
+    const pop = easeOutBack(range(fija ? rig.fx.pair : rig.fx.triad, desde, desde + 0.5));
     m.visible = pop > 0.001;
     m.scale.setScalar(Math.max(0.001, pop));
 
@@ -99,6 +106,9 @@ function PyramidLayer({ layer, index, palette }: { layer: Layer; index: number; 
     mat.emissive.copy(c.flow).lerp(c.warn, clash);
     mat.emissiveIntensity = first * 1.6 + clash * 0.45; // poco emisivo en el choque: que se lea el volumen
     if (edges.current) edges.current.material.color.copy(c.ink).lerp(c.warn, clash);
+    // Solo la letra que mira a cámara: antes del giro la del frente, después la de atrás (una llamada menos).
+    if (frente.current) frente.current.visible = flip < 0.5;
+    if (dorso.current) dorso.current.visible = flip >= 0.5;
   });
 
   const front = faceLabel(layer, 1);
@@ -113,27 +123,28 @@ function PyramidLayer({ layer, index, palette }: { layer: Layer; index: number; 
         flatShading
       />
       <Edges ref={edges as never} threshold={20} color={palette.edge[0]} lineWidth={1.4} transparent opacity={palette.edge[1]} />
-      <Text font={FONT_URL} fontSize={layer.labelSize} color={palette.ink} anchorX="center" anchorY="middle" {...front}>
+      <Text ref={frente} font={FONT_URL} fontSize={layer.labelSize} color={palette.ink} anchorX="center" anchorY="middle" {...front}>
         {layer.letra}
       </Text>
-      <Text font={FONT_URL} fontSize={layer.labelSize} color={palette.ink} anchorX="center" anchorY="middle" {...back}>
+      <Text ref={dorso} font={FONT_URL} fontSize={layer.labelSize} color={palette.ink} anchorX="center" anchorY="middle" {...back}>
         {layer.letra}
       </Text>
     </mesh>
   );
 }
 
-export function Pyramid({ palette }: { palette: Palette }) {
+export function Pyramid({ palette, fija = false }: { palette: Palette; fija?: boolean }) {
   const lift = useRef<Group>(null);
   const yaw = useRef<Group>(null);
   const tumble = useRef<Group>(null);
   useFrame((state) => {
     if (!lift.current || !yaw.current || !tumble.current) return;
-    const { flip, descent } = rig.hero;
+    const flip = fija ? 0 : rig.hero.flip;
+    const descent = fija ? 0 : rig.hero.descent;
     const t = rig.snap ? 0 : state.clock.elapsedTime;
     lift.current.position.y = MathUtils.lerp(PYRAMID_Y.it, PYRAMID_Y.ot, descent) + Math.sin(t * 0.9) * 0.06;
     // Los capítulos usan la planta: la pirámide se guarda y vuelve si un capítulo la pide (cada capa escala sola).
-    lift.current.visible = rig.fx.triad > 0.001;
+    lift.current.visible = (fija ? rig.fx.pair : rig.fx.triad) > 0.001;
     yaw.current.rotation.y = -0.38 + Math.sin(t * 0.25) * 0.16 + bell(flip) * 0.9;
     // Gira hacia adelante: a mitad del giro la punta apunta a la cámara y las tres capas se ven como
     // cuadrados concéntricos que rotan entre sí. Hacia atrás, la base quedaba de frente como un cuadrado
@@ -145,7 +156,7 @@ export function Pyramid({ palette }: { palette: Palette }) {
       <group ref={yaw}>
         <group ref={tumble}>
           {LAYERS.map((l, i) => (
-            <PyramidLayer key={l.id} layer={l} index={i} palette={palette} />
+            <PyramidLayer key={l.id} layer={l} index={i} palette={palette} fija={fija} />
           ))}
         </group>
       </group>

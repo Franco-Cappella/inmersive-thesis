@@ -44,6 +44,7 @@ export type Figura =
 export type SceneFx = {
   dim: number; // velo sobre el 3D: 1 = el capítulo se lee sobre el campo liso
   triad: number; // la pirámide del hero: 1 = presente, 0 = guardada (los capítulos usan la planta)
+  pair: number; // 10: la pirámide de IT (C·I·A) vuelve arriba, al lado de la invertida, para el contraste
   patch: number; // 01: el parche viaja de la torre IT al PLC de la planta
   halt: number; // 01: la planta se detiene (HMI en blanco, flujo cortado, válvula en alarma)
   bridge: number; // 02: se rompe el air gap: enlaces de IT (y la nube) a la planta y paquetes que cruzan
@@ -52,7 +53,7 @@ export type SceneFx = {
   attack: number; // 07: los cuatro casos, uno por tramo (ver CASOS_TRAMOS en src/scroll/timing.ts)
   zones: number; // 09: zonas y conductos, monitoreo pasivo y gemelo digital (ver MATIZ_TRAMOS)
 };
-export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, patch: 0, halt: 0, bridge: 0, frame: 0, hits: 0, attack: 0, zones: 0 };
+export const FX_INICIAL: SceneFx = { dim: 0, triad: 1, pair: 0, patch: 0, halt: 0, bridge: 0, frame: 0, hits: 0, attack: 0, zones: 0 };
 
 // Estado acumulado al terminar el capítulo i (i = -1: el final del hero).
 export const fxOf = (i: number): SceneFx =>
@@ -346,12 +347,12 @@ export const chapters: Chapter[] = [
     },
     fuentes: [],
     escena:
-      "La cámara sube y se aleja hasta ver la torre entera: la oficina sigue con su incidente, los ataques quedan frenados sobre la DMZ y la planta funciona, segmentada. La pirámide vuelve y se rearma capa por capa en el orden de OT: disponibilidad, integridad y confidencialidad.",
+      "La cámara sube y se aleja hasta ver la torre entera: la oficina sigue con su incidente, los ataques quedan frenados sobre la DMZ y la planta funciona, segmentada. Vuelven las dos pirámides para el contraste: arriba, en la oficina, la de IT se arma con la confidencialidad en la punta; abajo, en la planta, la invertida se rearma capa por capa en el orden de OT: disponibilidad, integridad y confidencialidad.",
     weight: 1.8,
     camara: {
       landscape: { position: [-8, 4, 31], target: [10, -3.2, -5] },
       portrait: { position: [0, 2.6, 32], target: [0, -3.4, -4] },
     },
-    fx: { triad: 1 },
+    fx: { triad: 1, pair: 1 },
   },
 ];

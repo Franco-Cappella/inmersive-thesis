@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { ui } from "@/content/ui";
 import { useUI } from "@/state/store";
-import { stopProgress } from "./navigation";
+import { stopProgress, velocidadActual } from "./navigation";
 
 // Cronómetro del ensayo (?presentacion&ensayo): arranca con la primera flecha y muestra la parada actual.
 // El color es estado, como en todo el sitio: ámbar desde los 8 minutos y rojo pasados los 9 (la exposición dura de 5 a 9).
-// También muestra los cuadros por segundo y la calidad del 3D: en la compu de la defensa, si el recorrido
+// Con + y − se ajusta la velocidad de los viajes entre paradas, y se ve acá. También muestra los cuadros por segundo y la calidad del 3D: en la compu de la defensa, si el recorrido
 // queda por debajo de 30 fps, conviene abrir con ?calidad=baja (docs/DEFENSA.md).
 const AVANZAR = ["arrowright", "arrowdown", "pagedown", " "];
 const FPS_MINIMO = 30;
@@ -19,6 +19,7 @@ export function Ensayo() {
   const [ahora, setAhora] = useState(0);
   const [parada, setParada] = useState({ index: 0, total: 0 });
   const [fps, setFps] = useState<number | null>(null);
+  const [velocidad, setVelocidad] = useState(1);
 
   useEffect(() => {
     if (!visible) return;
@@ -36,6 +37,7 @@ export function Ensayo() {
       const t = performance.now();
       setAhora(t);
       setParada(stopProgress());
+      setVelocidad(velocidadActual());
       setFps(Math.round((cuadros * 1000) / (t - desde)));
       cuadros = 0;
       desde = t;
@@ -59,6 +61,9 @@ export function Ensayo() {
       <span className="ensayo__reloj">{reloj}</span>
       <span className="ensayo__parada">
         {parada.index}/{parada.total}
+      </span>
+      <span className="ensayo__fps">
+        {ui.velocidad} {velocidad.toLocaleString("es-AR")}×
       </span>
       <span className="ensayo__fps" data-lento={lento || undefined}>
         {tier !== "static" && fps !== null && `${fps} fps · `}

@@ -13,6 +13,13 @@ const out = process.argv[3] || path.join(process.cwd(), "capturas");
 fs.mkdirSync(out, { recursive: true });
 const GL = ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"];
 
+// Espera a que termine el viaje entre paradas (el sitio marca <html data-viajando> mientras dura).
+const llegar = async (page) => {
+  await page.waitForTimeout(200);
+  await page.waitForFunction(() => !document.documentElement.dataset.viajando, null, { timeout: 20000 }).catch(() => {});
+  await page.waitForTimeout(400);
+};
+
 (async () => {
   const browser = await chromium.launch({ args: GL });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -54,7 +61,7 @@ const GL = ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swifts
   for (; pasos < 40; pasos++) {
     const y = await page.evaluate(() => scrollY);
     await page.keyboard.press("ArrowRight");
-    await page.waitForTimeout(3500); // el viaje más largo entre paradas dura 3,2 s
+    await llegar(page);
     if ((await page.evaluate(() => scrollY)) === y) break; // llegó a la última parada
   }
   await page.screenshot({ path: path.join(out, "offline-final.png") });

@@ -24,13 +24,61 @@ function stopY(stop: Stop) {
 // (si no, dos ← → seguidos calcularían desde una posición intermedia).
 let last = { y: 0, until: 0 };
 
-// En la presentación el viaje dura según lo que recorre (1,2 s por pantalla, entre 1,2 y 3,2 s):
-// el giro del hero o el final de una escena se ven actuar en vez de pasar de golpe.
+// En la presentación cada → es un viaje que deja ver actuar la escena: las animaciones van atadas al scroll,
+// así que su ritmo es el del viaje. Dura según lo que recorre (2,6 s más 1,6 s por pantalla, hasta 7,5 s) y
+// con una curva pareja (arranca y frena suave). Antes duraba de 1,2 a 3,2 s con la curva de Lenis, que hace
+// casi todo el recorrido en el primer tercio: la escena se disparaba de golpe.
+// La velocidad se ajusta en vivo con + y − (de 0,5× a 2×) y se recuerda en el navegador.
+const VIAJE = { base: 2.6, porPantalla: 1.6, max: 7.5 };
+const parejo = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
+const CLAVE = "tesina-velocidad";
+
+function leerVelocidad() {
+  try {
+    const v = parseFloat(localStorage.getItem(CLAVE) ?? "");
+    return v >= 0.5 && v <= 2 ? v : 1;
+  } catch {
+    return 1;
+  }
+}
+let velocidad = 1;
+let leida = false;
+
+export function velocidadActual() {
+  if (!leida) {
+    velocidad = leerVelocidad();
+    leida = true;
+  }
+  return velocidad;
+}
+
+export function cambiarVelocidad(paso: number) {
+  velocidad = Math.min(2, Math.max(0.5, Math.round((velocidadActual() + paso) * 4) / 4));
+  try {
+    localStorage.setItem(CLAVE, String(velocidad));
+  } catch {
+    // sin almacenamiento: vale solo para esta visita
+  }
+}
+
 function go(y: number, paced = false) {
+  const html = document.documentElement;
+  if (!paced) {
+    last = { y, until: performance.now() + 1300 };
+    scrollToY(y, 1.2);
+    return;
+  }
   const screens = Math.abs(y - window.scrollY) / window.innerHeight;
-  const duration = paced ? Math.min(3.2, Math.max(1.2, screens * 1.2)) : 1.2;
-  last = { y, until: performance.now() + duration * 1000 + 100 };
-  scrollToY(y, duration);
+  const duration = Math.min(VIAJE.max, VIAJE.base + screens * VIAJE.porPantalla) / velocidadActual();
+  last = { y, until: performance.now() + duration * 1000 + 300 };
+  // Mientras dura el viaje, <html data-viajando>: los scripts de prueba esperan a que se apague.
+  html.dataset.viajando = "true";
+  html.dataset.destino = String(y);
+  const llegar = () => {
+    if (last.y === y) delete html.dataset.viajando;
+  };
+  scrollToY(y, duration, parejo, llegar);
+  window.setTimeout(llegar, duration * 1000 + 300); // por si Lenis salta sin animar (reduced motion)
 }
 
 export function goToStop(id: string) {
@@ -42,7 +90,9 @@ export function goToStop(id: string) {
 // Siguiente o anterior según la POSICIÓN, no la sección activa: desde el título del hero
 // la primera → tiene que ir a la ficha IT, aunque la sección activa ya sea "it".
 export function stepStop(dir: 1 | -1) {
-  const ref = performance.now() < last.until ? last.y : window.scrollY;
+  // Cerca del destino anterior (a menos de 60 px) también vale ese destino: si el viaje todavía no terminó de
+  // llegar, una → no puede repetir la misma parada.
+  const ref = performance.now() < last.until || Math.abs(window.scrollY - last.y) < 60 ? last.y : window.scrollY;
   const ys = stops.map(stopY).filter((y): y is number => y !== null);
   const target = dir === 1 ? ys.find((y) => y > ref + 4) : ys.findLast((y) => y < ref - 4);
   if (target !== undefined) go(target, true);

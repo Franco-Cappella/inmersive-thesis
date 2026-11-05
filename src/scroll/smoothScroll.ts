@@ -21,9 +21,14 @@ export function initSmoothScroll() {
   };
 }
 
-export function scrollToY(y: number, duration = 1.2) {
-  if (lenis) lenis.scrollTo(y, { duration });
-  else window.scrollTo({ top: y });
+// `easing` y `onComplete` los usa el modo presentación (ver src/ui/navigation.ts). Sin easing, Lenis usa el suyo,
+// que hace casi todo el recorrido al principio: sirve para un salto, no para ver una escena actuar.
+export function scrollToY(y: number, duration = 1.2, easing?: (t: number) => number, onComplete?: () => void) {
+  if (lenis) lenis.scrollTo(y, { duration, easing, onComplete, force: true });
+  else {
+    window.scrollTo({ top: y });
+    onComplete?.();
+  }
 }
 
 export function scrollToSection(id: string) {

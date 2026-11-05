@@ -12,6 +12,13 @@ const TOPE = calidad === "alta" ? { llamadas: 150, triangulos: 500_000 } : { lla
 const GL = ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"];
 const FRAMES = 12;
 
+// Espera a que termine el viaje entre paradas (el sitio marca <html data-viajando> mientras dura).
+const llegar = async (page) => {
+  await page.waitForTimeout(200);
+  await page.waitForFunction(() => !document.documentElement.dataset.viajando, null, { timeout: 20000 }).catch(() => {});
+  await page.waitForTimeout(400);
+};
+
 (async () => {
   const browser = await chromium.launch({ args: GL });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
@@ -74,7 +81,7 @@ const FRAMES = 12;
     filas.push(fila);
     const y = await page.evaluate(() => scrollY);
     await page.keyboard.press("ArrowRight");
-    await page.waitForTimeout(3500); // el viaje más largo entre paradas dura 3,2 s
+    await llegar(page);
     if ((await page.evaluate(() => scrollY)) === y) break; // era la última parada
   }
 

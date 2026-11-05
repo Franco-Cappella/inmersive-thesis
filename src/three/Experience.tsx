@@ -82,6 +82,7 @@ export default function Experience() {
         />
         <Suspense fallback={null}>
           <Pyramid palette={palette} />
+          <Pyramid palette={palette} fija />
           <ITFloor palette={palette} />
           <OTFloor palette={palette} />
           <PlantDetails palette={palette} />

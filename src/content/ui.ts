@@ -10,6 +10,7 @@ export const ui = {
   escena: "Qué muestra la ilustración:",
   tesina: "Tesina",
   ensayo: "Ensayo",
+  velocidad: "velocidad",
   // Calidad del 3D en el ensayo: el tier que está usando el sitio (ver src/state/store.ts).
   calidad: { high: "calidad alta", low: "calidad baja", static: "sin 3D" },
   noEncontrada: {
