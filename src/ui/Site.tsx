@@ -114,6 +114,20 @@ export function Site() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // En presentación, un clic en cualquier parte pasa a la parada siguiente (como el → o un control remoto).
+  // Los enlaces, botones y campos siguen haciendo lo suyo, y no avanza si se estaba seleccionando texto.
+  useEffect(() => {
+    if (!presenting) return;
+    const onClick = (e: MouseEvent) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if ((e.target as HTMLElement)?.closest("a, button, input, textarea, select, label, [contenteditable]")) return;
+      if (window.getSelection()?.toString()) return;
+      stepStop(1);
+    };
+    window.addEventListener("click", onClick);
+    return () => window.removeEventListener("click", onClick);
+  }, [presenting]);
+
   // En presentación el cursor se oculta si no se mueve.
   useEffect(() => {
     if (!presenting) return;

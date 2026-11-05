@@ -26,6 +26,10 @@ export function Ensayo() {
     const onKey = (e: KeyboardEvent) => {
       if (AVANZAR.includes(e.key.toLowerCase())) setInicio((t) => t ?? performance.now());
     };
+    // También arranca con el primer clic que avanza (Site.tsx: un clic fuera de enlaces y botones pasa de parada).
+    const onClick = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement)?.closest("a, button, input, textarea, select, label")) setInicio((t) => t ?? performance.now());
+    };
     // El Canvas dibuja dentro de requestAnimationFrame: contar sus vueltas da los cuadros que se ven.
     let cuadros = 0;
     let desde = performance.now();
@@ -43,7 +47,9 @@ export function Ensayo() {
       desde = t;
     }, 500);
     window.addEventListener("keydown", onKey);
+    window.addEventListener("click", onClick);
     return () => {
+      window.removeEventListener("click", onClick);
       cancelAnimationFrame(vuelta);
       window.clearInterval(tick);
       window.removeEventListener("keydown", onKey);

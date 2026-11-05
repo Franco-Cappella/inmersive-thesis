@@ -19,7 +19,7 @@ Lista adaptada de la sección 14 de la skill a este proyecto (Next.js en export 
 
 ## El recorrido en el modo presentación
 
-**No hace falta scrollear.** Se abre el sitio con `?presentacion` (o se aprieta `P`) y se avanza con `→` y `←`, o con un control remoto de presentaciones (mandan esas mismas teclas, o `PageDown` y `PageUp`, que también sirven). Son 27 paradas: las del hero, una por capítulo y, en los capítulos con escena, paradas extra para que la escena actúe (una por golpe en el 05, una por caso en el 07 y una por pilar en el 09).
+**No hace falta scrollear.** Se abre el sitio con `?presentacion` (o se aprieta `P`) y se avanza con `→` y `←`, con un clic en cualquier parte de la pantalla (fuera de enlaces y botones), o con un control remoto de presentaciones (mandan esas mismas teclas, o `PageDown` y `PageUp`, que también sirven). Son 27 paradas: las del hero, una por capítulo y, en los capítulos con escena, paradas extra para que la escena actúe (una por golpe en el 05, una por caso en el 07 y una por pilar en el 09).
 
 Cada → es un viaje en el que la escena se reproduce sola: dura entre 3 y 7,5 segundos según lo que recorre, con un ritmo parejo (arranca y frena suave), para que se entienda lo que pasa. Mientras viaja se puede seguir hablando. Si en el ensayo se siente lento o rápido, se ajusta en vivo con `+` (más rápido) y `−` (más lento), de 0,5× a 2×; el navegador lo recuerda y el recuadro del ensayo muestra la velocidad. Si se aprieta → antes de que termine un viaje, sigue a la parada siguiente sin repetir.
 
